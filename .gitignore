@@ -1,0 +1,5 @@
+autoload/*
+init.vim.backup
+init.vim.backup1
+plugged/*
+tags
