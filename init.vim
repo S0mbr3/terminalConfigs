@@ -42,7 +42,7 @@ Plug 'Shougo/context_filetype.vim' "add context filype feature
 Plug 'Shougo/echodoc.vim' "print completed documention
 Plug 'Shougo/neoinclude.vim' "complete candidates from included files and path
 Plug 'Konfekt/FastFold' "Speed up updating folds when using auto completions plugin
-Plug 'php-vim/phpcd.vim' "Php Omnifunc
+Plug 'php-vim/phpcd.vim', { 'for': 'php', 'do': 'composer install' } "Php Omnifunc
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sudo ./install --all' }
 Plug 'junegunn/fzf.vim'
@@ -55,7 +55,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'wincent/loupe'
 Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
-Plug 'phpactor/phpactor'
+Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'} "php refactoring and introspection tool
 Plug 'roxma/ncm-phpactor'
 "Plug 'wincent/terminus' "better integration of terminal (curis behavior, better mouse s upport, focus reporting)
 " PHP Plugins
