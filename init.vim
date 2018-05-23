@@ -15,6 +15,7 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 " Additional sources for Deoplete
+<<<<<<< HEAD
 "Plug 'ludovicchabant/vim-gutentags'
 "Plug 'jsfaint/gen_tags.vim'
 Plug 'zchee/deoplete-jedi', {'for': 'python'} "sources for python
@@ -40,6 +41,24 @@ Plug 'ternjs/tern_for_vim', { 'do': 'sudo npm install && sudo npm install -g ter
 "Typescript Plugins 
 Plug 'mhartington/deoplete-typescript', {'for': ['typescript', 'typescript.tsx']}
 Plug 'Quramy/tsuquyomi', { 'do': 'sudo npm install -g typescript', 'for': ['typescript', 'typescript.tsx'] }
+=======
+Plug 'ludovicchabant/vim-gutentags'
+"Plug 'jsfaint/gen_tags.vim'
+Plug 'zchee/deoplete-jedi' "sources for python
+"Plug 'tweekmonster/deoplete-clang2' "sources for c/c++/objectiveC
+Plug 'Rip-Rip/clang_complete'
+Plug 'carlitux/deoplete-ternjs', { 'do': 'sudo npm install -g tern', 'for': ['javascript', 'javascript.jsx']  } "sources for javascript
+"Plug 'pangloss/vim-javascript'
+Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx']  }
+Plug 'ternjs/tern_for_vim', { 'do': 'sudo npm install && sudo npm install -g tern', 'for': ['javascript', 'javascript.jsx']  }
+Plug 'SevereOverfl0w/deoplete-github' "sources for gitcommit
+Plug 'pbogut/deoplete-padawan' "sources for php
+Plug 'zchee/deoplete-asm' "sources for asm
+Plug 'wellle/tmux-complete.vim' "sources for tmux panes
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Quramy/tsuquyomi', { 'do': 'npm install -g typescript' }
+Plug 'mhartington/deoplete-typescript'
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 " End of additional deoplete sources
 
 "Deoplete external plugins
@@ -51,6 +70,10 @@ Plug 'Shougo/context_filetype.vim' "add context filype feature
 Plug 'Shougo/echodoc.vim' "print completed documention
 Plug 'Shougo/neoinclude.vim' "complete candidates from included files and path
 Plug 'Konfekt/FastFold' "Speed up updating folds when using auto completions plugin
+<<<<<<< HEAD
+=======
+Plug 'php-vim/phpcd.vim', { 'for': 'php', 'do': 'composer install' } "Php Omnifunc
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sudo ./install --all' }
 Plug 'junegunn/fzf.vim'
@@ -63,14 +86,26 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'wincent/loupe'
 Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
+<<<<<<< HEAD
 "Plug 'wincent/terminus' "better integration of terminal (curis behavior, better mouse s upport, focus reporting)
+=======
+Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'} "php refactoring and introspection tool
+Plug 'roxma/ncm-phpactor'
+"Plug 'wincent/terminus' "better integration of terminal (curis behavior, better mouse s upport, focus reporting)
+" PHP Plugins
+Plug 'noahfrederick/vim-composer'
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 call plug#end()
 
 "General settings
 "set wildmenu "Show a bar that you can use to expand searches with tabs set by
 "defaut on neovim
 let g:python_host_prog = '/usr/bin/python2.7'
+<<<<<<< HEAD
 let g:python3_host_prog = '/usr/bin/python3.5'
+=======
+let g:python3_host_prog = '/usr/bin/python3.6'
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 set path+=**  "allow to search a file with :find command on all subdirectories
 set nu "Add lines number
 set relativenumber
@@ -129,10 +164,14 @@ set background=dark    " Setting dark mode
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1"
 
 " Deoplete settings
+<<<<<<< HEAD
 " Enable deoplete when InsertEnter.
 let g:deoplete#enable_at_startup = 0
 autocmd InsertEnter * call deoplete#enable()
 "let g:deoplete#enable_at_startup = 1
+=======
+let g:deoplete#enable_at_startup = 1
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 let g:deoplete#omni#functions = {}
 let g:deoplete#omni#functions.javascript = [
       \ 'tern#Complete',
@@ -184,9 +223,15 @@ let g:UltiSnipsExpandTrigger = "<C-s>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
+<<<<<<< HEAD
 "random mapping
 tnoremap <Esc> <C-\><C-n>
 
+=======
+"random remmaping
+tnoremap <Esc> <C-\><C-n>
+map <leader>$ <C-]> 
+>>>>>>> c71ae7980b93e9099828d8c26bd9ef0f7da8c988
 "visual mapping
 xnoremap <C-h> <C-w>h
 xnoremap <C-j> <C-w>j
