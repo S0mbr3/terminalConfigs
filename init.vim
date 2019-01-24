@@ -15,31 +15,21 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 " Additional sources for Deoplete
-"Plug 'ludovicchabant/vim-gutentags'
+Plug 'ludovicchabant/vim-gutentags'
 "Plug 'jsfaint/gen_tags.vim'
 Plug 'zchee/deoplete-jedi', {'for': 'python'} "sources for python
 "Plug 'tweekmonster/deoplete-clang2' "sources for c/c++/objectiveC
-Plug 'Rip-Rip/clang_complete', {'for': ['c', 'c++']}
+Plug 'Rip-Rip/clang_complete', {'for': ['c', 'cpp', 'objectivec']}
 Plug 'carlitux/deoplete-ternjs', { 'do': 'sudo npm install -g tern', 'for': ['javascript', 'javascript.jsx']  } "sources for javascript
 "Plug 'pangloss/vim-javascript'
-Plug 'SevereOverfl0w/deoplete-github' "sources for gitcommit
-Plug 'zchee/deoplete-asm' "sources for asm
-Plug 'wellle/tmux-complete.vim' "sources for tmux panes
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-" PHP PLUGS
-Plug 'pbogut/deoplete-padawan', {'do': 'composer install', 'for': 'php'} "sources for php
-Plug 'kristijanhusak/deoplete-phpactor', {'for': 'php'}
-Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
-Plug 'php-vim/phpcd.vim', {'for': 'php'} "Php Omnifunc
-Plug 'noahfrederick/vim-composer', {'for': 'php'}
-"Plug 'roxma/ncm-phpactor'
-
-"Javascript Plugins
 Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx']  }
 Plug 'ternjs/tern_for_vim', { 'do': 'sudo npm install && sudo npm install -g tern', 'for': ['javascript', 'javascript.jsx']  }
-"Typescript Plugins 
-Plug 'mhartington/deoplete-typescript', {'for': ['typescript', 'typescript.tsx']}
-Plug 'Quramy/tsuquyomi', { 'do': 'sudo npm install -g typescript', 'for': ['typescript', 'typescript.tsx'] }
+Plug 'SevereOverfl0w/deoplete-github' "sources for gitcommit
+Plug 'zchee/deoplete-asm', {'for': 'asm'} "sources for asm
+Plug 'wellle/tmux-complete.vim' "sources for tmux panes
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Quramy/tsuquyomi', { 'do': 'sudo npm install -g typescript' }
+Plug 'mhartington/deoplete-typescript', {'for': ['typescript', 'tsx'], 'do': './install.sh'}
 " End of additional deoplete sources
 
 "Deoplete external plugins
@@ -57,20 +47,28 @@ Plug 'junegunn/fzf.vim'
 Plug 'sirver/UltiSnips'
 Plug 'honza/vim-snippets'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'morhetz/gruvbox'
 Plug 'jiangmiao/auto-pairs'
 Plug 'wincent/loupe'
 Plug 'vim-airline/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 "Plug 'wincent/terminus' "better integration of terminal (curis behavior, better mouse s upport, focus reporting)
+" PHP Plugins
+"Plug 'pbogut/deoplete-padawan' "sources for php
+Plug 'lvht/phpcd.vim' , { 'for': 'php' , 'do': 'composer install' }"Php Omnifunc
+Plug 'phpactor/phpactor' , {'do': 'composer install', 'for': 'php'}
+"Plug 'kristijanhusak/deoplete-phpactor' , {'for': 'php'}
+Plug 'noahfrederick/vim-composer'
+"synatx for ejs
+Plug 'nikvdp/ejs-syntax', {'for': 'ejs'}
 call plug#end()
 
 "General settings
 "set wildmenu "Show a bar that you can use to expand searches with tabs set by
 "defaut on neovim
-let g:python_host_prog = '/usr/bin/python2.7'
-let g:python3_host_prog = '/usr/bin/python3.5'
+let g:html_indent_script1 = "inc"  "better indentation for hml using javascript
+let g:html_indent_style1 = "inc" "better indentation for html using css
 set path+=**  "allow to search a file with :find command on all subdirectories
 set nu "Add lines number
 set relativenumber
@@ -129,10 +127,7 @@ set background=dark    " Setting dark mode
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1"
 
 " Deoplete settings
-" Enable deoplete when InsertEnter.
-let g:deoplete#enable_at_startup = 0
-autocmd InsertEnter * call deoplete#enable()
-"let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#functions = {}
 let g:deoplete#omni#functions.javascript = [
       \ 'tern#Complete',
@@ -184,8 +179,25 @@ let g:UltiSnipsExpandTrigger = "<C-s>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
-"random mapping
-tnoremap <Esc> <C-\><C-n>
+"PHPACTOR settings and keybinding
+" Include use statement
+nmap <Leader>pu :call phpactor#UseAdd()<CR>
+" Invoke the context menu
+nmap <Leader>pmm :call phpactor#ContextMenu()<CR>
+" Invoke the navigation menu
+nmap <Leader>pnn :call phpactor#Navigate()<CR>
+" Goto definition of class or class member under the cursor
+nmap <Leader>po :call phpactor#GotoDefinition()<CR>
+" Transform the classes in the current file
+nmap <Leader>ptt :call phpactor#Transform()<CR>
+" Generate a new class (replacing the current file)
+nmap <Leader>pcc :call phpactor#ClassNew()<CR>
+" Extract expression (normal mode)
+nmap <silent><Leader>pee :call phpactor#ExtractExpression(v:false)<CR>
+" Extract expression from selection
+vmap <silent><Leader>pee :<C-U>call phpactor#ExtractExpression(v:true)<CR>
+" Extract method from selection
+vmap <silent><Leader>pem :<C-U>call phpactor#ExtractMethod()<CR>
 
 "visual mapping
 xnoremap <C-h> <C-w>h
@@ -199,7 +211,26 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+"insert mapping
+inoremap <C-h> <C-\><C-N><C-w>h
+inoremap <C-j> <C-\><C-N><C-w>j
+inoremap <C-k> <C-\><C-N><C-w>k
+inoremap <C-l> <C-\><C-N><C-w>l
+
+"terminal mapping
+tnoremap <C-h> <C-\><C-N><C-w>h
+tnoremap <C-j> <C-\><C-N><C-w>j
+tnoremap <C-k> <C-\><C-N><C-w>k
+tnoremap <C-l> <C-\><C-N><C-w>l
+tnoremap <Esc> <C-\><C-n> 
+
+"leader remaping
+"Allows to save a file that need sudo permissions
+nmap <Leader>w :w !sudo tee %<CR>
+nmap <Leader>ne :NERDTreeToggle<CR>
+
 "auto commands
 set autoread "detetec when the files have been change outside of vim or by another buffer of this file
 au FocusGained * :checktime "when vim can back the focus apply checktime which load back the file it's modified
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "Auto close the deoplete preview window when completion is done
+"au BufNewFile,BufRead *.ejs set filetype=html "enable ejs extensions as html files
