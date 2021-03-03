@@ -1,2 +1,2 @@
-# nvim
-Neovim configuration, mainly Linux configurations and plugins installations.
+# Linux terminal configurations.
+Does contain Neovim, Tmux and bash/zsh configurations
