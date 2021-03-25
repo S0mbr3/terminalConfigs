@@ -1,0 +1,4 @@
+"auto commands
+set autoread "detetec when the files have been change outside of vim or by another buffer of this file
+au FocusGained * :checktime "when vim can back the focus apply checktime which load back the file it's modified
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "Auto close the deoplete preview window when completion is done
