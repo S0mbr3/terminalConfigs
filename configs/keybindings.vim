@@ -28,4 +28,3 @@ tnoremap <Esc> <C-\><C-n>
 "leader remaping
 "Allows to save a file that need sudo permissions
 nmap <Leader>w :w !sudo tee %<CR>
-nmap <Leader>ne :NERDTreeToggle<CR>

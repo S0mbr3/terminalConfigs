@@ -6,7 +6,7 @@ let g:html_indent_script1 = "inc"  "better indentation for hml using javascript
 let g:html_indent_style1 = "inc" "better indentation for html using css
 set path+=**  "allow to search a file with :find command on all subdirectories
 set nu "Add lines number
-set relativenumber
+"set relativenumber
 set cursorline
 set laststatus=2
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%0.3b]\ [HEX=\%02.2B]\ [POS=%04v]\ [%p%%]\ [LEN=%L]
