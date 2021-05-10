@@ -25,6 +25,8 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update"
+Plug 'nvim-lua/completion-nvim'
+Plug 'udalov/kotlin-vim'
 call plug#end()
 
 
@@ -32,4 +34,3 @@ call plug#end()
  for f in glob('~/.config/nvim/configs/*.vim', 0, 1)
 	      execute 'source' f
 endfor
-
