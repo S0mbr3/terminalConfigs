@@ -17,6 +17,11 @@ sudo apt-get install gettext
 sudo apt-get install libevent-2.1-7 libevent-core-2.1-7 libevent-extra-2.1-7 libevent-dev
 sudo apt-get install libncurses5-dev
 sudo apt-get install bison
+sudo apt-get install rlwrap
+
+# downloand and install cht.sh
+curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
+sudo chmod +x /usr/local/bin/cht.sh
 
 #downloading neovim
 git clone https://github.com/neovim/neovim.git $HOME/builds/neovim
