@@ -123,3 +123,5 @@ function bat(){
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/benjamin/.sdkman"
 [[ -s "/home/benjamin/.sdkman/bin/sdkman-init.sh" ]] && source "/home/benjamin/.sdkman/bin/sdkman-init.sh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
