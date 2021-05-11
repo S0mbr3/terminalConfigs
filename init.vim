@@ -27,10 +27,11 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update"
 Plug 'nvim-lua/completion-nvim'
 Plug 'udalov/kotlin-vim'
+Plug norcalli/snippets.nvim
 call plug#end()
 
 
 "loading my configurations into init.vim file
- for f in glob('~/.config/nvim/configs/*.vim', 0, 1)
+ for f in glob('~/.config/nvim/configs/*vim', 0, 1)
 	      execute 'source' f
 endfor

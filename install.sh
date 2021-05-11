@@ -41,9 +41,12 @@ git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 (cd $HOME/builds/tmux && sh autogen.sh && ./configure && make)
 
 #install Usefull tools 
-sudo apt-get install pkg-config python nodejs ruby build-essential python3 pip fd-find bat npm xclip zsh
+sudo apt-get install snapd pkg-config python ruby-dev nodejs ruby build-essential python3 pip fd-find bat npm xclip zsh
 #python neovim module
+sudo npm install -g yarn
 python3 -m pip install --user --upgrade pynvim
+sudo gem install neovim
+sudo npm install -g neovim
 
 #making zsh default shell
 sudo chsh -s $(which zsh)
