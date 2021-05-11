@@ -19,6 +19,13 @@ sudo apt-get install libncurses5-dev
 sudo apt-get install bison
 sudo apt-get install rlwrap
 
+#configuring git global name and email
+echo "Global configuration for git user.name and user.email"
+read -p "Enter your user.name: " name
+read -p "Enter your user.email: " email
+git config --global user.name $name
+git config --global user.email $email
+
 # downloand and install cht.sh
 curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
 sudo chmod +x /usr/local/bin/cht.sh
