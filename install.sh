@@ -44,6 +44,8 @@ git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 sudo apt-get install snapd pkg-config python ruby-dev nodejs ruby build-essential python3 pip fd-find bat npm xclip zsh
 #python neovim module
 sudo npm install -g yarn
+yarn global add tree-sitter-cli
+yarn global add tree-sitter
 python3 -m pip install --user --upgrade pynvim
 sudo gem install neovim
 sudo npm install -g neovim
