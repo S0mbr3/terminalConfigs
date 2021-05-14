@@ -116,6 +116,7 @@ alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
+alias c='cht.sh'
 function bat(){
   fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
 }

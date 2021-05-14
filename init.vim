@@ -27,7 +27,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update"
 Plug 'nvim-lua/completion-nvim'
 Plug 'udalov/kotlin-vim'
-Plug norcalli/snippets.nvim
+Plug 'norcalli/snippets.nvim'
 call plug#end()
 
 

@@ -19,6 +19,8 @@ sudo git clone https://github.com/agkozak/zsh-z $ZSH/plugins/zsh-z
 (cd $HOME/builds && curl -OfsSL https://github.com/Peltoche/lsd/releases/download/0.20.1/lsd-musl_0.20.1_amd64.deb)
 sudo dpkg -i $HOME/builds/lsd-musl_0.20.1_amd64.deb # adapt version number and architecture
 
+#install lsp servers
+source lspLanguageServers.sh
 #reloading shell
 source ~/.zshrc
 

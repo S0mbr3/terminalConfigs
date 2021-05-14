@@ -6,3 +6,5 @@ sudo pip install cmake-language-server
 sudo npm install -g dockerfile-language-server-nodejs
 yarn global add diagnostic-languageserver
 sudo npm install -g vscode-html-languageserver-bin
+#curl -fsSL https://deno.land/x/install/install.sh | sh
+sudo npm install -g typescript-language-server
