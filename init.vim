@@ -25,13 +25,19 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update"
-Plug 'nvim-lua/completion-nvim'
+"Plug 'nvim-lua/completion-nvim'
 Plug 'udalov/kotlin-vim'
-Plug 'norcalli/snippets.nvim'
+Plug 'hrsh7th/nvim-compe'
+"Plug 'norcalli/snippets.nvim'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'hrsh7th/vim-vsnip'
 call plug#end()
 
 
 "loading my configurations into init.vim file
- for f in glob('~/.config/nvim/configs/*vim', 0, 1)
+ for f in glob('~/.config/nvim/configs/plugins/*vim', 0, 1)
 	      execute 'source' f
 endfor
