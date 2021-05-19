@@ -13,16 +13,16 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 "insert mapping
-inoremap <C-h> <C-\><C-N><C-w>h
-inoremap <C-j> <C-\><C-N><C-w>j
-inoremap <C-k> <C-\><C-N><C-w>k
-inoremap <C-l> <C-\><C-N><C-w>l
+inoremap <C-h> <C-\><C-n><C-w>h
+inoremap <C-j> <C-\><C-n><C-w>j
+inoremap <C-k> <C-\><C-n><C-w>k
+inoremap <C-l> <C-\><C-n><C-w>l
 
 "terminal mapping
-tnoremap <C-h> <C-\><C-N><C-w>h
-tnoremap <C-j> <C-\><C-N><C-w>j
-tnoremap <C-k> <C-\><C-N><C-w>k
-tnoremap <C-l> <C-\><C-N><C-w>l
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
 tnoremap <Esc> <C-\><C-n> 
 
 "leader remaping

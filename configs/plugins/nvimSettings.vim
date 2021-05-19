@@ -2,8 +2,8 @@ set clipboard+=unnamedplus
 
 "set wildmenu "Show a bar that you can use to expand searches with tabs set by
 "defaut on neovim
-let g:html_indent_script1 = "inc"  "better indentation for hml using javascript
-let g:html_indent_style1 = "inc" "better indentation for html using css
+let g:html_indent_script1 = 'inc'  "better indentation for hml using javascript
+let g:html_indent_style1 = 'inc' "better indentation for html using css
 set path+=**  "allow to search a file with :find command on all subdirectories
 set nu "Add lines number
 "set relativenumber

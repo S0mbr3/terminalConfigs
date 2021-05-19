@@ -41,7 +41,7 @@ git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 (cd $HOME/builds/tmux && sh autogen.sh && ./configure && make)
 
 #install Usefull tools 
-sudo apt-get install tree ninja-build snapd pkg-config python ruby-dev nodejs ruby build-essential python3 pip fd-find bat npm xclip zsh
+sudo apt-get install tree ninja-build snapd pkg-config python ruby-dev nodejs ruby build-essential python3 pip fd-find bat npm xclip ripgrep zsh
 #python neovim module
 sudo npm install -g yarn
 yarn global add tree-sitter-cli
