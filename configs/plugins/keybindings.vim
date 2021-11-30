@@ -34,4 +34,6 @@ nmap <Leader>wqa :wqa<CR>
 nmap <Leader>q :q<CR>
 nmap <Leader>qf :q!<CR>
 nmap <Leader>qaf :qa!<CR>
-
+nmap <Leader>mm :!./makefile<CR>
+nmap <Leader>m :w<CR><C-j>A./makefile<CR>./main<CR><C-k>
+nnoremap <leader>t :below 15sp term://$SHELL<cr>i
