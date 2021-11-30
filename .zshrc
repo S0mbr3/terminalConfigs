@@ -117,6 +117,8 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
+alias pi='/bin/sh ~/Scripts/pi.sh && cd ~/pi'
+alias upi='/bin/sh ~/Scripts/upi.sh'
 function bat(){
   fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
 }
@@ -152,3 +154,4 @@ fi
 unset env
 
 alias luamake=/home/benjamin/builds/lua-language-server/3rd/luamake/luamake
+export COLORTERM=truecolor
