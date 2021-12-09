@@ -1,5 +1,6 @@
 return require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig'
+  use 'glepnir/lspsaga.nvim'
   use 'brooth/far.vim' --asynchronous search and replace operations on a set of files
   use 'Shougo/echodoc.vim' --print completed documention
   use 'Shougo/neoinclude.vim' --complete candidates from included files and path
@@ -10,26 +11,45 @@ return require('packer').startup(function(use)
     use {'junegunn/fzf',run = 'cd ~/.fzf && ./install -all' }
     use 'junegunn/fzf.vim'
     use 'edkolev/tmuxline.vim'
-    use 'wellle/tmux-complete' --source for tmux panes
+    --use 'wellle/tmux-complete' --source for tmux panes
   end
   use 'windwp/nvim-autopairs'
   use 'wincent/loupe'
-  use 'vim-airline/vim-airline'
+  --use 'vim-airline/vim-airline'
+  use {
+  'nvim-lualine/lualine.nvim',
+  requires = {'kyazdani42/nvim-web-devicons', opt = true}
+}
   --use 'morhetz/gruvbox'
-  use 'npxbr/gruvbox.nvim'
-  use 'rktjmp/lush.nvim'
+  use 'owozsh/amora'
+  use {'ellisonleao/gruvbox.nvim', requires = {'rktjmp/lush.nvim'}}
   use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
+  use {'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim'}}
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}  -- We recommend updating the parsers on update
   --use 'nvim-lua/completion-nvim'
   use 'udalov/kotlin-vim'
-  use 'hrsh7th/nvim-compe'
   --use 'norcalli/snippets.nvim'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
   use 'rafamadriz/friendly-snippets'
-  use 'kyazdani42/nvim-web-devicons' -- for file icons
   --use 'nvim-nonicons'
-  use 'kyazdani42/nvim-tree.lua'
+  use {'kyazdani42/nvim-tree.lua', requires = {'kyazdani42/nvim-web-devicons'}} -- for file icons
+
   use 'hrsh7th/vim-vsnip-integ'
+  use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
+  use 'hrsh7th/nvim-cmp'
+  use 'github/copilot.vim'
+  use 'marko-cerovac/material.nvim'
+  use {
+  'phaazon/hop.nvim',
+  branch = 'v1', -- optional but strongly recommended
+  config = function()
+    -- you can configure Hop the way you like here; see :h hop-config
+    require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+  end
+}
 end)

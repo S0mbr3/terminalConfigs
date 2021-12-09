@@ -1,6 +1,6 @@
 return require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig'
-  use 'wellle/tmux-complete' --source for tmux panes
+  --use 'wellle/tmux-complete' --source for tmux panes
   use 'brooth/far.vim' --asynchronous search and replace operations on a set of files
   use 'Shougo/echodoc.vim' --print completed documention
   use 'Shougo/neoinclude.vim' --complete candidates from included files and path

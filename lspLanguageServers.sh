@@ -10,4 +10,5 @@ sudo npm install -g vscode-html-languageserver-bin
 sudo npm install -g typescript-language-server
 (git clone https://github.com/sumneko/lua-language-server $HOME/builds/lua-language-server \
   && cd $HOME/builds/lua-language-server && git submodule update --init --recursive \
-  cd 3rd/luamake && compile/install.sh && cd ../.. && ./3rd/luamake/luamake rebuild)
+  cd 3rd/luamake && ./compile/install.sh && cd ../.. && ./3rd/luamake/luamake rebuild)
+chmod -R +x $HOME/builds/lua-language-server

@@ -9,7 +9,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/benjamin/.oh-my-zsh"
+export ZSH="/home/oxhart/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -87,7 +87,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+#export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -120,12 +120,12 @@ alias c='cht.sh'
 alias pi='/bin/sh ~/Scripts/pi.sh && cd ~/pi'
 alias upi='/bin/sh ~/Scripts/upi.sh'
 function bat(){
-  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
+  fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/benjamin/.sdkman"
-[[ -s "/home/benjamin/.sdkman/bin/sdkman-init.sh" ]] && source "/home/benjamin/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="/home/oxhart/.sdkman"
+[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -153,5 +153,5 @@ fi
 
 unset env
 
-alias luamake=/home/benjamin/builds/lua-language-server/3rd/luamake/luamake
+alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
 export COLORTERM=truecolor
