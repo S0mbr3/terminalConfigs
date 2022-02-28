@@ -27,7 +27,7 @@ vim.o.completeopt="menuone,noselect" --complete options
 --vim.cmd([[ let g:completion_matching_strategy_list=["exact", "substring", "fuzzy"] ]])--how completion fill the menu
 
 
-vim.g.material_style = "palenight"
+--vim.g.material_style = "palenight"
 vim.cmd([[
 colorscheme material
 ]]) --use the  gruvbox colortheme

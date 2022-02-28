@@ -1,5 +1,5 @@
---require'material'.setup()
---vim.g.material_style = "palenight"
+--require'material'.setup({disable={background=true}})
+vim.g.material_style = "palenight"
 --Lua:
 vim.api.nvim_set_keymap('n', '<leader>mm', [[<Cmd>lua require('material.functions').toggle_style()<CR>]], { noremap = true, silent = true })
 --Lua:
