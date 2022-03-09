@@ -121,10 +121,12 @@ alias lt='ls --tree'
 alias c='cht.sh'
 alias pi='/bin/sh ~/Scripts/pi.sh && cd ~/pi'
 alias upi='/bin/sh ~/Scripts/upi.sh'
+alias cht='/bin/sh cht.sh'
 function bat(){
   fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
-
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
@@ -157,3 +159,4 @@ unset env
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
 export COLORTERM=truecolor
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
