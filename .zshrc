@@ -160,3 +160,4 @@ unset env
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
 export COLORTERM=truecolor
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+export PATH="$HOME/.local/bin/:$PATH"

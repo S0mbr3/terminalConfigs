@@ -1,6 +1,7 @@
 return require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig'
-  use 'glepnir/lspsaga.nvim'
+  use 'tami5/lspsaga.nvim'
+  -- use 'glepnir/lspsaga.nvim'
   use 'brooth/far.vim' --asynchronous search and replace operations on a set of files
   use 'Shougo/echodoc.vim' --print completed documention
   use 'Shougo/neoinclude.vim' --complete candidates from included files and path

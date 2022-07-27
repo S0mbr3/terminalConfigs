@@ -49,7 +49,7 @@ git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 
 elif [ $1 == "pacman" ]; then
 	echo "preparing for arch based distro\n"
-	sudo pacman -S ninja python python2 python-pip nodejs npm ruby fd zsh xclip bat tmux curl lsd dpkg z ripgrep
+	sudo pacman -S ninja python python2 python-pip nodejs npm ruby fd zsh xclip bat tmux curl lsd dpkg z ripgrep lf mdp
 	git clone https://aur.archlinux.org/snapd.git $HOME/builds/snapd
 	(cd $HOME/builds/snapd && makepkg -si)
 	sudo systemctl enable --now snapd.socket
