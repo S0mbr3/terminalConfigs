@@ -23,10 +23,11 @@ vim.api.nvim_set_keymap('i', '<C-l>', '<C-\\><C-n><C-w>h', { noremap = true, sil
 
 --terminal mapping
 vim.api.nvim_set_keymap('t', '<C-h>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<C-j>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<C-k>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<C-l>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-j>', '<C-\\><C-n><C-w>j', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<Leader><Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { noremap = true, silent = false })
 
 --leader mapping
 --Allows to save a file that need sudo permissions
@@ -37,3 +38,9 @@ vim.api.nvim_set_keymap('n', '<Leader>wqa', ':wqa<CR>', { noremap = false, silen
 vim.api.nvim_set_keymap('n', '<Leader>q', ':q<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qf', ':q!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qaf', ':qa!<CR>', { noremap = false, silent = true })
+
+-- 'cd' towards the directory in which the current file is edited
+-- but only change the path for the current window
+vim.api.nvim_set_keymap('n', '<Leader>cd', ':lcd %:h<CR>', { noremap = true, silent = false })
+
+

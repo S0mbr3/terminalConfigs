@@ -1,3 +1,5 @@
+sudo npm install -g emmet-ls
+sudo npm install -g vscode-html-languageserver-bin
 sudo npm i -g pyright #python language server
 sudo pip install -U jedi-language-server
 sudo snap install ccls --classic
@@ -10,5 +12,4 @@ sudo npm install -g vscode-html-languageserver-bin
 sudo npm install -g typescript-language-server
 (git clone https://github.com/sumneko/lua-language-server $HOME/builds/lua-language-server \
   && cd $HOME/builds/lua-language-server && git submodule update --init --recursive \
-  cd 3rd/luamake && ./compile/install.sh && cd ../.. && ./3rd/luamake/luamake rebuild)
-chmod -R +x $HOME/builds/lua-language-server
+  cd 3rd/luamake && compile/install.sh && cd ../.. && ./3rd/luamake/luamake rebuild)

@@ -6,6 +6,7 @@ vim.g.html_indent_script1 = 'inc'  --better indentation for hml using javascript
 vim.g.html_indent_style1 = 'inc' --better indentation for html using css
 vim.o.path=vim.o.path .. "**"  --allow to search a file with :find command on all subdirectories
 vim.o.nu=true --Add lines number
+vim.g.suda_smart_edit = 1
 --vim.o.relativenumber
 vim.o.cursorline=true
 vim.o.laststatus=2
@@ -21,8 +22,8 @@ vim.o.hidden=true --hide unsaved buffers when changing buffer
 vim.cmd([[ set nojoinspaces ]])
 vim.cmd([[ set directory^="$HOME/tmp/.nvim/swp//" ]])
 vim.o.showcmd=true
-vim.o.foldmethod="indent"
-vim.cmd([[ set foldignore=]])
+--vim.o.foldmethod="indent"
+--vim.cmd([[ set foldignore=]])
 vim.o.completeopt="menuone,noselect" --complete options
 --vim.cmd([[ let g:completion_matching_strategy_list=["exact", "substring", "fuzzy"] ]])--how completion fill the menu
 

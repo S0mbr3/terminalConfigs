@@ -38,7 +38,7 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'hrsh7th/vim-vsnip'
 call plug#end()
-
+vim.lsp.set_log_level("debug")
 
 "loading my configurations into init.vim file
  for f in glob('~/.config/nvim/configs/plugins/*vim', 0, 1)

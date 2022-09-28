@@ -1,3 +1,28 @@
+
+#Auto-launching ssh-agent to save passphrases
+
+env=~/.ssh/agent.env
+
+agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+
+agent_start () {
+    (umask 077; ssh-agent >| "$env")
+    . "$env" >| /dev/null ; }
+
+agent_load_env
+
+# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+
+if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add
+elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+    ssh-add
+fi
+
+unset env
+#
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -8,8 +33,6 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# to use novim user configuration while sudoedit
-export SUDO_EDITOR=/usr/bin/nvim
 # Path to your oh-my-zsh installation.
 export ZSH="/home/oxhart/.oh-my-zsh"
 
@@ -89,7 +112,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-#export LANG=en_US.UTF-8
+# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -119,45 +142,17 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
-alias pi='/bin/sh ~/Scripts/pi.sh && cd ~/pi'
-alias upi='/bin/sh ~/Scripts/upi.sh'
-alias cht='/bin/sh cht.sh'
 function bat(){
-  fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
 }
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#Auto-launching ssh-agent to save passphrases
-
-env=~/.ssh/agent.env
-
-agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
-
-agent_start () {
-    (umask 077; ssh-agent >| "$env")
-    . "$env" >| /dev/null ; }
-
-agent_load_env
-
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
-
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-    agent_start
-    ssh-add
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-    ssh-add
-fi
-
-unset env
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
-export COLORTERM=truecolor
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-export PATH="$HOME/.local/bin/:$PATH"
+export PATH="$PATH:/home/oxhart/.local/bin/i2p"
+export SUDO_ASKPASS='/usr/lib/ssh/x11-ssh-askpass'

@@ -27,6 +27,8 @@ return require('packer').startup(function(use)
   use 'nvim-lua/popup.nvim'
   use {'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim'}}
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
+  use {'nvim-telescope/telescope-project.nvim'}
+  use { "nvim-telescope/telescope-file-browser.nvim" }
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}  -- We recommend updating the parsers on update
   --use 'nvim-lua/completion-nvim'
   use 'udalov/kotlin-vim'
@@ -45,6 +47,16 @@ return require('packer').startup(function(use)
   use 'hrsh7th/nvim-cmp'
   use 'github/copilot.vim'
   use 'marko-cerovac/material.nvim'
+  use {'kdheepak/lazygit.nvim'}
+  use {'lambdalisue/suda.vim'}
+  use {
+    's1n7ax/nvim-terminal',
+    config = function()
+        vim.o.hidden = true
+        require('nvim-terminal').setup()
+    end,
+}
+  use {'edluffy/hologram.nvim'} -- to see images inside neovim
   use {
   'phaazon/hop.nvim',
   branch = 'v1', -- optional but strongly recommended

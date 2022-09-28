@@ -13,6 +13,7 @@ sudo $1 $2 git
 sudo $1 $2 cmake
 sudo $1 $2 rlwrap
 sudo $1 $2 tree
+sudo $1 $2 stow
 
 #configuring git global name and email
 echo "Global configuration for git user.name and user.email"
@@ -64,6 +65,7 @@ sudo chmod +x /usr/local/bin/cht.sh
 
 #install Usefull tools 
 #python neovim module
+sudo npm install -g browser-sync
 sudo npm install -g yarn
 yarn global add tree-sitter-cli
 yarn global add tree-sitter
