@@ -1,3 +1,5 @@
+sudo npm install -g emmet-ls
+sudo npm install -g vscode-html-languageserver-bin
 sudo npm i -g pyright #python language server
 sudo pip install -U jedi-language-server
 sudo snap install ccls --classic
