@@ -154,5 +154,4 @@ export SDKMAN_DIR="/home/oxhart/.sdkman"
 
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
-export PATH="$PATH:/home/oxhart/.local/bin/i2p"
-export SUDO_ASKPASS='/usr/lib/ssh/x11-ssh-askpass'
+export PATH="$PATH:/home/oxhart/.local/bin/"

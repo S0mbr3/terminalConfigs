@@ -20,13 +20,15 @@ vim.api.nvim_set_keymap('i', '<C-j>', '<C-\\><C-n><C-w>h', { noremap = true, sil
 vim.api.nvim_set_keymap('i', '<C-k>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<C-l>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
 
-
 --terminal mapping
 vim.api.nvim_set_keymap('t', '<C-h>', '<C-\\><C-n><C-w>h', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-j>', '<C-\\><C-n><C-w>j', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<Leader><Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('t', '<Leader><Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-space>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.keymap.set({'t', 'n', 'i', 'v' }, '<M-s>', '<cmd>lua require("utils.switchterm").switchTerm()<CR>', { noremap = true, silent = true })
+vim.keymap.set('t' , '<C-s>', '<cmd>lua require("utils.switchterm").termSizer()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { noremap = true, silent = false })
 
 --leader mapping
@@ -41,6 +43,6 @@ vim.api.nvim_set_keymap('n', '<Leader>qaf', ':qa!<CR>', { noremap = false, silen
 
 -- 'cd' towards the directory in which the current file is edited
 -- but only change the path for the current window
-vim.api.nvim_set_keymap('n', '<Leader>cd', ':lcd %:h<CR>', { noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', '<Leader>cd', ':lcd %:p:h<CR>', { noremap = true, silent = false })
 
 

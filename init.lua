@@ -10,6 +10,7 @@ end
 
 require('plugins')
 require('config')
+require('utils')
 --require('config/nvim-tata')
 --for f in fn.glob('~/.config/nvim/configs/lua/plugins/*lua', 0, 1) do
 --execute 'require(${f})'
@@ -25,6 +26,7 @@ require('config')
 		require('packer').sync()
 	end
 --end
+--vim.lsp.set_log_level("debug")
 --vim.api.nvim_set_keymap('n', '<Leader>lg', ":LazyGit<cr>", { noremap = true, silent = true })
 --vim.api.nvim_set_keymap('n', '<Leader>lc', ":LazyGitConfig<cr>", { noremap = true, silent = true })
 
