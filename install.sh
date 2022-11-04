@@ -48,6 +48,10 @@ sudo dpkg -i $HOME/builds/lsd-musl_0.20.1_amd64.deb # adapt version number and a
 git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 (cd $HOME/builds/tmux && sh autogen.sh && ./configure && make)
 
+#download and install Tmux Plugin Manager (Mostly for tmux ressurect)
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
 elif [ $1 == "pacman" ]; then
 	echo "preparing for arch based distro\n"
 	sudo pacman -S ninja python python2 python-pip nodejs npm ruby fd zsh xclip bat tmux curl lsd dpkg z ripgrep lf mdp
@@ -55,6 +59,7 @@ elif [ $1 == "pacman" ]; then
 	(cd $HOME/builds/snapd && makepkg -si)
 	sudo systemctl enable --now snapd.socket
 	sudo ln -s /var/lib/snapd/snap /snap
+  sudo pacman -S shellcheck #for emacs bash lsp
 fi
 
 
@@ -67,11 +72,18 @@ sudo chmod +x /usr/local/bin/cht.sh
 #python neovim module
 sudo npm install -g browser-sync
 sudo npm install -g yarn
+sudo npm i -g @angular/cli
 yarn global add tree-sitter-cli
 yarn global add tree-sitter
 python3 -m pip install --user --upgrade pynvim
 sudo gem install neovim
 sudo npm install -g neovim
+
+#installation of nodenv installer and nodenv build
+curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer | bash
+#installation of nodenv doctor
+curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-doctor | bash
+
 
 #install Oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -81,8 +93,8 @@ sudo chsh -s $(which zsh)
 
 # preparing and create symlinks
 rm $HOME/.zshrc $HOME/.config/nvim/init.vim $HOME/.tmux.conf
-ln -s $(pwd)/.zshrc $HOME/ && ln -s $(which fdfind) $HOME/.local/bin/fd && ln -s $(pwd)/.tmux.conf $HOME/
-ln -s $(pwd)/init.vim $HOME/.config/nvim && ln -s $(pwd)/configs $HOME/.config/nvim
+# have to use full path no relative path for symlinks even tho we could use -r option
+ln -s $(pwd)/nvim/init.lua $HOME/.config/nvim
 
 
 

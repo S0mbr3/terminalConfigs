@@ -22,6 +22,7 @@ elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
 fi
 
 unset env
+#nvr -s
 #
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -120,6 +121,8 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+export VISUAL='nvr -l'
+export EDITOR="$VISUAL"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -142,8 +145,9 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
-function bat(){
-  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
+alias zz="z && ls"
+function bt(){
+  fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -155,3 +159,29 @@ export SDKMAN_DIR="/home/oxhart/.sdkman"
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
 export PATH="$PATH:/home/oxhart/.local/bin/"
+
+#node = "${node -v}"
+#source /usr/share/nvm/init-nvm.sh
+Command() { echo "$(node -v)"; }
+result=$(Command)
+# Load Angular CLI autocompletion.
+if [[ "$result" == "v16.10.0" ]]; then
+  source <(ng completion script)
+fi
+export PATH="$HOME/.nodenv/bin:$PATH"
+eval "$(nodenv init -)"
+export TERM=xterm-kitty
+export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
+
+# for vterm of emacs to pass messages between vterm and the shell
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
