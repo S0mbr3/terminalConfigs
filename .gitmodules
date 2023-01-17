@@ -1,0 +1,9 @@
+[submodule ".dotfiles/emacs/.emacs.d"]
+	path = .dotfiles/emacs/.emacs.d
+	url = https://github.com/doomemacs/doomemacs
+[submodule ".dotfiles/nodenv/.nodenv"]
+	path = .dotfiles/nodenv/.nodenv
+	url = https://github.com/nodenv/nodenv.git
+[submodule ".dotfiles/.dotfiles/nodenv/.nodenv"]
+	path = .dotfiles/.dotfiles/nodenv/.nodenv
+	url = https://github.com/nodenv/nodenv.git
