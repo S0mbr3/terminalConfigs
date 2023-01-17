@@ -45,6 +45,7 @@ return require('packer').startup(function(use)
   use { "nvim-telescope/telescope-file-browser.nvim" }
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}  -- We recommend updating the parsers on update Highlight, edit, and navigate code
    use { 'nvim-treesitter/nvim-treesitter-textobjects', after = { 'nvim-treesitter' } }-- Additional textobjects for treesitter
+   use 'nvim-treesitter/nvim-tree-docs'
   --use 'nvim-lua/completion-nvim'
   use 'udalov/kotlin-vim'
   --use 'norcalli/snippets.nvim'

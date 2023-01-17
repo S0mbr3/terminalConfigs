@@ -1,7 +1,7 @@
 local saga = require'lspsaga'
 local keymap = vim.keymap.set
 saga.init_lsp_saga()
-vim.api.nvim_set_keymap('n', 'gh', "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true })
 keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
 -- vim.api.nvim_set_keymap('n', 'ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('v', 'ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", { noremap = true, silent = true })
@@ -104,7 +104,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint"}
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {

@@ -8,6 +8,7 @@ sudo pip install cmake-language-server
 sudo npm install -g dockerfile-language-server-nodejs
 yarn global add diagnostic-languageserver
 sudo npm install -g vscode-html-languageserver-bin
+sudo npm install -g @tailwindcss/language-server
 #curl -fsSL https://deno.land/x/install/install.sh | sh
 sudo npm install -g typescript-language-server
 (git clone https://github.com/sumneko/lua-language-server $HOME/builds/lua-language-server \

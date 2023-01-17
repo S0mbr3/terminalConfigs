@@ -46,7 +46,7 @@ vim.api.nvim_set_keymap('n', '<leader>mp', [[<Cmd>lua require('material.function
 -- -- Enable `lukas-reineke/indent-blankline.nvim`
 --See `:help indent_blankline.txt`
 
-vim.cmd("colorscheme tokyonight")
+vim.cmd("colorscheme material")
 
 if (vim.g.colors_name == 'tokyonight') then
   vim.o.cursorline=false

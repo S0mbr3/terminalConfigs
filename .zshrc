@@ -146,6 +146,8 @@ alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
 alias zz="z && ls"
+alias kssh='kitty +kitten ssh'
+alias deb='kitty +kitten ssh debian'
 function bt(){
   fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
