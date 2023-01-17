@@ -1,0 +1,11 @@
+
+Warning: due to a long standing Gtk+ bug
+https://gitlab.gnome.org/GNOME/gtk/issues/221
+Emacs might crash when run in daemon mode and the X11 connection is unexpectedly lost.
+Using an Emacs configured with --with-x-toolkit=lucid does not have this problem.
+Starting Emacs daemon.
+Cleaning up the recentf list...
+File /home/oxhart/.emacs.d/test removed from the recentf list
+File /home/oxhart/test1/test removed from the recentf list
+File /home/oxhart/scripts/fz removed from the recentf list
+Cleaning up the recentf list...done (3 removed)

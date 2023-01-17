@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if ! ls -- *' '* 2>/dev/null; then
+  echo "No files or folders detected with spaces"
+  exit 1
+fi
+read -rp 'Do you want to rename all spaces with underscores ? (y/n)' answer
+if [[ $answer == "n" ]]; then
+  exit 0
+fi
+
+while (ls -- *' '* &>/dev/null);
+do
+  rename ' ' '_' ./*
+done
+echo "All files and folders have been renamed !"

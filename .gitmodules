@@ -7,3 +7,6 @@
 [submodule ".dotfiles/.dotfiles/nodenv/.nodenv"]
 	path = .dotfiles/.dotfiles/nodenv/.nodenv
 	url = https://github.com/nodenv/nodenv.git
+[submodule "scripts/fz"]
+	path = scripts/fz
+	url = git@github.com:S0mbr3/fz.git
