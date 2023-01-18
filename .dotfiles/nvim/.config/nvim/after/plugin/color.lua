@@ -2,8 +2,8 @@
 --vim.g.material_transparent = true
 vim.opt.background = "dark"
 require("tokyonight").setup({
-  transparent=true,
-  terminal_colors=true,
+  transparent=false,
+  terminal_colors=false,
   dim_inactive=true,
 })
 
