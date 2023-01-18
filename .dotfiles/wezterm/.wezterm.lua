@@ -11,8 +11,8 @@ return {
     bottom = 0,
   },
   keys = {
-    { key = 'PageUp', mods = 'CTRL|SHIFT', action = act.ScrollToPrompt(-1) },
-    { key = 'PageDown', mods = 'CTRL|SHIFT', action = act.ScrollToPrompt(1) },
+    { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
+    { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
     { key = 'Enter', mods = 'CTRL|SHIFT', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
   },
 }
