@@ -1,6 +1,4 @@
---local saga = require'lspsaga'
 local keymap = vim.keymap.set
---saga.init_lsp_saga()
 vim.api.nvim_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true })
 keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
 -- vim.api.nvim_set_keymap('n', 'ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", { noremap = true, silent = true })
@@ -11,8 +9,8 @@ vim.api.nvim_set_keymap('n', '<C-b>', "<cmd>lua require('lspsaga.action').smart_
 vim.api.nvim_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>lr', "<cmd>Lspsaga rename<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>ld', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>cc', "<cmd>lua require'lspsaga.diagnostic'.show_cursor_diagnostics()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>Lspsaga show_line_diagnostics<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cc', "<cmd>Lspsaga show_cursor_diagnostics<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '[e', "<cmd>Lspsaga diagnostic_jump_prev<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', ']e', "<cmd>Lspsaga diagnostic_jump_next<CR>", { noremap = true, silent = true })
 -- Only jump to error
@@ -22,12 +20,19 @@ end, { silent = true })
 vim.keymap.set("n", "]E", function()
   require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
-vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>Lspsaga open_floaterm<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<A-d>', "<C-\\><C-n><cmd>Lspsaga close_floaterm<CR>", { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>Lspsaga term_floaterm<CR>", { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('t', '<A-d>', "<C-\\><C-n><cmd>Lspsaga close_floaterm<CR>", { noremap = true, silent = true })
+-- Float terminal
+keymap({"n", "t"}, "<A-q>", "<cmd>Lspsaga term_toggle<CR>")
+
 keymap("n", "<leader>lp", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 -- outline
 keymap("n","<leader>lo", "<cmd>LSoutlineToggle<CR>",{ silent = true })
 
+keymap("n", "gp", "<cmd>Lspsaga peek_definition<CR>")
+
+-- Go to Definition
+keymap("n","gd", "<cmd>Lspsaga goto_definition<CR>")
 --end of LSPSAGA CONFIGURATION
 
 -- Diagnostic keymaps
@@ -66,7 +71,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   --nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  --nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('gr', require('telescope.builtin').lsp_references, '[T]elescope [R]eferences')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')

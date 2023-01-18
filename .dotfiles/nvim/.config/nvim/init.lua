@@ -40,7 +40,7 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 })
 
 
---vim.lsp.set_log_level("debug")
+vim.lsp.set_log_level("debug")
 --vim.api.nvim_set_keymap('n', '<Leader>lg', ":LazyGit<cr>", { noremap = true, silent = true })
 --vim.api.nvim_set_keymap('n', '<Leader>lc', ":LazyGitConfig<cr>", { noremap = true, silent = true })
 
