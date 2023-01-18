@@ -148,6 +148,7 @@ alias c='cht.sh'
 alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias deb='kitty +kitten ssh debian'
+export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
 function bt(){
   fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }

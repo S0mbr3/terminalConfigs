@@ -7,7 +7,13 @@ return require('packer').startup(function(use)
     use 'williamboman/mason.nvim'                                                        -- Manage external editor tooling i.e LSP servers
   use 'williamboman/mason-lspconfig.nvim'
   --use 'kkharji/lspsaga.nvim'
-  use 'glepnir/lspsaga.nvim'
+  use ({
+    'glepnir/lspsaga.nvim',
+    branch = "main",
+    config = function()
+      require('lspsaga').setup({})
+    end,
+    })
   use 'brooth/far.vim' --asynchronous search and replace operations on a set of files
   use 'Shougo/echodoc.vim' --print completed documention
   use 'Shougo/neoinclude.vim' --complete candidates from included files and path

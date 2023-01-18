@@ -1,6 +1,6 @@
-local saga = require'lspsaga'
+--local saga = require'lspsaga'
 local keymap = vim.keymap.set
-saga.init_lsp_saga()
+--saga.init_lsp_saga()
 vim.api.nvim_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true })
 keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
 -- vim.api.nvim_set_keymap('n', 'ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", { noremap = true, silent = true })
