@@ -6,13 +6,23 @@ vim.api.nvim_set_keymap('n', '<Leader>fg', "<cmd>lua require('telescope.builtin'
 vim.api.nvim_set_keymap('n', '<Leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fc', "<cmd>lua require'telescope'.extensions.project.project{}<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fi', "<cmd>lua require'telescope'.extensions.project.project{}<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fn', "<cmd>lua require'telescope'.extensions.file_browser.file_browser{}<cr>", { noremap = true, silent = true })
 
 
 -- You dont need to set any of these options. These are the default ones. Only
 vim.api.nvim_set_keymap('n', '<Leader>fe', "<cmd>lua require('telescope.builtin').builtin({ include_extensions=true })<cr>", { noremap = true, silent = true })
 -- the loading is important
+local actions = require("telescope.actions")
 require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+      },
+    },
+  },
   extensions = {
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
@@ -20,7 +30,10 @@ require('telescope').setup {
       override_file_sorter = true,     -- override the file sorter
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
-    }
+    },
+    project = {
+      hidden_files = true,
+    },
   }
 }
 -- To get fzf loaded and working with telescope, you need to call

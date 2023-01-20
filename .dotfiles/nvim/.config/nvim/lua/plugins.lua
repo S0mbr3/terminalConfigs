@@ -68,6 +68,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
   use 'github/copilot.vim'
+  use { 'catppuccin/nvim', as = 'catppuccin'}
   use 'folke/tokyonight.nvim'
   use 'marko-cerovac/material.nvim'
   use {'kdheepak/lazygit.nvim'}

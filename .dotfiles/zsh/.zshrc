@@ -1,6 +1,16 @@
 
 #Auto-launching ssh-agent to save passphrases
 
+function_name (){
+  toilet "Hello Ox"
+  #neofetch
+  cowsay "je t'aime"
+  fortune > fortune;
+  lolcat -a fortune
+  rm fortune
+}
+function_name
+
 env=~/.ssh/agent.env
 
 agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
@@ -173,7 +183,8 @@ if [[ "$result" == "v16.10.0" ]]; then
 fi
 export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
-export TERM=xterm-kitty
+#export TERM=xterm-kitty
+export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 
 # for vterm of emacs to pass messages between vterm and the shell
