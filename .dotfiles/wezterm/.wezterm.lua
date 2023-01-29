@@ -1,5 +1,7 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
+local layouts = 'right'
+--local l = require('layouts')
 
 function getCommand(commandVar, ifnil)
       local handle = io.popen(commandVar)
@@ -13,6 +15,70 @@ function getCommand(commandVar, ifnil)
     return output
 end
 
+
+  local split = function(position)
+    local _,_,_ = wezterm.run_child_process {'wezterm', 'cli', 'split-pane', position}
+  end
+
+local right = function(pane)
+  if #pane:tab():panes() <= 1 then
+    --pane:split {direction = 'Right'}
+    split('--right')
+  else
+    --pane:split {direction = 'Bottom'}
+    split('--bottom')
+  end
+end
+
+local bottom = function (pane)
+  if #pane:tab():panes() <= 1 then
+    split('--bottom')
+    --pane:split {direction = 'Bottom'}
+  else
+    split('--right')
+    --pane:split {direction = 'Right'}
+  end
+end
+
+wezterm.on ("flayouts",
+function(window, pane)
+  if layouts == 'right' then
+    layouts = 'top'
+  elseif layouts == 'top' then
+    layouts = 'right'
+    end
+  --act.MoveTabRelative()
+  window:perform_action(wezterm.action.MoveTabRelative(-1), pane)
+  --local _,tabs,_ = wezterm.run_child_process {"jq", "'.[]", "|", "select(.window_id==0)", "|", ".pane_id'"}
+  print(pane:tab():tab_id())
+  local pane_ids = {}
+  print ( pane:tab():panes() )
+  local panes = pane:tab():panes()
+  for _, v in ipairs(panes) do
+  local v_string = tostring(v)
+    for pane_id in string.gmatch(v_string, "pane_id:(%d+)") do
+        table.insert(pane_ids, pane_id)
+    end
+  end
+  print(pane_ids)
+  --local _,tabs,_ = wezterm.run_child_process {'/bin/bash $HOME/wez.sh', pane:tab():tab_id()}
+  --local tabs = getCommand('/bin/bash $HOME/wez.sh', "deso")
+  --print("tabs lists: " ..tabs)
+  end);
+
+wezterm.on("make-layouts",
+function(window, pane)
+  --local panes = pane:tab():panes()
+  print("layouts tests")
+  print(#pane:tab():panes())
+  print(pane:tab():panes())
+  print(pane:tab():panes_with_info())
+  if layouts == "right" then
+    right(pane)
+  elseif layouts == "top" then
+    bottom(pane)
+  end
+end);
 
 wezterm.on("update-status", function(window, pane)
       -- demonstrates shelling out to get some external status.
@@ -36,7 +102,7 @@ wezterm.on("update-status", function(window, pane)
 
       local success_date, date, stderr_date = wezterm.run_child_process({"date"});
       if success_date then
-        date = wezterm.strftime("%Y-%m-%d %H:%M:%S");
+       date = wezterm.strftime("%A %H:%M:%S %d-%m-%Y");
       else
         print(stderr_date)
       end
@@ -47,7 +113,7 @@ wezterm.on("update-status", function(window, pane)
       window:set_right_status(wezterm.format({
         {Attribute={Underline="Curly"}},
         {Attribute={Italic=true}},
-        {Text = os.getenv('USER').. " " ..uname.. " "},
+        {Text = layouts .." " ..os.getenv('USER').. " " ..uname.. " "},
         {Foreground = {AnsiColor = 'Purple' }},
         {Text = date.. " "},
         {Foreground = {AnsiColor = 'Lime' }},
@@ -65,9 +131,16 @@ return {
       remote_address = '192.168.0.50:5045',
       username = 'nebj',
     },
+    {
+      name = 'learc',
+      remote_address = '82.66.43.46:5046',
+      username = 'oxhart',
+    },
   },
   --color_scheme = "tokyonight-storm",
   color_scheme = "ChallengerDeep",
+  window_background_opacity = 0.8,
+  font_size=12,
   tab_bar_at_bottom = true,
   window_padding = {
     left = 0,
@@ -75,13 +148,20 @@ return {
     top = 0,
     bottom = 0,
   },
+  --leader = { key = 'a', mods = 'CTRL', timeout_milliseconds=1000},
   keys = {
-    { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
+    { key = 'k', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Prev' },
+    { key = 'j', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Next' },
     { key = '[', mods = 'CTRL|SUPER', action = act.ActivatePaneDirection 'Prev' },
     { key = ']', mods = 'CTRL|SUPER', action = act.ActivatePaneDirection 'Next' },
-    { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
     { key = 'w', mods = 'SHIFT|CTRL', action = act.CloseCurrentPane {confirm = true }},
-    { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
     { key = 'Enter', mods = 'CTRL|SHIFT', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
+    { key = '|', mods = 'CTRL|SHIFT', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
+    { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
+    { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
+    --{ key = 'm', mods = 'SHIFT|CTRL', action =  l.layout()},
+    { key = 'm', mods = 'SHIFT|CTRL', action =  wezterm.action {EmitEvent = "make-layouts"}},
+    { key = 'b', mods = 'SHIFT|CTRL', action =  wezterm.action {EmitEvent = "flayouts"}},
   },
 }
+

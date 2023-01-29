@@ -47,9 +47,10 @@ vim.api.nvim_set_keymap('n', '<leader>mp', [[<Cmd>lua require('material.function
 --See `:help indent_blankline.txt`
 
 --vim.cmd[[colorscheme tokyonight-moon]]
-vim.cmd[[colorscheme catppuccin-mocha]]
+--vim.cmd[[colorscheme catppuccin-mocha]]
+vim.cmd[[colorscheme tokyonight-moon]]
 
-if (vim.g.colors_name == 'tokyonight') then
+if (vim.g.colors_name == 'tokyonight-night') then
   vim.o.cursorline=false
       -- Set a bunch of things
        end

@@ -1,5 +1,5 @@
 -- leader mapping has to come before requiring plugins !
-vim.g.mapleader = ' ' --set the mapleader to space
+vim.g.mapleader = ' ' --set the mapleader to spaceswitchterm
 vim.g.maplocalleader = ' '
 
 -- Keymaps for better default experience
@@ -49,6 +49,8 @@ vim.api.nvim_set_keymap('n', '<Leader>sqa', ':wqa<CR>', { noremap = false, silen
 vim.api.nvim_set_keymap('n', '<Leader>q', ':q<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qf', ':q!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qaf', ':qa!<CR>', { noremap = false, silent = true })
+
+vim.api.nvim_set_keymap('n', '<Leader>x', ':w|luafile %<CR>', { noremap = false, silent = true })
 
 -- 'cd' towards the directory in which the current file is edited
 -- but only change the path for the current window

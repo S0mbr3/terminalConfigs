@@ -6,9 +6,9 @@ function_name (){
   toilet "Hello Ox"
   if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
     cowsay "The system is running Arch Linux"
-    export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
   else
     echo "The system is not running Arch Linux"
+    export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
   fi
   #neofetch
   fortune > fortune;
@@ -163,16 +163,12 @@ alias lt='ls --tree'
 alias c='cht.sh'
 alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
-alias deb='kitty +kitten ssh debian'
+alias kdeb='kitty +kitten ssh debian'
+alias deb='ssh debian'
 function bt(){
   fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/oxhart/.sdkman"
-[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
@@ -191,6 +187,7 @@ eval "$(nodenv init -)"
 #export TERM=xterm-kitty
 export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
+source ~/wezterm.sh
 
 # for vterm of emacs to pass messages between vterm and the shell
 vterm_printf(){
@@ -205,3 +202,8 @@ vterm_printf(){
     fi
 }
 
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/oxhart/.sdkman"
+[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
