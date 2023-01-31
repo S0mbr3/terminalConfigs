@@ -16,27 +16,105 @@ function getCommand(commandVar, ifnil)
 end
 
 
-  local split = function(position)
-    local _,_,_ = wezterm.run_child_process {'wezterm', 'cli', 'split-pane', position}
-  end
+local move = function(id)
+  local _,_,_ = wezterm.run_child_process{'wezterm', 'cli', 'move-pane-to-new-tab', '--pane-id', id}
+end
 
-local right = function(pane)
-  if #pane:tab():panes() <= 1 then
-    --pane:split {direction = 'Right'}
-    split('--right')
+  local split = function(position, id)
+    id = id or nil
+    if id == nil then
+    local _,_,_ = wezterm.run_child_process {'wezterm', 'cli', 'split-pane', position}
   else
-    --pane:split {direction = 'Bottom'}
-    split('--bottom')
+    local _,_,_ = wezterm.run_child_process {'wezterm', 'cli', 'split-pane', position, '--move-pane-id', id}
   end
 end
 
-local bottom = function (pane)
-  if #pane:tab():panes() <= 1 then
-    split('--bottom')
-    --pane:split {direction = 'Bottom'}
+local right = function(pane, id, first_split)
+  id = id or nil
+  first_split = first_split or nil
+  print("first split is: "..tostring(first_split))
+  if id == nil then
+    if #pane:tab():panes() <= 1 then
+      --pane:split {direction = 'Right'}
+      split('--right')
+    else
+      --pane:split {direction = 'Bottom'}
+      split('--bottom')
+    end
   else
-    split('--right')
-    --pane:split {direction = 'Right'}
+    if first_split == true then
+      --pane:split {direction = 'Right'}
+      split('--right', id)
+    else
+      --pane:split {direction = 'Bottom'}
+      split('--bottom', id)
+    end
+  end
+end
+
+local bottom = function (pane, id, first_split)
+  id = id or nil
+  first_split = first_split or nil
+  print("first split is" ..tostring(first_split))
+  if id == nil then
+    if #pane:tab():panes() <= 1 then
+      split('--bottom')
+      --pane:split {direction = 'Bottom'}
+    else
+      split('--right')
+      --pane:split {direction = 'Right'}
+    end
+  else
+    if first_split == true then
+      split('--bottom', id)
+      --pane:split {direction = 'Bottom'}
+    else
+      split('--right', id)
+      --pane:split {direction = 'Right'}
+    end
+  end
+end
+
+local detect_tab = function(tabs, window, pane)
+  local index=0
+  for _, v in ipairs(tabs) do
+  print("is active? "..tostring(v.is_active))
+  if v.is_active == true then
+      print('C EST LA BONNNNNE TAB son id est: '.. tostring(v.index))
+      if v.is_active == true then print('C EST LA BONNNNNE TAB son id est: '.. v.index) end
+      index = v.index
+      end
+    end
+    local step = tabs[#tabs].index - index + 1
+    print("the step is: "..tostring(step))
+    window:perform_action(wezterm.action.ActivateTabRelative(step), pane)
+    window:perform_action(wezterm.action.MoveTabRelative(-step), pane)
+end
+
+local change_layout_bottom = function(pane_ids, pane, window)
+  local first_pane = true
+  local first_split = true
+  local tabs = pane:tab():window():tabs_with_info()
+  --print(tabs)
+  for _, v in ipairs(pane_ids) do
+    local v_string = tostring(v)
+    if first_pane == true then
+      move(v)
+      detect_tab(tabs, window, pane)
+      first_pane = false
+    else
+      local panes_number = #pane:tab():panes()
+      print("deuxieme tour: "..v_string)
+      print("deuxieme tour: "..tostring(first_split))
+      if layouts == "top" then
+        print("layouting: "..panes_number.. tostring(first_split))
+      bottom(pane, v_string, first_split)
+    else
+      print("layouting: "..panes_number.. " "..tostring(first_split))
+      right(pane,v_string, first_split )
+    end
+    if first_split == true then first_split = false end
+  end
   end
 end
 
@@ -48,19 +126,23 @@ function(window, pane)
     layouts = 'right'
     end
   --act.MoveTabRelative()
-  window:perform_action(wezterm.action.MoveTabRelative(-1), pane)
+  --window:perform_action(wezterm.action.MoveTabRelative(-1), pane)
   --local _,tabs,_ = wezterm.run_child_process {"jq", "'.[]", "|", "select(.window_id==0)", "|", ".pane_id'"}
-  print(pane:tab():tab_id())
-  local pane_ids = {}
-  print ( pane:tab():panes() )
+  print("tab id is: "..pane:tab():tab_id())
+  --print( pane:tab():panes_with_info() )
+  print(pane:tab():window():tabs_with_info())
   local panes = pane:tab():panes()
+
+  local pane_ids = {}
   for _, v in ipairs(panes) do
+      print(v)
   local v_string = tostring(v)
     for pane_id in string.gmatch(v_string, "pane_id:(%d+)") do
         table.insert(pane_ids, pane_id)
     end
   end
-  print(pane_ids)
+  change_layout_bottom(pane_ids, pane, window)
+
   --local _,tabs,_ = wezterm.run_child_process {'/bin/bash $HOME/wez.sh', pane:tab():tab_id()}
   --local tabs = getCommand('/bin/bash $HOME/wez.sh', "deso")
   --print("tabs lists: " ..tabs)
@@ -89,6 +171,11 @@ wezterm.on("update-status", function(window, pane)
       -- user = string.gsub(user, "\n", "")
       -- print(string.format("%s %s %s", stdout, success, stderr))
       local command= "jq -r '.name' $HOME/scripts/fete/day.json"
+
+      local panes_number
+      if #pane:tab():panes() then panes_number = tostring(#pane:tab():panes())
+      else panes_number = "oncpa" end
+
       --local output = getCommand(command, "dulamour")
       --local  success1, uname1, stderr = wezterm.run_child_process { 'uname', '-a', '|', 'cut', '-d', "' '", '-f2,3' }
       --print("the uname1 is: "..uname1.. "and success is: "..tostring(success1))
@@ -113,7 +200,7 @@ wezterm.on("update-status", function(window, pane)
       window:set_right_status(wezterm.format({
         {Attribute={Underline="Curly"}},
         {Attribute={Italic=true}},
-        {Text = layouts .. " " ..#pane:tab():panes() .." " ..os.getenv('USER').. " " ..uname.. " "},
+        {Text = layouts .. " " ..panes_number .." " ..os.getenv('USER').. " " ..uname.. " "},
         {Foreground = {AnsiColor = 'Purple' }},
         {Text = date.. " "},
         {Foreground = {AnsiColor = 'Lime' }},
