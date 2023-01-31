@@ -1,0 +1,3 @@
+#!/bin/bash
+kill -s kill $(ps -C "volumeicon" -o pid=)
+volumeicon&

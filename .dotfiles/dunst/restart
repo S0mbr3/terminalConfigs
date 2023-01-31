@@ -1,0 +1,5 @@
+#!/bin/bash
+
+kill -s kill $(ps -C "dunst" -o pid=)
+dunst&
+notify-send "Hello there" "Text text text"
