@@ -1,6 +1,6 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
-local layouts = 'right'
+local layouts = 'top'
 --local l = require('layouts')
 
 function getCommand(commandVar, ifnil)
@@ -113,11 +113,11 @@ wezterm.on("update-status", function(window, pane)
       window:set_right_status(wezterm.format({
         {Attribute={Underline="Curly"}},
         {Attribute={Italic=true}},
-        {Text = layouts .." " ..os.getenv('USER').. " " ..uname.. " "},
+        {Text = layouts .. " " ..#pane:tab():panes() .." " ..os.getenv('USER').. " " ..uname.. " "},
         {Foreground = {AnsiColor = 'Purple' }},
         {Text = date.. " "},
         {Foreground = {AnsiColor = 'Lime' }},
-        {Text=string.format("bonne fete aux %s", fete)},
+        {Text=string.format("bonne fête aux %s", fete)},
         -- {Text=date},
         -- {Text=user},
         -- {Text=fete},
@@ -155,12 +155,12 @@ return {
     { key = '[', mods = 'CTRL|SUPER', action = act.ActivatePaneDirection 'Prev' },
     { key = ']', mods = 'CTRL|SUPER', action = act.ActivatePaneDirection 'Next' },
     { key = 'w', mods = 'SHIFT|CTRL', action = act.CloseCurrentPane {confirm = true }},
-    { key = 'Enter', mods = 'CTRL|SHIFT', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
+    --{ key = 'Enter', mods = 'CTRL|SHIFT', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
     { key = '|', mods = 'CTRL|SHIFT', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
     { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
     { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
     --{ key = 'm', mods = 'SHIFT|CTRL', action =  l.layout()},
-    { key = 'm', mods = 'SHIFT|CTRL', action =  wezterm.action {EmitEvent = "make-layouts"}},
+    { key = 'Enter', mods = 'SHIFT|CTRL', action =  wezterm.action {EmitEvent = "make-layouts"}},
     { key = 'b', mods = 'SHIFT|CTRL', action =  wezterm.action {EmitEvent = "flayouts"}},
   },
 }

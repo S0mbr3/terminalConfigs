@@ -77,3 +77,8 @@ vim.api.nvim_set_keymap('t', '<M-6>', '<C-\\><C-n>2gt', { noremap = true, silent
 vim.api.nvim_set_keymap('t', '<M-7>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<M-8>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<M-9>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
+
+
+
+-- executing shell commands
+vim.api.nvim_set_keymap('n', '<Leader><C-e>', ':!/bin/bash ~/.config/volumeicon/restart<CR>', { noremap = true, silent = true })
