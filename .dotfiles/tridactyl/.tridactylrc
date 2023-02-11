@@ -29,3 +29,4 @@ set searchurls.s https://paulgo.io/search?q=
 set searchurls.st https://stackoverflow.com/search?q=
 set searchurls.gi https://github.com/search?utf8=✓&q=
 set searchurls.wez https://wezfurlong.org/wezterm/install/source.html?search=
+set searchurls.dl https://www.deepl.com/translator#fr/en/

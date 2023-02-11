@@ -18,7 +18,7 @@ vim.o.laststatus=2
 vim.o.insearch=true --show searching as typing
 vim.o.hlsearch=false -- highliting or no the searches
 --vim.o.statusline=[[ %F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%0.3b]\ [HEX=\%02.2B]\ [POS=%04v]\ [%p%%]\ [LEN=%L] ]]
-vim.cmd([[syntax on ]]) --Add syntax
+--vim.cmd([[syntax on ]]) --Add syntax
 --vim.o.autoindent=true
 vim.o.smartindent=true
 vim.o.encoding="utf-8"

@@ -17,27 +17,29 @@ function_name (){
 }
 function_name
 
-env=~/.ssh/agent.env
+function sshe(){
+  env=~/.ssh/agent.env
 
-agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+  agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
 
-agent_start () {
+  agent_start () {
     (umask 077; ssh-agent >| "$env")
     . "$env" >| /dev/null ; }
 
-agent_load_env
+    agent_load_env
 
 # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
 agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
 
 if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-    agent_start
-    ssh-add
+  agent_start
+  ssh-add
 elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-    ssh-add
+  ssh-add
 fi
 
 unset env
+}
 #nvr -s
 #
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -161,10 +163,16 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
-alias zz="z && ls"
+#alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
 alias deb='ssh debian'
+
+
+functin zz(){
+  z $1
+  ls
+}
 function bt(){
   fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 }
@@ -184,8 +192,8 @@ if [[ "$result" == "v16.10.0" ]]; then
 fi
 export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
-#export TERM=xterm-kitty
-export TERM=xterm-256color
+export TERM=xterm-kitty
+#export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 source ~/wezterm.sh
 

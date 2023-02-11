@@ -46,9 +46,15 @@ vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { no
 vim.api.nvim_set_keymap('n', '<Leader>w', ':w<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>sa', ':wa<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>sqa', ':wqa<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>q', ':q<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>qi', ':q<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qf', ':q!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qaf', ':qa!<CR>', { noremap = false, silent = true })
+
+
+vim.api.nvim_set_keymap('n', '<Leader>bd', ':bd<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>bn', ':bn<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>bp', ':bp<CR>', { noremap = false, silent = true })
+
 
 vim.api.nvim_set_keymap('n', '<Leader>x', ':w|luafile %<CR>', { noremap = false, silent = true })
 

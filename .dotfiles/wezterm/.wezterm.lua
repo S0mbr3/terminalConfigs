@@ -4,11 +4,9 @@ local act = wezterm.action
 local layouts_name = { 'bottom', 'right', 'column' }
 local layouts = {}
 local layouts_index = 1
-local width_cell = nil
-local height_cell = nil
 --local l = require('layouts')
 
-function getCommand(commandVar, ifnil)
+local getCommand = function (commandVar, ifnil)
   local handle = io.popen(commandVar)
   local output = nil
   if handle  then
@@ -36,12 +34,8 @@ end
 
 local right = function(args)
   print("entering")
-  id = args.id or nil
-  first_split = args.first_split
-  pane = args.pane or nil
-  print("first split is: "..tostring(args.first_split))
   if args.id == nil then
-    if #pane:tab():panes() <= 1 then
+    if #args.pane:tab():panes() <= 1 then
       --pane:split {direction = 'Right'}
       split('--right')
     else
@@ -83,7 +77,7 @@ end
 
 local column = function(args)
   print("column layout")
-  if args.id == nil then 
+  if args.id == nil then
     split ('--right')
   else
     split('--right', args.id, args.percentage)
@@ -183,18 +177,10 @@ function(window, pane)
 end);
 
 wezterm.on("make-layouts",
-function(window, pane)
-  --local panes = pane:tab():panes()
-  -- print("layouts tests")
-  -- print(#pane:tab():panes())
-  -- print(pane:tab():panes())
+function(_, pane)
   print(pane:tab():panes_with_info())
-  if layouts_name[layouts_index] then
-    -- print("le nom est: "..tostring(layouts_name[layouts_index].. "son index est:".. tostring(layouts_index)))
-  end
-
-  layout = layouts[layouts_name[layouts_index]]
-  if layout then 
+  local layout = layouts[layouts_name[layouts_index]]
+  if layout then
     layout({pane=pane})
   else
     print("MEGA ERROR: ")
@@ -272,9 +258,15 @@ return {
     },
   },
   --color_scheme = "tokyonight-storm",
+  enable_kitty_keyboard=true,
+  enable_kitty_graphics=true,
   color_scheme = "ChallengerDeep",
   window_background_opacity = 0.8,
-  font_size=12,
+  --font = wezterm.font 'Fira Code Regular Nerd Font Complete',
+  font = wezterm.font("FiraCode Nerd Font", {weight="Regular", stretch="Normal", style="Normal"}),
+  harfbuzz_features = {"cv13" , "ss01", "cv06", "ss07",  'ss09', 'cv27', 'cv28',
+  'ss06', 'ss10', 'cv25', 'cv01', 'cv02', 'cv14', 'cv16', 'cv31', 'cv29', 'cv30', 'ss05'},
+  font_size=11,
   tab_bar_at_bottom = true,
   window_padding = {
     left = 0,
