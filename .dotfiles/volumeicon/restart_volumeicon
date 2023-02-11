@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ "$(ps -C 'volumeicon' -o pid=)" != "" ]]; then
+  echo "Killing volumeicon"
+  kill -s kill "$(ps -C "volumeicon" -o pid=)"
+else 
+  echo "nothing to kill"
+fi
+volumeicon&
