@@ -4,6 +4,7 @@
 pcall(require, "luarocks.loader")
 
 -- Standard awesome library
+local volume_widget = require('awesome-wm-widgets.pactl-widget.volume')
 local bluetooth = require("gobo.awesome.bluetooth") -- bluetooth widget for awesomeWM from this github repo:     https://github.com/gobolinux/gobo-awesome-bluetooth 
 local toggle_all_tags = require("my_modules.toggle_all_tags")
 local statusbar = require('my_modules.statusbar')
@@ -136,6 +137,7 @@ mywidget = awful.widget.watch([[ bash -c "sensors | grep temp1"]], 15)
 fete_text_box = wibox.widget.textbox(" | Bonne fête aux ")
 fete_widget = awful.widget.watch([[ bash -c "jq -r '.name' ~/scripts/fete/day.json" ]])
 
+net_wireless = net_widgets.wireless({interface="wlp8s0"})
 net_wired = net_widgets.indicator({})
 
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
@@ -215,8 +217,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
                 mytextclock,
                 fete_text_box,
                 fete_widget,
+                net_wireless,
                 net_wired,
                 net_internet,
+                volume_widget(),
                 bluetooth.new(),
                 s.mylayoutbox,
             },
@@ -341,6 +345,12 @@ return popup
 end ]]
 
 awful.keyboard.append_global_keybindings({
+    awful.key({}, "XF86AudioLowerVolume",      function() volume_widget:dec(5) end,
+              {description="Lower volume", group="Benji"}),
+    awful.key({}, "XF86AudioMute",      function() volume_widget:toggle() end,
+              {description="Toggle Mute", group="Benji"}),
+    awful.key({}, "XF86AudioRaiseVolume",      function() volume_widget:inc(5) end,
+              {description="Raise volume", group="Benji"}),
     awful.key({ modkey, "Control"           }, "b",      function() popTest() end,
               {description="Pop Test", group="Benji"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -739,8 +749,9 @@ local autorun = true
 local autorunApps =
 {
   'setxkbmap -layout us -variant altgr-intl -option nodeadkeys',
-  '~/.config/volumeicon/restart_volumeicon',
+  --'~/.config/volumeicon/restart_volumeicon',
   'picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0',
+  'sudo systemctl start bluetooth.service',
   'nvidia-settings -assign CurrentMetaMode="nvidia-settings --assign CurrentMetaMode="DP-0: 2560x1600+0+0 { ForceFullCompositionPipeline = On }"',
 }
 if autorun then
