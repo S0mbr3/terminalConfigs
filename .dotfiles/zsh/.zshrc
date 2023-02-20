@@ -1,5 +1,4 @@
 
-#Auto-launching ssh-agent to save passphrases
 
 
 function_name (){
@@ -16,6 +15,17 @@ function_name (){
   rm fortune
 }
 function_name
+
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
+
+#Auto-launching ssh-agent to save passphrases
 
 function sshe(){
   env=~/.ssh/agent.env
@@ -42,12 +52,6 @@ unset env
 }
 #nvr -s
 #
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -129,9 +133,8 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -180,7 +183,6 @@ function bt(){
 
 
 alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
-export PATH="$PATH:/home/oxhart/.local/bin/"
 
 #node = "${node -v}"
 #source /usr/share/nvm/init-nvm.sh
@@ -190,12 +192,12 @@ result=$(Command)
 if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
-export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
 export TERM=xterm-kitty
 #export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
-source ~/wezterm.sh
+## uncomment below line to allow shell integration with wezterm using wezterm.sh
+#source ~/wezterm.sh
 
 # for vterm of emacs to pass messages between vterm and the shell
 vterm_printf(){
@@ -210,6 +212,8 @@ vterm_printf(){
     fi
 }
 
+HISTSIZE=20000
+SAVEHIST=20000
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"

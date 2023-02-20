@@ -237,3 +237,32 @@
                 alert-libnotify-additional-args '("--hint=string:desktop-entry:emacs")
                 org-alert-notification-title "Org Notifications")
                 ( org-alert-enable))
+;;
+;;the function below will open a temporary buffer to show the content of the corresponding to the pattern i am searching in the project
+
+;; (add-hook '+vertico/search-project-hook #'(lambda ()
+;;                                             (text-mode)))
+
+(defun my/ivy-format-function-search (cands)
+  (ivy--format-function-default (mapcar (lambda (cand)
+                                          (let ((file (car cand))
+                                            (line (cadr cand)))
+                                        (with-temp-buffer
+                                          (insert-file-contents file)
+                                          (concat
+                                           (propertize file 'face 'ivy-grep-info)
+                                           ":"
+                                           (propertize (number-to-string line) 'face 'font-lock-constant-face)
+                                           ": "
+                                           (buffer-substring (point-at-bol) (point-at-eol))))))
+                                  cands)))
+
+
+(setq ivy-format-function 'my/ivy-format-function-search)
+
+(map! :leader
+      "/" #'+vertico/project-search)
+
+(setq-default left-fringe-width nil)
+(setq-default right-fringe-width 0)
+(set-fringe-mode '(0 . 0))

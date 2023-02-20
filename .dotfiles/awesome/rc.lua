@@ -1,3 +1,5 @@
+
+
 -- awesome_mode: api-level=4:screen=on
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
@@ -244,7 +246,6 @@ local popme = function()
   local notification_widgets = {}
 local notest = function(n)
   --[[ local myscreen = awful.screen.focused()
-
   myscreen.mywibox.visible = not myscreen.mywibox.visible ]]
         naughty.notification{message='YEN A PLEIN '}
   --notification_widgets[#notification_widgets+1] = wibox.widget.textbox(n.title)
@@ -543,8 +544,27 @@ client.connect_signal("request::default_mousebindings", function()
     })
 end)
 
+local no_fullscreen = true
+local claimed_fullscreen_rule = {class = {"firefox", "vlc"}}
+awful.client.set_claimed_fullscreen(claimed_fullscreen_rule)
+client.disconnect_signal("request::geometry", awful.ewmh.geometry)
+client.connect_signal("request::geometry", function(c, context, ...)
+  local tmp_rule = awful.client.get_claimed_fullscreen()
+  local i = 0;
+  while i < #tmp_rule do
+    local string = table.unpack(tmp_rule,i)
+    naughty.notification{title="mes regles", message=tostring(string)}
+  end
+    print(table.unpack(tmp_rule))
+  if not no_fullscreen or context ~= "fullscreen" or not awful.rules.match_any(c, claimed_fullscreen_rule) then
+    awful.ewmh.geometry(c, context, ...)
+  end
+end)
+
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
+      awful.key({ modkey, "Shift"   }, "p",      function () no_fullscreen = not no_fullscreen; naughty.notification{title="Claimed fullscreen ?", message=tostring(no_fullscreen)}                         end,
+      {description = "Claim fullscreen client", group = "Benji"}),
         awful.key({ modkey, "Shift"}, "s", function () 
           local c = client.focus
           if c then c.sticky = not c.sticky end
@@ -608,7 +628,8 @@ ruled.client.connect_signal("request::rules", function()
             raise     = true,
             screen    = awful.screen.preferred,
             placement = awful.placement.no_overlap+awful.placement.no_offscreen
-        }
+        },
+        callback = awful.client.setslave --set new clients as slave instead of spawning at maste area
     }
 
     -- Floating clients.
@@ -721,6 +742,8 @@ screen.connect_signal("arrange", function (s)
         if only_one and not c.floating or c.maximized then
             c.border_width = 0
             --c.fullscreen = true
+          elseif only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
+            c.border_width = 0
         else
             c.border_width = beautiful.border_width -- your border width
             --c.fullscreen = false
@@ -759,4 +782,3 @@ if autorun then
     awful.spawn.with_shell(autorunApps[app])
   end
 end
-
