@@ -1,6 +1,6 @@
 
 return require('packer').startup(function(use)
-  use ''
+  use 'simrat39/rust-tools.nvim'
   use 'neovim/nvim-lspconfig'
   use 'mfussenegger/nvim-dap'
   --use 'tami5/lspsaga.nvim'

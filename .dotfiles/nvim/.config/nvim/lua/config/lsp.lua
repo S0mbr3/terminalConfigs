@@ -109,7 +109,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
+local servers = { 'clangd', 'pyright', 'tsserver', 'lua_ls', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -129,7 +129,7 @@ require'lspconfig'.emmet_ls.setup({
   filetypes = { "html", "php", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "typescript"},
 })
 
-require'lspconfig'.sumneko_lua.setup {
+require'lspconfig'.lua_ls.setup {
   settings = {
     Lua = {
       runtime = {
@@ -151,3 +151,30 @@ require'lspconfig'.sumneko_lua.setup {
     },
   },
 }
+
+-- Update this path
+-- for rust debugger watch rust-tools
+local extension_path = vim.env.HOME .. '/.vscode-oss/extensions/vadimcn.vscode-lldb-1.8.1-universal/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'  -- MacOS: This may be .dylib
+
+local opts = {
+  -- ... other configs
+  dap = {
+    adapter = require('rust-tools.dap').get_codelldb_adapter(
+    codelldb_path, liblldb_path)
+  }
+}
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<Leader>r", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
+

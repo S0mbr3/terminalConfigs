@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+#script to init few things in awesomeWM
+
+nvidia-settings --assign CurrentMetaMode="DP-0: 2560x1600+0+0 { ForceFullCompositionPipeline = On }"
+sudo systemctl start bluetooth.service
+sudo rfkill unblock wifi
+sudo wpa_supplicant -B -i wlp8s0 -c /etc/wpa_supplicant/hiden.conf
+sudo dhcpcd wlp8s0

@@ -219,10 +219,13 @@ screen.connect_signal("request::desktop_decoration", function(s)
                 mytextclock,
                 fete_text_box,
                 fete_widget,
+                mytextbox,
                 net_wireless,
                 net_wired,
                 net_internet,
+                mytextbox,
                 volume_widget(),
+                mytextbox,
                 bluetooth.new(),
                 s.mylayoutbox,
             },
@@ -639,7 +642,7 @@ ruled.client.connect_signal("request::rules", function()
             instance = { "copyq", "pinentry", "DTA" },  --DTA = firefox addon DownThemAll
             class    = {
                 "Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
-                "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer", "Tilda"
+                "Wpa_gui", "veromix", "xtightvncviewer", "Tilda"
             },
             -- Note that the name property shown in xprop might be set slightly after creation of the client
             -- and the name shown there might not match defined rules here.

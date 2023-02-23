@@ -52,9 +52,10 @@ git clone https://github.com/tmux/tmux.git $HOME/builds/tmux
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 
+# graphviz is used to draw graphs (used for rust crates graphs)
 elif [ $1 == "pacman" ]; then
 	echo "preparing for arch based distro\n"
-	sudo pacman -S ninja python python2 python-pip nodejs npm ruby fd zsh xclip bat tmux curl lsd dpkg z ripgrep lf mdp stow
+	sudo pacman -S ninja python python2 python-pip nodejs npm ruby fd zsh xclip bat tmux curl lsd dpkg z ripgrep lf mdp stow graphviz
 	git clone https://aur.archlinux.org/snapd.git $HOME/builds/snapd
 	(cd $HOME/builds/snapd && makepkg -si)
 	sudo systemctl enable --now snapd.socket
