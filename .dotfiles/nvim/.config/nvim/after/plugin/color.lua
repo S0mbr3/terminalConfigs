@@ -48,7 +48,7 @@ vim.api.nvim_set_keymap('n', '<leader>mp', [[<Cmd>lua require('material.function
 
 --vim.cmd[[colorscheme tokyonight-moon]]
 --vim.cmd[[colorscheme catppuccin-mocha]]
-vim.cmd[[colorscheme tokyonight-moon]]
+vim.cmd[[colorscheme material]]
 
 if (vim.g.colors_name == 'tokyonight-night') then
   vim.o.cursorline=false

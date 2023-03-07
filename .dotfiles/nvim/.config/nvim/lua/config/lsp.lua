@@ -46,14 +46,28 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 
  vim.diagnostic.config({
-        virtual_text = true,
+        virtual_text = {
+          source = "if_many",
+        },
+        update_in_insert = true,
         signs = true,
         underline = true,
-        update_in_insert = true,
         severity_sort = true,
+        float = {
+          border = 'rounded',
+          source = 'always',
+          header = '',
+          prefix = '',
+        }
     })
 
-local on_attach = function(_, bufnr)
+    -- Allow to have a floating window with the errors
+-- vim.cmd([[
+-- set signcolumn=yes
+-- autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+-- ]])
+
+    local lsp_keymaps = function (bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -101,6 +115,10 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
+local on_attach = function(_, bufnr)
+  lsp_keymaps(bufnr)
+end
+
 --vim.keymap.set('n', '<cmd>:Format<cr>', {buffer = bufnr, desc='LSP: [F]ormat whole buffer' })
 -- nvim-cmp supports additional completion capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -109,7 +127,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'tsserver', 'lua_ls', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
+local servers = {'pyright', 'tsserver', 'lua_ls', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -123,6 +141,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+require("clangd_extensions").setup()
 require'lspconfig'.emmet_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
@@ -168,13 +187,29 @@ local opts = {
 local rt = require("rust-tools")
 
 rt.setup({
+  opts,
   server = {
+    capabilities = capabilities,
     on_attach = function(_, bufnr)
+      --lsp_keymaps(bufnr)
+
       -- Hover actions
       vim.keymap.set("n", "<Leader>r", rt.hover_actions.hover_actions, { buffer = bufnr })
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
     end,
+    setting = {
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy"
+        },
+        diagnostics = {
+          experimental = {
+            enable = true,
+          }
+        }
+      }
+    }
   },
 })
 

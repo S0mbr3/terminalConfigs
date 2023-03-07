@@ -33,11 +33,21 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-challenger-deep)
+;;(setq doom-theme 'doom-challenger-deep)
+(setq doom-theme 'doom-moonlight)
+
+;; To have transparent frames
+;;(setq my/opacity 90)
+(set-frame-parameter nil 'alpha-background 90) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 90)) ; For all new frames henceforth
+
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
+
+;; Disable auto pairs if it feels annoying
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -95,8 +105,8 @@
 (setq which-key-idle-delay 1)
 ;; quick shortcut to change fast between php mode and web-mode
 (defun toggle-php-flavor-mode ()
-  (interactive)
   "Toggle mode between PHP & Web-Mode Helper modes"
+  (interactive)
   (cond ((string= mode-name "PHP\\\\l")
          (web-mode))
         ((string= mode-name "PHP")
@@ -154,6 +164,8 @@
 
 ;; dired configs
 
+;;(setq dired-kill-when-opening-new-dired-buffer t)
+
 (map! :leader
       (:prefix ("d" . "dired")
        :desc "Open dired" "d" #'dired
@@ -161,7 +173,8 @@
       (:after dired
               (:map dired-mode-map
                :desc "Peep-dired image previews" "d p" #'peep-dired
-               :desc "Dired view file" "d v" #'dired-view-file)))
+               :desc "Dired view file" "d v" #'dired-view-file)
+              ))
 
 (evil-define-key 'normal dired-mode-map
   (kbd "h") 'dired-up-directory
@@ -172,7 +185,9 @@
 
 ;;(setq peep-dired-cleanup-eagerly t)
 ; will disable at closing dired
+;;(setq peep-dired-cleanup-on-disable t)
 (setq peep-dired-cleanup-on-disable t)
+;;(setq peep-dired-enable-on-multiple-windows nil)
 ;;(setq peep-dired-enable-on-directories t)
 
 (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
@@ -220,8 +235,8 @@
   (evil-define-key 'insert vterm-mode-map (kbd "C-m")       #'vterm-send-escape)
   ;;(evil-define-key 'insert vterm-mode-map (kbd "C-z")       #'vterm-send-C-z)
   ;;(evil-define-key 'insert vterm-mode-map (kbd "C-m")       #'evil-escape)
-  (map! :n "M-n" #'+vterm/toggle)
-  (map! :i "M-n" #'+vterm/toggle)
+  (map! :n "C-<escape>" #'+vterm/toggle)
+  (map! :i "C-<escape>" #'+vterm/toggle)
   (evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-vterm-next)
   (evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-vterm-prev)
   (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
@@ -254,7 +269,7 @@
                                            ":"
                                            (propertize (number-to-string line) 'face 'font-lock-constant-face)
                                            ": "
-                                           (buffer-substring (point-at-bol) (point-at-eol))))))
+                                           (buffer-substring (line-beginning-position) (line-end-position))))))
                                   cands)))
 
 
@@ -266,3 +281,7 @@
 (setq-default left-fringe-width nil)
 (setq-default right-fringe-width 0)
 (set-fringe-mode '(0 . 0))
+
+
+;;TailwindCSS
+(use-package! lsp-tailwindcss)

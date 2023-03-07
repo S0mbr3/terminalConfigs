@@ -142,7 +142,8 @@ export LANG=en_US.UTF-8
 # else
 #   export EDITOR='mvim'
 # fi
-export VISUAL='nvr -l'
+#export VISUAL='nvr -l'
+export VISUAL='nvim'
 export EDITOR="$VISUAL"
 
 # Compilation flags

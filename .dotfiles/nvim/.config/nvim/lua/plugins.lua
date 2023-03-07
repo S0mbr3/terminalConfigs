@@ -1,8 +1,18 @@
 
 return require('packer').startup(function(use)
-  use 'simrat39/rust-tools.nvim'
-  use 'neovim/nvim-lspconfig'
+use {
+    "nvim-neorg/neorg",
+    run = ":Neorg sync-parsers", -- This is the important bit!
+    config = function()
+        require("neorg").setup {
+            -- configuration here
+        }
+    end,
+  }
+    use 'neovim/nvim-lspconfig'
   use 'mfussenegger/nvim-dap'
+  use 'simrat39/rust-tools.nvim'
+  use 'p00f/clangd_extensions.nvim'
   --use 'tami5/lspsaga.nvim'
     use 'williamboman/mason.nvim'                                                        -- Manage external editor tooling i.e LSP servers
   use 'williamboman/mason-lspconfig.nvim'
@@ -67,7 +77,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/vim-vsnip-integ'
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
-  use 'github/copilot.vim'
+  --use 'github/copilot.vim'
   use { 'catppuccin/nvim', as = 'catppuccin'}
   use 'folke/tokyonight.nvim'
   use 'marko-cerovac/material.nvim'

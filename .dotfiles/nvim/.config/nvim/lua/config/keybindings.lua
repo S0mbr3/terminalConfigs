@@ -43,7 +43,7 @@ vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { no
 
 --leader mapping
 --Allows to save a file that need sudo permissions
-vim.api.nvim_set_keymap('n', '<Leader>w', ':w<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>wf', ':w<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>sa', ':wa<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>sqa', ':wqa<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>qi', ':q<CR>', { noremap = false, silent = true })
