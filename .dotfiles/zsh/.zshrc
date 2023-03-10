@@ -172,7 +172,6 @@ alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
 alias deb='ssh debian'
 
-
 functin zz(){
   z $1
   ls

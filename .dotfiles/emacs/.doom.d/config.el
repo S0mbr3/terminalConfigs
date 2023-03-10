@@ -11,6 +11,7 @@
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
+;;
 ;; - `doom-font' -- the primary font to use
 ;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
 ;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
@@ -22,7 +23,8 @@
 ;; accept. For example:
 ;;
 
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;(setq doom-font (font-spec :size 14.0))
+(setq doom-font (font-spec :family "Fira Code Nerd Font" :size 12.0 :weight 'regular))
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -47,7 +49,7 @@
 (setq display-line-numbers-type 'relative)
 
 ;; Disable auto pairs if it feels annoying
-(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+;;(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
