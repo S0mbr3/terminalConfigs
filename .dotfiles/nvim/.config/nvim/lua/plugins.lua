@@ -1,6 +1,18 @@
 
 return require('packer').startup(function(use)
-use {
+use({
+  "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup({
+        -- optional configuration
+      })
+    end,
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+})use {
     "nvim-neorg/neorg",
     run = ":Neorg sync-parsers", -- This is the important bit!
     config = function()

@@ -1,0 +1,12 @@
+* INBOX
+
+** TODO  Make keybinding with general for org and org capture
+  [2023-07-28 ven. 00:45]
+  [[file:~/.emacs.d/init.el::("jm" "Meeting" entry]]
+
+* Active
+* TODO Finish documentation
+SCHEDULED: <2023-07-27 jeu.>
+
+* test
+SCHEDULED: <2023-07-27 jeu.>

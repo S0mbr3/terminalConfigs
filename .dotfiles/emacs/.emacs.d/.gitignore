@@ -1,0 +1,7 @@
+# Ignore everything
+/*
+
+
+!/init.el
+!/orgFiles
+!.gitignore
