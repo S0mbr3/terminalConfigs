@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#pid=$(ps aux | grep "rc-dev" | grep -v tox | tr -s " " ";" | cut -d";" -f2)
+# pid=$(pgrep -f "rc-dev")
+# echo "le pid est: $pid"
+# if [[ -n $pid ]]; then
+#   echo "Awesome dev is running"
+#   kill -s SIGKILL $pid
+# else
+echo "Awesome dev is not running, starting..."
+Xephyr :1 -ac -br -noreset -screen 2560x1600 -dpi 96 &
+sleep 0.1
+DISPLAY=:1.0 awesome -c rc-dev.lua &
+instance=$!
+
+while inotifywait -r -e close_write ~/Documents/builds/terminalConfigs/.dotfiles/awesome; do
+  kill -s SIGHUP $instance
+done
+# fi

@@ -575,21 +575,17 @@ client.connect_signal("request::geometry", function(c, context, ...)
     -- c.border_width = 0
   if not no_fullscreen or context ~= "fullscreen" or not awful.rules.match_any(c, claimed_fullscreen_rule) then
     naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
-    c. floating = false
     awful.ewmh.geometry(c, context, ...)
   end
-  if no_fullscreen and awful.rules.match_any(c, claimed_fullscreen_rule) then
-    c.floating = false
-  end
   --print(context)
-  -- if c.maximized then
-  --   c.border_width = 0
-  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and not c.fullscreen then
-  --   c.border_width = beautiful.border_width
-  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and c.fullscreen then
-  --   c.border_width = 0
-  --
-  -- end
+  if c.maximized then
+    c.border_width = 0
+  elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and not c.fullscreen then
+    c.border_width = beautiful.border_width
+  elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and c.fullscreen then
+    c.border_width = 0
+
+  end
 end)
 
 client.connect_signal("request::default_keybindings", function()
@@ -797,18 +793,6 @@ screen.connect_signal("arrange", function (s)
     for _, c in pairs(s.clients) do
         if only_one and  not c.floating or c.maximized then
             c.border_width = 0
-          --   local screen_geometry = set_max_screen_size(c)
-          --   if not not screen_geometry then
-          --   c.border_width = screen_geometry.width
-          --   c.border_height = screen_geometry.height
-          -- end
-        -- elseif not only_one and not c.floating and c.maximized then
-        --     c.border_width = 0
-        --     local screen_geometry = set_max_screen_size(c)
-        --     if not not screen_geometry then
-        --     c.border_width = screen_geometry.width
-        --     c.border_height = screen_geometry.height
-        --   end
           -- elseif only_one and c.maximized then
           --   c.border_width = 0
           -- elseif only_one and c.maximized and awful.rules.match_any(c, claimed_fullscreen_rule) then

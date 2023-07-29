@@ -1,6 +1,3 @@
-
-
-
 function_name (){
   toilet "Hello Ox"
   if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
@@ -171,6 +168,9 @@ alias c='cht.sh'
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
 alias deb='ssh debian'
+#export OPENAI_API_KEY='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'
+export OPENAI_API_KEY='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'
+export PATH="/home/oxhart/scripts:$PATH"
 
 functin zz(){
   z $1
@@ -193,7 +193,7 @@ if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
 eval "$(nodenv init -)"
-export TERM=xterm-kitty
+#export TERM=xterm-kitty
 #export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 ## uncomment below line to allow shell integration with wezterm using wezterm.sh
@@ -214,8 +214,27 @@ vterm_printf(){
 
 HISTSIZE=20000
 SAVEHIST=20000
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/oxhart/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/oxhart/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/oxhart/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/oxhart/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

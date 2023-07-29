@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+languages=$(echo "javascript rust lua c++ c java python" | tr " " "\n")
+commands=$(echo "awk find bash zsh sed curl cut tr bc xargs" | tr " " "\n")
+total=$(printf "%s\n%s" "$languages" "$commands")
+selected=$(echo "$total" | fzf)
+read -p "Type your topic: " topic
+curl cht.sh/"$selected"/"$topic"
+

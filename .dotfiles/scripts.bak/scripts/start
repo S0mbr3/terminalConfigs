@@ -28,7 +28,7 @@ function start_bluetooth {
 }
 
 function start_dhcpcd {
-  if ! pgrep -f "dhcpcd"; then
+  if ! pgref -f "dhcpcd"; then
     "$@"
   fi
 }

@@ -1,4 +1,7 @@
 .git
+.dotfiles/emacs/.emacs.d/*
+!.dotfiles/emacs/.emacs.d/orgfiles
+!.dotfiles/emacs/.emacs.d/init.el
 scripts/.git
 node_modules
 .dotfiles/nodenv/.nodenv/versions

@@ -575,7 +575,6 @@ client.connect_signal("request::geometry", function(c, context, ...)
     -- c.border_width = 0
   if not no_fullscreen or context ~= "fullscreen" or not awful.rules.match_any(c, claimed_fullscreen_rule) then
     naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
-    c. floating = false
     awful.ewmh.geometry(c, context, ...)
   end
   if no_fullscreen and awful.rules.match_any(c, claimed_fullscreen_rule) then
@@ -799,15 +798,15 @@ screen.connect_signal("arrange", function (s)
             c.border_width = 0
           --   local screen_geometry = set_max_screen_size(c)
           --   if not not screen_geometry then
-          --   c.border_width = screen_geometry.width
-          --   c.border_height = screen_geometry.height
+          --   c.width = screen_geometry.width
+          --   c.height = screen_geometry.height
           -- end
         -- elseif not only_one and not c.floating and c.maximized then
         --     c.border_width = 0
         --     local screen_geometry = set_max_screen_size(c)
         --     if not not screen_geometry then
-        --     c.border_width = screen_geometry.width
-        --     c.border_height = screen_geometry.height
+        --     c.width = screen_geometry.width
+        --     c.height = screen_geometry.height
         --   end
           -- elseif only_one and c.maximized then
           --   c.border_width = 0

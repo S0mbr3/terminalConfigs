@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "pid: $1"
+#while sleep 1; do echo "$(ps -p "$1" -o rss | tail -n 1)/1024"| bc;done
+while sleep 1; do echo "$(echo "scale=4; $(ps -p "$1" -o rss | tail -n 1)/1024" | bc) mb";done

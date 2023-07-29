@@ -552,14 +552,14 @@ client.connect_signal("request::default_mousebindings", function()
 end)
 
 local no_fullscreen = true
-local claimed_fullscreen_rule = {class = {"firefox", "vlc"}}
+local claimed_fullscreen_rule = {class = {"firefox", "vlc", "Brave-browser"}}
 awful.client.set_claimed_fullscreen(claimed_fullscreen_rule)
 client.disconnect_signal("request::geometry", awful.ewmh.geometry)
 client.connect_signal("request::geometry", function(c, context, ...)
 
-  -- -- Create a notification with the client size
+  -- Create a notification with the client size
   -- naughty.notification({
-  --   title = "Client size",
+  --   title = "client size Dev",
   --   message = "Width: " .. c.width .. "\nHeight: " .. c.height .. "\ncontext: " .. context,
   --   timeout = 5, -- Notification will disappear after 5 seconds
   --   urgency = "low"
@@ -571,25 +571,9 @@ client.connect_signal("request::geometry", function(c, context, ...)
     local string = table.unpack(tmp_rule,i)
     naughty.notification{title="mes regles", message=tostring(string)}
   end
-    -- naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
-    -- c.border_width = 0
   if not no_fullscreen or context ~= "fullscreen" or not awful.rules.match_any(c, claimed_fullscreen_rule) then
-    naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
-    c. floating = false
     awful.ewmh.geometry(c, context, ...)
   end
-  if no_fullscreen and awful.rules.match_any(c, claimed_fullscreen_rule) then
-    c.floating = false
-  end
-  --print(context)
-  -- if c.maximized then
-  --   c.border_width = 0
-  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and not c.fullscreen then
-  --   c.border_width = beautiful.border_width
-  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and c.fullscreen then
-  --   c.border_width = 0
-  --
-  -- end
 end)
 
 client.connect_signal("request::default_keybindings", function()
@@ -700,11 +684,6 @@ ruled.client.connect_signal("request::rules", function()
     --     rule       = { class = "Firefox"     },
     --     properties = { screen = 1, tag = "2" }
     -- }
-
-    ruled.client.append_rule {
-        rule       = { class = "Xephyr"     },
-        properties = { screen = 1, tag = "W" }
-    }
 end)
 -- }}}
 
@@ -771,22 +750,12 @@ end)
 client.connect_signal("mouse::enter", function(c)
     c:activate { context = "mouse_enter", raise = false }
 end)
-
-
-function set_max_screen_size(c, s)
-    -- local focused_screen = awful.screen.focused()
-    -- c.width = focused_screen.geometry.width
-    -- c.height = focused_screen.geometry.height
-    for s = 1, screen.count() do
-      local screen_geometry = screen[s].workarea
-      local available_width = screen_geometry.width
-      local available_height = screen_geometry.height
-
-      --Print the available screen space for each screen
-      --naughty.notification{title="available space?" ,message="Screen " .. s .. ": " .. available_width .. "x" .. available_height}
-      return screen_geometry
-    end
-
+function set_max_screen_size(c)
+    local focused_screen = awful.screen.focused()
+    c.width = focused_screen.geometry.width
+    c.height = focused_screen.geometry.height
+    -- c.width = c.width + beautiful.border_width
+    -- c.height = c.height + beautiful.border_width
   end
 
 -- No borders when rearranging only 1 non-floating or maximized client
@@ -795,36 +764,14 @@ screen.connect_signal("arrange", function (s)
     local only_one = #s.tiled_clients == 1
 
     for _, c in pairs(s.clients) do
-        if only_one and  not c.floating or c.maximized then
+        if only_one and not awful.rules.match_any(c, claimed_fullscreen_rule) and not c.floating then
             c.border_width = 0
-          --   local screen_geometry = set_max_screen_size(c)
-          --   if not not screen_geometry then
-          --   c.border_width = screen_geometry.width
-          --   c.border_height = screen_geometry.height
-          -- end
-        -- elseif not only_one and not c.floating and c.maximized then
-        --     c.border_width = 0
-        --     local screen_geometry = set_max_screen_size(c)
-        --     if not not screen_geometry then
-        --     c.border_width = screen_geometry.width
-        --     c.border_height = screen_geometry.height
-        --   end
-          -- elseif only_one and c.maximized then
-          --   c.border_width = 0
-          -- elseif only_one and c.maximized and awful.rules.match_any(c, claimed_fullscreen_rule) then
-          --   c.border_width = 0
-          -- elseif only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
-          --   naughty.notification{title="fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
-          --   local screen_geometry = set_max_screen_size(c)
-          --   if not not screen_geometry then
-          --   c.width = 2560
-          --   c.height = 1600
-          -- end
-          -- elseif not only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
-          --   local screen_geometry = set_max_screen_size(c)
-          --   --c.border_width = 0
-          --   c.border_width = beautiful.border_width -- your border width
-        elseif not only_one and not c.maximized then
+          elseif only_one and c.maximized and not awful.rules.match_any(c, claimed_fullscreen_rule) then
+            c.border_width = 0
+          elseif only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
+            set_max_screen_size(c)
+            c.border_width = 0
+        else
             c.border_width = beautiful.border_width -- your border width
         end
     end

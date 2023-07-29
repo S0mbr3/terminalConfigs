@@ -84,9 +84,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- Table of layouts to cover with awful.layout.inc, order matters.
 tag.connect_signal("request::default_layouts", function()
     awful.layout.append_default_layouts({
-        awful.layout.suit.tile,
-        awful.layout.suit.floating,
         awful.layout.suit.tile.left,
+        awful.layout.suit.floating,
+        awful.layout.suit.tile,
         awful.layout.suit.tile.bottom,
         awful.layout.suit.tile.top,
         awful.layout.suit.fair,
@@ -422,9 +422,9 @@ awful.keyboard.append_global_keybindings({
             end
         end,
         {description = "go back", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, "Control", "Shift" }, "j", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, "Control", "Shift" }, "k", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey, "Control" }, "n",
               function ()
@@ -449,6 +449,10 @@ awful.keyboard.append_global_keybindings({
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
+    awful.key({ modkey, "Control"           }, "j",     function () awful.client.incwfact( 0.05)          end,
+              {description = "increase client height factor", group = "layout"}),
+    awful.key({ modkey, "Control"           }, "k",     function () awful.client.incwfact(-0.05)          end,
+              {description = "decrease client height factor", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
@@ -552,16 +556,39 @@ local claimed_fullscreen_rule = {class = {"firefox", "vlc"}}
 awful.client.set_claimed_fullscreen(claimed_fullscreen_rule)
 client.disconnect_signal("request::geometry", awful.ewmh.geometry)
 client.connect_signal("request::geometry", function(c, context, ...)
+
+  -- -- Create a notification with the client size
+  -- naughty.notification({
+  --   title = "Client size",
+  --   message = "Width: " .. c.width .. "\nHeight: " .. c.height .. "\ncontext: " .. context,
+  --   timeout = 5, -- Notification will disappear after 5 seconds
+  --   urgency = "low"
+  -- })
+
   local tmp_rule = awful.client.get_claimed_fullscreen()
   local i = 0;
   while i < #tmp_rule do
     local string = table.unpack(tmp_rule,i)
     naughty.notification{title="mes regles", message=tostring(string)}
   end
-    print(table.unpack(tmp_rule))
+    -- naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
+    -- c.border_width = 0
   if not no_fullscreen or context ~= "fullscreen" or not awful.rules.match_any(c, claimed_fullscreen_rule) then
+    --naughty.notification{title="fake fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
     awful.ewmh.geometry(c, context, ...)
   end
+  if no_fullscreen and awful.rules.match_any(c, claimed_fullscreen_rule) then
+    c.floating = false
+  end
+  --print(context)
+  -- if c.maximized then
+  --   c.border_width = 0
+  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and not c.fullscreen then
+  --   c.border_width = beautiful.border_width
+  -- elseif c.maximized or c.client_mazimize_horizontal or c.client_mazimize_vertical and c.fullscreen then
+  --   c.border_width = 0
+  --
+  -- end
 end)
 
 client.connect_signal("request::default_keybindings", function()
@@ -614,6 +641,8 @@ client.connect_signal("request::default_keybindings", function()
                 c:raise()
             end ,
             {description = "(un)maximize horizontally", group = "client"}),
+        awful.key({ modkey, "Shift"   }, "Next",   function (c) c:relative_move( 20,  20, -40, -40) end),
+        awful.key({ modkey, "Shift"   }, "Prior",  function (c) c:relative_move(-20, -20,  40,  40) end),
     })
 end)
 
@@ -642,7 +671,7 @@ ruled.client.connect_signal("request::rules", function()
             instance = { "copyq", "pinentry", "DTA" },  --DTA = firefox addon DownThemAll
             class    = {
                 "Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
-                "Wpa_gui", "veromix", "xtightvncviewer", "Tilda"
+                "Wpa_gui", "veromix", "xtightvncviewer", "Tilda", "org.gnome.Nautilus"
             },
             -- Note that the name property shown in xprop might be set slightly after creation of the client
             -- and the name shown there might not match defined rules here.
@@ -670,6 +699,11 @@ ruled.client.connect_signal("request::rules", function()
     --     rule       = { class = "Firefox"     },
     --     properties = { screen = 1, tag = "2" }
     -- }
+
+    ruled.client.append_rule {
+        rule       = { class = "Xephyr"     },
+        properties = { screen = 1, tag = "W" }
+    }
 end)
 -- }}}
 
@@ -738,18 +772,59 @@ client.connect_signal("mouse::enter", function(c)
 end)
 
 
+function set_max_screen_size(c, s)
+    -- local focused_screen = awful.screen.focused()
+    -- c.width = focused_screen.geometry.width
+    -- c.height = focused_screen.geometry.height
+    for s = 1, screen.count() do
+      local screen_geometry = screen[s].workarea
+      local available_width = screen_geometry.width
+      local available_height = screen_geometry.height
+
+      --Print the available screen space for each screen
+      --naughty.notification{title="available space?" ,message="Screen " .. s .. ": " .. available_width .. "x" .. available_height}
+      return screen_geometry
+    end
+
+  end
+
 -- No borders when rearranging only 1 non-floating or maximized client
 screen.connect_signal("arrange", function (s)
+  -- Create a notification with the client size
     local only_one = #s.tiled_clients == 1
+
     for _, c in pairs(s.clients) do
-        if only_one and not c.floating or c.maximized then
+        if only_one and  not c.floating or c.maximized then
             c.border_width = 0
-            --c.fullscreen = true
-          elseif only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
-            c.border_width = 0
-        else
+          --   local screen_geometry = set_max_screen_size(c)
+          --   if not not screen_geometry then
+          --   c.border_width = screen_geometry.width
+          --   c.border_height = screen_geometry.height
+          -- end
+        -- elseif not only_one and not c.floating and c.maximized then
+        --     c.border_width = 0
+        --     local screen_geometry = set_max_screen_size(c)
+        --     if not not screen_geometry then
+        --     c.border_width = screen_geometry.width
+        --     c.border_height = screen_geometry.height
+        --   end
+          -- elseif only_one and c.maximized then
+          --   c.border_width = 0
+          -- elseif only_one and c.maximized and awful.rules.match_any(c, claimed_fullscreen_rule) then
+          --   c.border_width = 0
+          -- elseif only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
+          --   naughty.notification{title="fullscreen", message="Width: " .. c.width .. "\nHeight: " .. c.height}
+          --   local screen_geometry = set_max_screen_size(c)
+          --   if not not screen_geometry then
+          --   c.width = 2560
+          --   c.height = 1600
+          -- end
+          -- elseif not only_one and awful.rules.match_any(c, claimed_fullscreen_rule) then
+          --   local screen_geometry = set_max_screen_size(c)
+          --   --c.border_width = 0
+          --   c.border_width = beautiful.border_width -- your border width
+        elseif not only_one and not c.maximized then
             c.border_width = beautiful.border_width -- your border width
-            --c.fullscreen = false
         end
     end
 end)
@@ -774,11 +849,12 @@ awful.spawn.with_shell('picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0'
 local autorun = true
 local autorunApps =
 {
-  'setxkbmap -layout us -variant altgr-intl -option nodeadkeys',
+  '/home/oxhart/scripts/start',
+  --'setxkbmap -layout us -variant altgr-intl -option nodeadkeys',
   --'~/.config/volumeicon/restart_volumeicon',
-  'picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0',
-  'sudo systemctl start bluetooth.service',
-  'nvidia-settings -assign CurrentMetaMode="nvidia-settings --assign CurrentMetaMode="DP-0: 2560x1600+0+0 { ForceFullCompositionPipeline = On }"',
+  --'picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0 --inactive-opacity=1 -b',
+  --'sudo systemctl start bluetooth.service',
+  --'nvidia-settings -assign CurrentMetaMode="nvidia-settings --assign CurrentMetaMode="DP-0: 2560x1600+0+0 { ForceFullCompositionPipeline = On }"',
 }
 if autorun then
   for app = 1, #autorunApps do
