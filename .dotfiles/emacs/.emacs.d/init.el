@@ -1,5 +1,15 @@
+(setq gc-cons-threshold (* 50 1000 000))
+(defun ox/display-startup-time()
+(message "Emacs loaded in %s with %d garbage collections."
+    (format "%.2f seconds"
+	    (float-time
+	     (time-subtract after-init-time before-init-time)))
+    gcs-done))
+
+(add-hook 'emacs-startup-hook #'ox/display-startup-time)
+
 (defconst my-project-path "~/dev")
-(defconst my-font-size 140)
+(defconst my-font-size 250)
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
 (defconst my-linux-font "FiraCode Retina")
@@ -9,7 +19,60 @@
 			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Habits.org"
 			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/birthdays.org"))
 
+;; Initialize package sources
+(require 'package)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; Initialize use-package on non-Linux platforms
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(require 'use-package)
+;;(setq use-package-always-defer t)
+(setq use-package-always-ensure t)
+;;(setq use-package-compute-statistics t)
+;;(setq use-package-verbose t)
+
+;; Not if you want to move everything out of the ~/.emacs.d folder reliabily, set `user-emacs-directory` before loading the no-littering!
+(setq user-emacs-directory "~/.cache/emacs")
+(use-package no-littering)
+
+;; no-littering doesn't set this by default so we must place auto save files in the same path as it uses for sessions
+
+(setq auto-save-file-name-transforms
+      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;;(load-theme 'doom-challenger-deep t)
+  (load-theme 'doom-moonlight t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :custom(doom-modeline-height 8))
+
 (setq inhibit-startup-message t ; Don't show the spalsh screen
+      ring-bell-function 'ignore
       visible-bell nil)  ; Stop screen to flash when the bell rings
 
 ;; Turn off some uneeded ui elements
@@ -31,6 +94,7 @@
 		shell-mode-hook
 		eshell-mode-hook
 		vterm-mode-hook
+		treemacs-mode-hook
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -45,23 +109,6 @@
   (set-face-attribute 'default nil :font my-wsl-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
 
-;; Initialize package sources
-(require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
 
@@ -71,8 +118,8 @@
 ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (recentf-mode 1) ;; Enable the recent file mode to select with a number recent files
-(savehist-mode 1)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
+(savehist-mode 1)
 
 ;; Nove customization variables to a separate file and load it
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
@@ -88,18 +135,18 @@
 (setq global-auto-revert-non-file-buffers t)
 
 ;; Mode to log commands use clm/open-command-log-buffer to see them
-(use-package command-log-mode)
+(use-package command-log-mode
+:commands command-log-mode)
+;; install all the icons
+(use-package all-the-icons)
 
 ;; make unique colors for each parentheses pair to see better delimitation
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-(use-package vterm
-  :ensure t)
-;; :hook (vterm-mode . (lambda ()
-;; 			(evil-emacs-state))))
 
 ;; Better keybinding management 
 (use-package general
+  :after which-key
   :config
   (general-define-key
    "C-c C-v" 'compile-and-execute-c-code
@@ -127,6 +174,7 @@
     "ff" '(find-file :which-key "find-file")
     "ff" '(find-file :which-key "find-file")
     "fr" '(recentf-open-files :which-key "Recent opened files")
+    "ft" '(treemacs-select-window :which-key "Open treemacs")
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
@@ -135,32 +183,14 @@
     "t" '(:ignore t  :which-key "toggles")
     "tt" '(counsel-load-theme :which-key "choose theme")))
 
-(use-package multi-vterm
-  :ensure t)
-;; :after vterm
-;; :hook (vterm-mode . (lambda ()
-;; 			(evil-emacs-state))))
-(ox/leader-keys
-  "s" '(:ignore t :which-key "shells")
-  "sv" '(multi-vterm :which-key "new multi-vterm buffer")
-  "so" '(multi-vterm-dedicated-toggle :which-key "toggle multi-vterm")
-  "sp" '(multi-vterm-prev :which-key "multi-vterm prev")
-  "sn" '(multi-vterm-next :which-key "multi-vterm next")
-  "se" '(eshell :whick-key "eshell"))
-(setq multi-vterm-dedicated-window-height-percent 40)
-
 (use-package which-key
-  :init (which-key-mode)
+   :after evil
+  ;;:defer 0
+  ;;:init (which-key-mode)
   :diminish which-key-mode
   :config
-
+  (which-key-mode)
   (setq which-key-idle-delay 0.3))
-(defun print-evil-state ()
-  "Print the value of evil-emacs-state-modes."
-  (interactive)
-  (prin1 evil-emacs-state-modes))
-(ox/leader-keys
-  "p" '(print-evil-state :which-key "print evil state"))
 
 (use-package ivy
   :diminish
@@ -183,17 +213,18 @@
   (setq ivy-count-format "(%d/%d) "))
 
 (use-package ivy-rich
+  :after ivy
   :init
   (ivy-rich-mode 1))
 ;; To allow M-x to be sorted from most recent used 
 (use-package smex
-  :ensure t
+  :after ivy
   :config
   (smex-initialize))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
+	 ("C-x b" . counsel-switch-buffer)
 	 ("C-x C-f" . counsel-find-file)
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history))
@@ -201,10 +232,11 @@
   (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
 
 (use-package harpoon
+  :after (general which-key)
   :config
   (ox/leader-keys
     ;;"h" '(:ignore t :which-key "Org")
-    "0" '(harpoon-add-file)
+    "0" '(harpoon-add-file :whick-key "Add file to Harpoon")
     "1" '(harpoon-go-to-1 :which-key "harpoon file 1")
     "2" '(harpoon-go-to-1 :which-key "harpoon file 2")
     "3" '(harpoon-go-to-1 :which-key "harpoon file 3")
@@ -215,7 +247,10 @@
     "8" '(harpoon-go-to-1 :which-key "harpoon file 8")
     "9" '(harpoon-go-to-1 :which-key "harpoon file 9")))
 
-(use-package hydra)
+(use-package hydra
+:after (general which-key)
+:defer t
+:config
 (defhydra hydra-text-scale (:timeout 4)
   "scale text"
   ("j" text-scale-increase "in")
@@ -223,7 +258,7 @@
   ("f" nil "finished" :exit t))
 (ox/leader-keys
   "h" '(:ignore t :which-key "hydra")
-  "hs" '(hydra-text-scale/body :which-key "scale text"))
+  "hs" '(hydra-text-scale/body :which-key "scale text")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -237,6 +272,7 @@
 
 ;; Better help view and features
 (use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable)
@@ -245,6 +281,69 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+(use-package term
+:defer 0
+:config
+(setq explicit-shell-file-name "zsh"))
+;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
+
+(use-package vterm
+  :defer 0
+  :after (general which-key)
+  :config
+  (setq vterm-max-scrollback 10000)
+  (setq term-prompt-regexp "^[^❯\n]*[❯] *"))
+;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
+;; :hook (vterm-mode . (lambda ()
+;; 			(evil-emacs-state))))
+(use-package multi-vterm
+  :after vterm
+  ;; :after vterm
+  ;; :hook (vterm-mode . (lambda ()
+  ;; 			(evil-emacs-state))))
+  :config
+  (ox/leader-keys
+    "s" '(:ignore t :which-key "shells")
+    "sv" '(multi-vterm :which-key "new multi-vterm buffer")
+    "so" '(multi-vterm-dedicated-toggle :which-key "toggle multi-vterm")
+    "sp" '(multi-vterm-prev :which-key "multi-vterm prev")
+    "sn" '(multi-vterm-next :which-key "multi-vterm next")
+    "se" '(eshell :whick-key "eshell"))
+  (setq multi-vterm-dedicated-window-height-percent 40))
+
+(if (eq system-type 'gnu/linux)
+	(setq explicit-shell-file-name "zsh")
+    (setq explicit-shell-file-name "powershell.exe")
+    (setq explicit-powershel.exe-args'()))
+
+(use-package eshell-git-prompt
+  :after eshell)
+
+(defun ox/configure-eshell ()
+  ;; Save command history when commands are entered
+  (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+
+  ;; Truncate buffer for performance
+  (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+
+  ;; Bind some useful keys for evil-mode
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
+
+  (setq eshell-history-size 10000
+	eshell-buffer-maximun-lines 10000
+	eshell-hist-ignoredups t
+	eshell-scroll-to-bottom-on-input t))
+
+(use-package eshell
+  :hook (eshell-first-time-mode . ox/configure-eshell)
+  :config
+  (eshell-git-prompt-use-theme 'multiline)
+
+  (with-eval-after-load 'esh-opt
+    (setq eshell-destroy-buffer-when-process-dies t)
+    (setq eshell-visual-commands '("htop" "zsh" "vim"))))
 
 ;; Dependencies for evil mode undo features
 (use-package undo-tree)
@@ -269,7 +368,6 @@
     (add-to-list 'evil-emacs-state-modes mode)))
 ;;(evil-set-initial-state mode 'emacs)))
 (use-package evil
-  :after multi-vterm
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -284,7 +382,26 @@
 
   (evil-set-initial-state 'message-buffer-mode 'normal)
   ;;(evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'dashboard-mode 'normal))
+  (evil-set-initial-state 'dashboard-mode 'normal)
+
+(defun print-evil-state ()
+  "Print the value of evil-emacs-state-modes."
+  (interactive)
+  (prin1 evil-emacs-state-modes))
+(ox/leader-keys
+"e" '(:ignore t :which-key "Evil")
+"eu" '(evil-collection-unimpaired-move-text-up :which-key "Evil")
+  "ep" '(print-evil-state :which-key "print evil state")
+"ed" '(evil-collection-unimpaired-move-text-down :which-key "Evil"))
+(defhydra hydra-move-text (:timeout 4)
+  "scale text"
+  ("j" evil-collection-unimpaired-move-text-up "Move up")
+  ("k" evil-collection-unimpaired-move-text-down "Move down")
+  ("f" nil "finished" :exit t))
+(ox/leader-keys
+  "h" '(:ignore t :which-key "hydra")
+  "hm" '(hydra-move-text/body :which-key "Move text")))
+
 (evil-mode 1)
 
 (use-package evil-collection
@@ -316,42 +433,99 @@
   (setq projectile-switch-projection-action #'projectile-dired))
 
 (use-package counsel-projectile
+  :after projectile
   :config (counsel-projectile-mode))
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :config
-  (lsp-enable-which-key-integration t))
-
+(use-package lua-mode
+  :mode "\\.lua\\'")
 (use-package typescript-mode
   :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2))
 
+(use-package flycheck
+  :after lsp-mode
+  :ensure t
+  :init (global-flycheck-mode))
+
+(defun ox/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode))
+
+(use-package lsp-mode
+  :hook
+ ((lsp-mode . ox/lsp-mode-setup)
+    (c-mode . lsp-deferred)
+    (python-mode . lsp-deferred)
+    (lua-mode . lsp-deferred)
+    (typescript-mode . lsp-deferred)
+    (js-mode . lsp-deferred))
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t)
+  ;; The path to lsp-mode needs to be added to load-path as well as the
+  ;; path to the `clients' subdirectory.
+  (add-to-list 'load-path (expand-file-name "lib/lsp-mode" user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "lib/lsp-mode/clients" user-emacs-directory))
+  :commands (lsp lsp-deferred))
+
+(use-package lsp-ui
+:after lsp-mode
+:commands lsp-ivy-workspace-symbol
+:hook (lsp-mode . lsp-ui-mode)
+:custom(lsp-ui-doc-position 'bottom))
+
+(use-package lsp-treemacs
+:after lsp-mode
+:commands lsp-treemacs-errors-list
+:config
+(lsp-treemacs-sync-mode t))
+(use-package treemacs-evil
+:after lsp-treemacs)
+(use-package treemacs-projectile
+:after lsp-treemacs)
+
+(use-package lsp-ivy
+:after lsp-mode)
+
+(use-package company
+:after lsp-mode
+:hook ((prog-mode . company-mode)
+             (lisp-interaction-mode . company-mode))
+:bind (:map company-active-map
+("<tab" . company-complete-selection))
+(:map lsp-mode-map
+("<tab>" . company-indent-or-complete-common))
+:custom
+(company-minimum-prefix-length 1)
+(company-idle-delay 0.0))
+
+(use-package company-box
+:hook (company-mode . company-box-mode))
+
 ;; We are making magit getting the full buffer size
 (use-package magit
+  :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 ;; Allow to work with forges to get informations about repositories (notifications, issues, pull requests etc)
-(use-package forge)
+(use-package forge
+:after magit)
 
 (defun ox/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
   (visual-line-mode 1))
 
-(defun ox/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1))
-  
 
 (use-package org
+  :pin org
+  :commands (org-capture org-agenda)
+  :hook (org-mode . ox/org-mode-setup)
   :config
+  (message "hi from org-mode")
   (setq org-ellipsis " ⮧"
 	org-hide-emphasis-markers t)
   (setq org-agenda-start-with-log-mode t)
@@ -371,108 +545,108 @@
 	'((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
 	  (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-    (setq org-refile-targets
-    '(("Archive.org" :maxlevel . 1)
-      ("Tasks.org" :maxlevel . 1)))
+  (setq org-refile-targets
+	'(("Archive.org" :maxlevel . 1)
+	  ("Tasks.org" :maxlevel . 1)))
 
   ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-    (setq org-tag-alist
-    '((:startgroup)
-       ; Put mutually exclusive tags here
-       (:endgroup)
-       ("@errand" . ?E)
-       ("@home" . ?H)
-       ("@work" . ?W)
-       ("agenda" . ?a)
-       ("planning" . ?p)
-       ("publish" . ?P)
-       ("batch" . ?b)
-       ("note" . ?n)
-       ("idea" . ?i)))
+  (setq org-tag-alist
+	'((:startgroup)
+					; Put mutually exclusive tags here
+	  (:endgroup)
+	  ("@errand" . ?E)
+	  ("@home" . ?H)
+	  ("@work" . ?W)
+	  ("agenda" . ?a)
+	  ("planning" . ?p)
+	  ("publish" . ?P)
+	  ("batch" . ?b)
+	  ("note" . ?n)
+	  ("idea" . ?i)))
 
   ;; Configure custom agenda views
   (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+	'(("d" "Dashboard"
+	   ((agenda "" ((org-deadline-warning-days 7)))
+	    (todo "NEXT"
+		  ((org-agenda-overriding-header "Next Tasks")))
+	    (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))))
+	  ("n" "Next Tasks"
+	   ((todo "NEXT"
+		  ((org-agenda-overriding-header "Next Tasks")))))
 
-    ("W" "Work Tasks" tags-todo "+work-email")
+	  ("W" "Work Tasks" tags-todo "+work-email")
 
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
+	  ;; Low-effort next actions
+	  ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+	   ((org-agenda-overriding-header "Low Effort Tasks")
+	    (org-agenda-max-todos 20)
+	    (org-agenda-files org-agenda-files)))
 
-    ("w" "Workflow Status"
-     ((todo "WAIT"
-            ((org-agenda-overriding-header "Waiting on External")
-             (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-            ((org-agenda-overriding-header "In Review")
-             (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-            ((org-agenda-overriding-header "In Planning")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
-            ((org-agenda-overriding-header "Project Backlog")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "READY"
-            ((org-agenda-overriding-header "Ready for Work")
-             (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
-            ((org-agenda-overriding-header "Active Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-            ((org-agenda-overriding-header "Completed Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "CANC"
-            ((org-agenda-overriding-header "Cancelled Projects")
-             (org-agenda-files org-agenda-files)))))))
+	  ("w" "Workflow Status"
+	   ((todo "WAIT"
+		  ((org-agenda-overriding-header "Waiting on External")
+		   (org-agenda-files org-agenda-files)))
+	    (todo "REVIEW"
+		  ((org-agenda-overriding-header "In Review")
+		   (org-agenda-files org-agenda-files)))
+	    (todo "PLAN"
+		  ((org-agenda-overriding-header "In Planning")
+		   (org-agenda-todo-list-sublevels nil)
+		   (org-agenda-files org-agenda-files)))
+	    (todo "BACKLOG"
+		  ((org-agenda-overriding-header "Project Backlog")
+		   (org-agenda-todo-list-sublevels nil)
+		   (org-agenda-files org-agenda-files)))
+	    (todo "READY"
+		  ((org-agenda-overriding-header "Ready for Work")
+		   (org-agenda-files org-agenda-files)))
+	    (todo "ACTIVE"
+		  ((org-agenda-overriding-header "Active Projects")
+		   (org-agenda-files org-agenda-files)))
+	    (todo "COMPLETED"
+		  ((org-agenda-overriding-header "Completed Projects")
+		   (org-agenda-files org-agenda-files)))
+	    (todo "CANC"
+		  ((org-agenda-overriding-header "Cancelled Projects")
+		   (org-agenda-files org-agenda-files)))))))
 
-(setq org-capture-templates
-    `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/orgFiles/Tasks.org" "Inbox")
+  (setq org-capture-templates
+	`(("t" "Tasks / Projects")
+	  ("tt" "Task" entry (file+olp "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org" "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-      ("j" "Journal Entries")
-      ("jj" "Journal" entry
-           (file+olp+datetree "~/orgFiles/Journal.org")
+	  ("j" "Journal Entries")
+	  ("jj" "Journal" entry
+           (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
            "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
            ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
            :clock-in :clock-resume
            :empty-lines 1)
-      ("jm" "Meeting" entry
-           (file+olp+datetree "~/orgFiles/Journal.org")
+	  ("jm" "Meeting" entry
+           (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
            "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
            :clock-in :clock-resume
            :empty-lines 1)
 
-      ("w" "Workflows")
-      ("we" "Checking Email" entry (file+olp+datetree "~/orgFiles/Journal.org")
+	  ("w" "Workflows")
+	  ("we" "Checking Email" entry (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
            "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-      ("m" "Metrics Capture")
-      ("mw" "Weight" table-line (file+headline "~/orgFiles/Metrics.org" "Weight")
-       "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+	  ("m" "Metrics Capture")
+	  ("mw" "Weight" table-line (file+headline "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Metrics.org" "Weight")
+	   "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
   (define-key global-map (kbd "C-c j")
 	      (lambda () (interactive) (org-capture nil "jj")))
   (ox/leader-keys
-  "o" '(:ignore t :which-key "Org")
-  "oa" '(org-agenda :which-key "Open org-agenda")
-  "ot" '(org-todo-list :which-key "Open all TODO lists")
-  "oc" '(org-capture :which-key "Open org-capture")))
+    "o" '(:ignore t :which-key "Org")
+    "oa" '(org-agenda :which-key "Open org-agenda")
+    "ot" '(org-todo-list :which-key "Open all TODO lists")
+    "oc" '(org-capture :which-key "Open org-capture")))
 
 
 (use-package org-superstar
@@ -495,22 +669,23 @@
 (use-package visual-fill-column
   :hook (org-mode . ox/org-mode-visual-fill))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (C . t)
-   (shell . t)
-   (python . t)))
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (C . t)
+     (shell . t)
+     (python . t)))
+  (setq org-confirm-babel-evaluate nil)
+  (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
-(push '("conf-unix" . conf-unix) org-src-lang-modes)
+(with-eval-after-load 'org
+  (require 'org-tempo)
 
-(setq org-confirm-babel-evaluate nil)
-(require 'org-tempo)
-
-(add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("cc" . "src C"))
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("cc" . "src C")))
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun ox/org-babel-tangle-config ()
@@ -522,41 +697,25 @@
 
     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ox/org-babel-tangle-config)))
 
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;;(load-theme 'doom-challenger-deep t)
-  (load-theme 'doom-moonlight t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :custom(doom-modeline-height 8))
-
-(require 'treesit)
-(setq treesit-extra-load-path '("/usr/local/lib"))
-
-  
-  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
-  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
-  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
-  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
-  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
-  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
-  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+;;(require 'treesit)
+;;(setq treesit-extra-load-path '("/usr/local/lib"))
+;;
+;;  
+;;  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
+;;  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
+;;  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
+;;  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
+;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
+;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
+;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+(use-package tree-sitter-langs
+:defer 0)
+(use-package tree-sitter
+:after tree-sitter-langs
+:config
+;; Activate tree-sitter globally (minor mode registered on every buffer)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (unless (package-installed-p 'posframe)
   (package-refresh-contents)
@@ -645,6 +804,41 @@
 
 ;; kill current buffer without the annoying confirmation message
 
+;; This package allow single buffer navigation in Dired
+;; like (dired-kill-when-opening-new-dired-buffer t) does
+;; (use-package dired-single
+;;   :config
+;;   (evil-collection-define-key 'normal 'dired-mode-map
+;;     "h" 'dired-single-up-directory
+;;     "l" 'dired-single-buffer))
+(use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :config
+  (setq dired-kill-when-opening-new-dired-buffer t)
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-up-directory
+    "l" 'dired-find-file))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package dired-hide-dotfiles
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "H" 'dired-hide-dotfiles-mode))
+
+(use-package dired-open
+  :after dired
+  ;;:commands (dired dired-jump)
+  :config
+  ;; Strange behaviors not picking always the good program automatically
+  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+  (setq dired-open-extensions '(("png" . "feh")
+				("mkv" . "mpv"))))
+
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
 (require 'ansi-color)
@@ -654,6 +848,16 @@
     (ansi-color-apply-on-region (point-min) (point-max))))
 
 (add-hook 'compilation-filter-hook 'my-ansi-colorize-buffer)
+
+(use-package auto-package-update
+  :defer 0
+  :custom
+  (auto-package-update-interval 7)
+  (auto-package-update-prompt-before-update t)
+  (auto-package-update-hide-results t)
+  :config
+  (auto-package-update-maybe)
+  (auto-package-update-at-time "09:00"))
 
 ;; Set PowerShell as default shell
 ;; (setq explicit-shell-file-name "C:/Program Files/PowerShell/7-preview/pw;; sh.exe")
@@ -702,4 +906,5 @@
     ;;        (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
       ;;      (define-key comint-mode-map (kbd "<down>") 'comint-next-input)))
 
-(message "lol")
+;; Make gc pauses faster by decreasubg tge threshold.
+(setq gc-cons-threshold (* 2 1000 000))
