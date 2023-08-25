@@ -1,0 +1,6 @@
+Info 0    [08:45:32.456] Starting TS Server
+Info 1    [08:45:32.456] Version: 5.1.6
+Info 2    [08:45:32.457] Arguments: /usr/bin/node /usr/lib/node_modules/typescript/lib/tsserver.js --logFile /home/oxhart/Documents/builds/terminalConfigs/.log/tsserver.log --logVerbosity info --cancellationPipeName /tmp/51bb51a12e7153e832e9a2c00e999ae2/tscancellation*
+Info 3    [08:45:32.457] Platform: linux NodeVersion: v20.4.0 CaseSensitive: true
+Info 4    [08:45:32.457] ServerMode: undefined hasUnknownServerMode: undefined
+Info 5    [08:45:32.467] Format host information updated
