@@ -327,6 +327,7 @@ Using persp-mode to create different workspaces
       (setq my-persp-init-timer nil))))
 
 (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
+
 ;;(run-with-timer 5 nil 'my-update-dynamic-persps)
 ;; (use-package perspective
 ;;   :straight t
@@ -361,6 +362,9 @@ Using persp-mode to create different workspaces
 (recentf-mode 1) ;; Enable the recent file mode to select with a number recent files
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
+(display-time-mode 1) ;;Display the time
+(setq display-time-day-and-date 1)
+(setq display-time-default-load-average nil) ;; Disable load time display
 
 ;; Nove customization variables to a separate file and load it
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
@@ -399,6 +403,26 @@ Using persp-mode to create different workspaces
 
 * General.el Configuration
 #+begin_src emacs-lisp
+;; Go to end of line and eval last sexp
+(defun ox/eval()
+  (interactive)
+  (end-of-line)
+  (eval-last-sexp nil))
+
+(defun ox/compile (ox/command)
+  (interactive "sCommand: ")
+  ;;(setq-local buffer-save-without-query nil)
+  (save-buffer)
+  (compile (format "%s" ox/command)))
+
+(defun ox/recompile()
+(interactive)
+(save-buffer)
+(ignore-errors (kill-compilation)) ;; interrupt old compilation
+(recompile)
+)
+
+
 ;; Better keybinding management 
 (use-package general
   :straight t
@@ -423,6 +447,7 @@ Using persp-mode to create different workspaces
     "r" '(restart-emacs :which-key "restart")
 
     ";" '(comment-or-uncomment-region :which-key "comment or uncomment region")
+    "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
     "ff" '(find-file :which-key "find-file")
@@ -431,7 +456,8 @@ Using persp-mode to create different workspaces
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
-    "cr" '(recompile :which-key "recompile")))
+    "cd" '(ox/compile :which-key "ox/compile")
+    "cr" '(ox/recompile :which-key "ox/recompile")))
 #+end_src
 
 * Navigation Enhancement
@@ -579,6 +605,16 @@ folder, otherwise delete a word"
 	(delete-minibuffer-contents))
     (backward-kill-word arg)))
 
+(defun my-vertico-alt-done ()
+  "Mimic the behavior of `ivy-alt-done' in Vertico."
+  (interactive)
+  (if-let ((file (vertico--candidate)))
+      (if (file-directory-p file)
+            (vertico-insert)
+        (vertico-exit))
+    (vertico-exit-input)))
+
+
 (use-package vertico
   :straight '(vertico :host github
 		      :repo "minad/vertico"
@@ -586,7 +622,9 @@ folder, otherwise delete a word"
   :bind (:map vertico-map
 	      ("C-j" . vertico-next)
 	      ("C-k" . vertico-previous)
-	      ("C-f" . vertico-exit)
+	      ;;("C-f" . vertico-exit)
+	      ;;("C-f" . vertico-exit-input)
+	      ("C-f" . my-vertico-alt-done)
 	      ("?" . minibuffer-completion-help)
 	      ("RET" . minibuffer-force-complete-and-exit)
 	      ("M-TAB" . minibuffer-complete)
@@ -599,7 +637,6 @@ folder, otherwise delete a word"
   :init
   (savehist-mode)
   (vertico-mode))
-
 
 (use-package yasnippet
   :straight t
@@ -962,10 +999,25 @@ folder, otherwise delete a word"
 
 #+begin_src emacs-lisp
 ;; Dependencies for evil mode undo features
-(use-package undo-tree
-   :straight t)
+;; (use-package undo-tree
+;;   :straight t
+;; :init (global-undo-tree-mode)
+
+;; :config
+;; ;; Enable undo-tree mode
+
+;; ;; Enable undo history saving
+;; (setq undo-tree-auto-save-history t)
+
+;; ;; Set the directory where undo histories will be saved
+;; (setq undo-tree-history-directory-alist '(("." . "~/.cache/emacs/undo-history"))))
+
 (use-package undo-fu
   :straight t)
+(use-package undo-fu-session
+  :straight t
+  :init (undo-fu-session-global-mode)
+  )
 ;; For evil g; g, motions and last-change-register "."
 (use-package goto-chg
   :straight t)
@@ -992,6 +1044,7 @@ folder, otherwise delete a word"
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
+  (setq evil-undo-system 'undo-fu)
   :hook (evil-mode . ox/evil-hook)
   :config
   (evil-set-undo-system 'undo-redo)
