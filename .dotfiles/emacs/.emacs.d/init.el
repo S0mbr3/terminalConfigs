@@ -9,11 +9,12 @@
 (add-hook 'emacs-startup-hook #'ox/display-startup-time)
 
 (defconst my-project-path "~/dev")
-(defconst my-font-size 180)
+(defconst my-font-size 200)
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
 (defconst my-linux-font "FiraCode Retina")
 (defconst my-wsl-font "Fira Code Retina")
+
 (defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
 			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/todo.org"
 			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Habits.org"
@@ -22,6 +23,7 @@
  ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
 (defvar ox/enable-ivy nil )
 (defvar ox/enable-vertico t)
+(defvar ox/enable-cape t "Enable Cape package.")
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -38,7 +40,8 @@
 (straight-use-package 'use-package)
 
 ;;(setq use-package-always-defer t)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
+(setq package-enable-at-startup nil)
 ;;(setq use-package-compute-statistics t)
 ;;(setq use-package-verbose t)
 
@@ -68,7 +71,8 @@
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;;(load-theme 'doom-challenger-deep t)
-  (load-theme 'doom-moonlight t)
+  ;;(load-theme 'doom-moonlight t)
+  (load-theme 'doom-outrun-electric t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -169,45 +173,76 @@
   (global-set-key (kbd "C-x b") 'consult-persp-buffer)
 
   ;; Add vterm buffers to the current perspective when starting them
-;; Automatically add buffers to current perspective when their major mode changes
-(setq persp-add-buffer-on-after-change-major-mode t)
+  ;; Automatically add buffers to current perspective when their major mode changes
+  (setq persp-add-buffer-on-after-change-major-mode t)
 
-(defun my-persp-buffer-filter (buf)
-  "Filter out buffers that start with an asterisk, except for vterm buffers."
-  (let ((buf-name (buffer-name buf)))
-    (not (or (and (string-prefix-p "*" buf-name)
-                  (string-prefix-p "*vterm" buf-name))))))
+  (defun my-persp-buffer-filter (buf)
+    "Filter out buffers that start with an asterisk, except for vterm buffers."
+    (let ((buf-name (buffer-name buf)))
+      (not (or (and (string-prefix-p "*" buf-name)
+                    (string-prefix-p "*vterm" buf-name))))))
 
-;; Add the custom filter function
-(add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
+  ;; Add the custom filter function
+  (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
 
-;; Making harpoon maintaining a seperates set of bookmarks to each perspective
-(defun harpoon--file-name ()
-  "File name for harpoon on current project."
-  (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
-                        (safe-persp-name (get-current-persp))
-                      "none")))
-    (concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+  ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
+  (defun harpoon--file-name ()
+    "File name for harpoon on current project."
+    (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
+                          (safe-persp-name (get-current-persp))
+			"none")))
+      (concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+
+  (defun ox/find-first-vterm-in-persp ()
+    "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
+    (interactive)
+    (let* ((all-buffers-in-emacs (buffer-list))
+           (all-buffers-in-persp (persp-buffer-list-restricted))
+           (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
+           (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
+      (if first-vterm-buffer
+            first-vterm-buffer
+	nil)))
+
+  (defun switch-to-last-persp-vterm ()
+    "Switch to the last visited vterm buffer within the current perspective."
+    (interactive)
+    (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
+      (message "vterm buffer is :%s" last-persp-vterm-buffer)
+      (if last-persp-vterm-buffer
+	  (switch-to-buffer last-persp-vterm-buffer)
+	(message "No last vterm buffer in this perspective to switch to."))))
+
+  (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
+
+  (defun switch-to-next-persp-vterm-from-last (&optional offset)
+    "Switch to the next vterm buffer in the current perspective, starting from the last visited vterm buffer.
+OFFSET can be provided to skip a given number of buffers."
+    (interactive "P")
+    (let* ((offset (or offset 1))
+	   (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
+           (all-vterm-buffers multi-vterm-buffer-list)
+           (persp-buffers (persp-buffer-list-restricted))
+           (persp-vterm-buffers (cl-intersection all-vterm-buffers persp-buffers :test 'eq))
+           (buffer-list-len (length persp-vterm-buffers))
+           (start-buffer (or last-persp-vterm-buffer (current-buffer)))
+           (my-index (cl-position start-buffer persp-vterm-buffers :test 'eq)))
+      (if my-index
+          (let ((target-index (mod (+ my-index offset) buffer-list-len)))
+            (switch-to-buffer (nth target-index persp-vterm-buffers)))
+	(when persp-vterm-buffers
+          (switch-to-buffer (car persp-vterm-buffers))))))
+
+  (defun switch-to-prev-persp-vterm-from-last (&optional offset)
+    "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
+OFFSET can be provided to skip a given number of buffers."
+    (interactive "P")
+    (switch-to-next-persp-vterm-from-last (- (or offset 1))))
 
 
-(defun switch-to-last-vterm-buffer ()
-  "Switch to the most recently used vterm buffer in the current perspective, excluding the dedicated one."
-  (interactive)
-  (let ((buffers (persp-buffer-list-restricted))
-        (found nil)
-        (dedicated-vterm-buffer-name "*vterminal - dedicated*")) ; Change this to match your dedicated buffer's name
-    (while (and buffers (not found))
-      (let ((buf (car buffers)))
-        (if (and (with-current-buffer buf (eq major-mode 'vterm-mode))
-                 (not (equal (buffer-name buf) dedicated-vterm-buffer-name))) ; Exclude dedicated buffer
-            (setq found buf))
-        (setq buffers (cdr buffers))))
-    (if found
-        (switch-to-buffer found)
-      (message "No non-dedicated vterm buffer found in current perspective."))))
 
-(global-set-key (kbd "C-c v") 'switch-to-last-vterm-buffer)
-
+  (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
+  (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
 
 
 
@@ -267,11 +302,7 @@
   ;; Keybindings for Alt+numbers
   (dotimes (i 10)  ;; Loop from 0 to 9
     (let ((key (format "M-%d" i)))
-      (global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i)))))
-
-
-
-  )
+      (global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
 ;; (eval-after-load 'persp-mode
 ;;   '(my-update-dynamic-persps))
 (defvar my-persp-init-timer nil
@@ -315,6 +346,7 @@
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
 (display-time-mode 1) ;;Display the time
+(pixel-scroll-precision-mode 1)
 (setq display-time-day-and-date 1)
 (setq display-time-default-load-average nil) ;; Disable load time display
 
@@ -338,7 +370,7 @@
 (set-default-coding-systems 'utf-8)
 
 ;; Start automatically the daemon
-;;(server-start)
+(server-start)
 ;; Mode to log commands use clm/open-command-log-buffer to see them
 (use-package command-log-mode
 :straight t
@@ -399,8 +431,10 @@
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-    "ff" '(find-file :which-key "find-file")
+    "fe" '(consult-find :which-key "consult-find")
+    "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(recentf-open-files :which-key "Recent opened files")
+    "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
 
     "c" '(:ignore t :which-key "compiling")
@@ -434,8 +468,8 @@ folder, otherwise delete a word"
   (interactive)
   (if-let ((file (vertico--candidate)))
       (if (file-directory-p file)
-            (vertico-insert)
-        (vertico-exit))
+	  (vertico-insert)
+	(vertico-exit))
     (vertico-exit-input)))
 
 
@@ -449,9 +483,11 @@ folder, otherwise delete a word"
 	      ;;("C-f" . vertico-exit)
 	      ;;("C-f" . vertico-exit-input)
 	      ("C-f" . my-vertico-alt-done)
+	      ("TAB" . my-vertico-alt-done)
 	      ("?" . minibuffer-completion-help)
 	      ("RET" . minibuffer-force-complete-and-exit)
-	      ("M-TAB" . minibuffer-complete)
+	      ;;("M-TAB" . minibuffer-complete)
+	      ("M-TAB" . vertico-exit-input)
 	      :map minibuffer-local-map
 	      ("M-h" . ox/minibuffer-backward-kill))
   :custom
@@ -505,7 +541,7 @@ folder, otherwise delete a word"
   ;; :straight '(corfu :host github
   ;; 		    :repo "minad/corfu")
   :straight (corfu :files (:defaults "extensions/*")
-                   :includes (corfu-info corfu-history))
+		   :includes (corfu-info corfu-history))
 
   :bind (:map corfu-map
 	      ("C-j" . corfu-next)
@@ -517,8 +553,9 @@ folder, otherwise delete a word"
   :custom
   (corfu-auto t)
   (corfu-cycle t)
+  ;;(corfu-auto-delay 0)
   (corfu-auto-prefix 1)
-:config
+  :config
   (general-define-key
    :states 'insert
    "C-e" 'corfu-quit)
@@ -528,13 +565,11 @@ folder, otherwise delete a word"
   (corfu-popupinfo-mode))
 
 
-;; (use-package company
-;; :straight t)
 (use-package cape
   :straight t
   :after corfu
-  ;;:hook (lsp-completion-mode . ox/cape-capf-setup-lsp)
-  :hook (lsp-completion-mode . ox/cape-test-hook)
+  :hook (lsp-after-initialize . ox/cape-test-hook) ;; Needed for cape capf to work 
+  ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
   ;; :init
   ;; ;; NOTE: The order matters!
   ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
@@ -569,7 +604,7 @@ folder, otherwise delete a word"
 `cape-capf-buster' version. Also add `cape-file' and
 `company-yasnippet' backends."
     (setf (elt (cl-member 'lsp-completion-at-point completion-at-point-functions) 0)
-          (cape-capf-buster #'lsp-completion-at-point))
+	  (cape-capf-buster #'lsp-completion-at-point))
     ;; TODO 2022-02-28: Maybe use `cape-wrap-predicate' to have candidates
     ;; listed when I want?
     ;;(add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
@@ -577,106 +612,109 @@ folder, otherwise delete a word"
     (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
   )
 (defun ox/cape-hook ()
+  (add-to-list 'completion-at-point-functions #'cape-yasnippet)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-yasnippet)
   )
 (defun ox/cape-test-hook ()
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions
-	       (cape-super-capf #'lsp-completion-at-point #'cape-dabbrev #'cape-yasnippet)))
-(defun ox/cape1-hook ()
-  (setq-local completion-at-point-functions
-	      '(lsp-completion-at-point
-		cape-file
-		cape-yasnippet
-		cape-dabbrev)))
+  (lsp-completion-mode -1)
+  ;; (lambda () (lsp-completion-mode nil)
+    (message "lsp-completion-mode running")
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions
+		 (cape-super-capf  #'cape-yasnippet #'lsp-completion-at-point #'cape-dabbrev)))
+  (defun ox/cape1-hook ()
+    (setq-local completion-at-point-functions
+		'(lsp-completion-at-point
+		  cape-file
+		  cape-yasnippet
+		  cape-dabbrev)))
 
-(use-package cape-yasnippet
-  :straight '(cape-yasnippet :host github
-    			     :repo "elken/cape-yasnippet")
-  :after cape yasnippet
-  )
-
-
-
-(use-package orderless
-  :straight t
-  :init
-  (setq completion-styles '(orderless)
-	completion-category-defaults nil
-	completion-category-overrides '((file (styles . (partial-completion))))))
-
-(defun ox/get-project-root ()
-  (when (fboundp 'projectile-project-root)
-    (projectile-project-root)))
-
-(use-package consult
-  :straight t
-  :after which-key
-  :demand t
-  :bind (("C-s" . consult-line)
-	 ("C-M-l" . consult-imenu)
-	 ("C-M-j" . persp-switch-to-buffer*)
-	 ([remap describe-key]      . helpful-key)
-	 ([remap describe-command]  . helpful-command)
-	 ([remap describe-variable] . helpful-variable)
-	 ([remap describe-function] . helpful-callable)
-	 :map minibuffer-local-map
-	 ("C-r" . consult-history))
-  :custom
-  (consult-project-root-function #'ox/get-project-root)
-  (completion-in-region-function #'consult-completion-in-region)
-  :config
-  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-  (ox/leader-keys
-    "t" '(:ignore t :which-key "toggles")
-    "tt" '(consult-theme :which-key "Load themes"))
-  (consult-preview-at-point-mode))
-
-(use-package consult-lsp
-  :straight t
-  :after (lsp-mode consult))
-
-(use-package all-the-icons-completion
-  :straight t
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :config
-  ;;(all-the-icons-completion-mode)
-  )
-
-(use-package marginalia
-  :after vertico
-  :straight t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (marginalia-mode))
+  (use-package cape-yasnippet
+    :straight '(cape-yasnippet :host github
+			       :repo "elken/cape-yasnippet")
+    :after cape yasnippet
+    )
 
 
 
-(use-package embark
-  :straight t
-  :bind (("C-S-a" . embark-act)
-	 :map minibuffer-local-map
-	 ("C-d" . embark-act))
-  :config
+  (use-package orderless
+    :straight t
+    :init
+    (setq completion-styles '(orderless)
+	  completion-category-defaults nil
+	  completion-category-overrides '((file (styles . (partial-completion))))))
 
-  ;; Show Embark actions via which-key
-  (setq embark-action-indicator
-	(lambda (map)
-	  (which-key--show-keymap "Embark" map nil nil 'no-paging)
-	  #'which-key--hide-popup-ignore-command)
-	embark-become-indicator embark-action-indicator))
+  (defun ox/get-project-root ()
+    (when (fboundp 'projectile-project-root)
+      (projectile-project-root)))
 
-(use-package embark-consult
-  :straight '(embark-consult :host github
-			     :repo "oantolin/embark"
-			     :files ("embark-consult.el"))
-  :after (embark consult)
-  :demand t
-  :hook
-  (embark-collect-mode . embark-consult-preview-minor-mode))
+  (use-package consult
+    :straight t
+    :after which-key
+    :demand t
+    :bind (("C-s" . consult-line)
+	   ("C-M-l" . consult-imenu)
+	   ("C-M-j" . persp-switch-to-buffer*)
+	   ([remap describe-key]      . helpful-key)
+	   ([remap describe-command]  . helpful-command)
+	   ([remap describe-variable] . helpful-variable)
+	   ([remap describe-function] . helpful-callable)
+	   :map minibuffer-local-map
+	   ("C-r" . consult-history))
+    :custom
+    (consult-project-root-function #'ox/get-project-root)
+    (completion-in-region-function #'consult-completion-in-region)
+    :config
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+    (ox/leader-keys
+      "t" '(:ignore t :which-key "toggles")
+      "tt" '(consult-theme :which-key "Load themes"))
+    (consult-preview-at-point-mode))
+
+  (use-package consult-lsp
+    :straight t
+    :after (lsp-mode consult))
+
+  (use-package all-the-icons-completion
+    :straight t
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+    :config
+    ;;(all-the-icons-completion-mode)
+    )
+
+  (use-package marginalia
+    :after vertico
+    :straight t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+
+
+  (use-package embark
+    :straight t
+    :bind (("C-S-a" . embark-act)
+	   :map minibuffer-local-map
+	   ("C-d" . embark-act))
+    :config
+
+    ;; Show Embark actions via which-key
+    (setq embark-action-indicator
+	  (lambda (map)
+	    (which-key--show-keymap "Embark" map nil nil 'no-paging)
+	    #'which-key--hide-popup-ignore-command)
+	  embark-become-indicator embark-action-indicator))
+
+  (use-package embark-consult
+    :straight '(embark-consult :host github
+			       :repo "oantolin/embark"
+			       :files ("embark-consult.el"))
+    :after (embark consult)
+    :demand t
+    :hook
+    (embark-collect-mode . embark-consult-preview-minor-mode))
 
 (use-package wgrep
   :straight t) ;; edit grep searches
@@ -722,6 +760,21 @@ folder, otherwise delete a word"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+(use-package rg
+  :straight t
+  :config
+  ;;(rg-enable-default-bindings)
+  (rg-enable-menu)
+  )
+
+(defun ox/sudo-find-file (file)
+  "Open FILE as root."
+  (interactive
+   (list (read-file-name "Open as root: ")))
+  (find-file (if (file-writable-p file)
+                 file
+               (concat "/sudo:root@localhost:" file))))
+
 ;; Better help view and features
 (use-package helpful
   :straight t
@@ -744,6 +797,8 @@ folder, otherwise delete a word"
     (define-key vterm-mode-map (kbd key) nil))
 ;; switch to last buffer in every mode with C-6
 (evil-define-key '(visual insert normal) vterm-mode-map (kbd "C-6") 'evil-switch-to-windows-last-buffer)
+;; (evil-define-key '(visual insert normal) vterm-mode-map (kbd "C-{") 'multi-vterm-prev)
+;; (evil-define-key '(visual insert normal) vterm-mode-map (kbd "C-}") 'multi-vterm-next)
 
   (setq vterm-max-scrollback 10000)
   (setq term-prompt-regexp "^[^❯\n]*[❯] *"))
@@ -828,20 +883,24 @@ folder, otherwise delete a word"
 (defun ox/evil-hook ()
   (message "ox/evil-hook was called") ; add this line
   (dolist (mode '(Custom-mode
-		  eshell-mode
-		  git-rebase-mode
-		  erc-mode
-		  circe-server-mode
-		  circe-chat-mode
-		  circe-query-mode
-		  sauron-mode
-		  vterm-mode
-		  term-mode
-		  ))
+		    eshell-mode
+		    git-rebase-mode
+		    erc-mode
+		    circe-server-mode
+		    circe-chat-mode
+		    circe-query-mode
+		    sauron-mode
+		    vterm-mode
+		    term-mode
+		    ))
     (add-to-list 'evil-emacs-state-modes mode)))
 ;;(evil-set-initial-state mode 'emacs)))
 (use-package evil
-  :straight t
+  ;;:straight t
+  :straight '(evil :host github
+		       :repo "emacs-evil/evil"
+		       :branch "master")
+
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -899,6 +958,42 @@ folder, otherwise delete a word"
     "ia" '(evil-numbers/inc-at-pt :which-key "Imcrement")
     "ix" '(evil-numbers/dec-at-pt :which-key "Decrement")))
 
+(use-package evil-mc
+    :straight t
+    :config
+    (global-evil-mc-mode  1)
+
+    (defun evil--mc-make-cursor-at-col (_startcol endcol orig-line)
+      (move-to-column endcol)
+      (unless (= (line-number-at-pos) orig-line)
+        (evil-mc-make-cursor-here))
+      )
+    ;;; During visual selection point has +1 value
+    (defun my-evil-mc-make-vertical-cursors (beg end)
+      (interactive (list (region-beginning) (- (region-end) 1)))
+      (evil-exit-visual-state)
+      (evil-mc-pause-cursors)
+      ;;; Because `evil-mc-resume-cursors` produces a cursor,
+      ;;; we have to skip a current line here to avoid having +1 cursor
+      (apply-on-rectangle #'evil--mc-make-cursor-at-col
+                          beg end (line-number-at-pos))
+      (evil-mc-resume-cursors)
+      ;;; Because `evil-mc-resume-cursors` produces a cursor, we need to place it on on the
+      ;;; same column as the others
+      (move-to-column (evil-mc-column-number end))
+      )
+
+ (defun evil-mc-make-vertical-cursors (beg end)
+      (interactive (list (region-beginning) (region-end)))
+      (evil-mc-pause-cursors)
+      (apply-on-rectangle #'evil--mc-make-cursor-at-col
+                          beg end (line-number-at-pos (point)))
+      (evil-mc-resume-cursors)
+      (evil-normal-state)
+      (move-to-column (evil-mc-column-number (if (> end beg)
+                                                 beg
+                                               end)))))
+
 (use-package projectile
   :straight t
   :diminish projectile-mode
@@ -910,6 +1005,11 @@ folder, otherwise delete a word"
   (when (file-directory-p my-project-path)
     (setq projectile-project-search-path `(,my-project-path)))
   (setq projectile-switch-projection-action #'projectile-dired))
+
+(use-package eros
+  :straight t
+  :init
+  (eros-mode 1))
 
 (use-package nvm
   :straight t
@@ -927,9 +1027,13 @@ folder, otherwise delete a word"
   )
 (use-package emmet-mode
   :straight t
-  :hook ((typescript-mode . emmet-mode)
-	 ;;(typescript-mode . lambda() (interactive)(emmet-preview-mode 1) )))
-	 (typescript-mode . emmet-preview-mode)))
+  :hook ((typescript-mode . emmet-mode))
+	 ;;(typescript-mode . emmet-preview-mode)))
+ :config
+(ox/leader-keys
+"te" '(emmet-preview-mode :which-key "Emmet Preview Mode")))
+;; (add-to-list 'emmet-jsx-major-modes tsx-ts-mode)
+;; (add-to-list 'emmet-jsx-major-modes js2-jsx-mode))
 
 
 ;; Hide corfu suggestions and disable it when emmet-mode preview is working
@@ -959,6 +1063,10 @@ folder, otherwise delete a word"
   :straight t
   :defer t)
 
+(use-package flycheck-rust
+:straight t
+:hook (flycheck-mode . flycheck-rust-setup))
+
 (use-package web-mode
   :straight t
   :mode "(\\.\\(html?\\|ejs\\|tsx\\|jsx\\)\\'"
@@ -986,7 +1094,12 @@ folder, otherwise delete a word"
 
 (use-package smartparens
   :straight t
-  :hook (prog-mode . smartparens-mode))
+  :hook (prog-mode . smartparens-mode)
+  :config(require 'smartparens-config)
+;; add a blank line when opening a {
+  (sp-with-modes
+      '(c++-mode objc-mode c-mode typescript-mode)
+    (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 
 (use-package flycheck
   :straight t
@@ -1002,23 +1115,24 @@ folder, otherwise delete a word"
 (use-package lsp-mode
   :straight t
   :hook
- ((lsp-mode . ox/lsp-mode-setup)
-    (c-mode . lsp-deferred)
-    (python-mode . lsp-deferred)
-    (lua-mode . lsp-deferred)
-    (typescript-mode . lsp-deferred)
-    (css-mode . lsp-deferred)
-    (html-mode . lsp-deferred)
-    (js-mode . lsp-deferred))
+  ((lsp-mode . ox/lsp-mode-setup)
+   (c-mode . lsp-deferred)
+   (python-mode . lsp-deferred)
+   (lua-mode . lsp-deferred)
+   (typescript-mode . lsp-deferred)
+   (css-mode . lsp-deferred)
+   (html-mode . lsp-deferred)
+   (rust-mode . lsp-deferred)
+   (js-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-
- ;; ;; Configure Emmet LSP
- ;;  (lsp-register-client
- ;;   (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
- ;;                    :major-modes '(typescript-mode html-mode css-mode)
- ;;                    :server-id 'emmet-ls))
+  (setq lsp-rust-server 'rust-analyzer) ; or 'rls
+  ;; ;; Configure Emmet LSP
+  ;;  (lsp-register-client
+  ;;   (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
+  ;;                    :major-modes '(typescript-mode html-mode css-mode)
+  ;;                    :server-id 'emmet-ls))
   ;; Configure TailwindCSS Intellisense
   ;; (lsp-register-client
   ;;  (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-intellisense" "--stdio")
@@ -1045,12 +1159,12 @@ folder, otherwise delete a word"
   "lS" 'lsp-ui-sideline-mode
   "lX" 'lsp-execute-code-action)
 (use-package lsp-ui
-:straight t
-:after lsp-mode
-;;:commands lsp-ivy-workspace-symbol
-:hook (lsp-mode . lsp-ui-mode)
-;;:custom(lsp-ui-doc-position 'bottom)
-:config
+  :straight t
+  :after lsp-mode
+  ;;:commands lsp-ivy-workspace-symbol
+  :hook (lsp-mode . lsp-ui-mode)
+  ;;:custom(lsp-ui-doc-position 'bottom)
+  :config
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
         lsp-ui-doc-position 'top
@@ -1060,17 +1174,17 @@ folder, otherwise delete a word"
         lsp-ui-sideline-ignore-duplicate t))
 
 (use-package lsp-treemacs
-:straight t
-:after lsp-mode
-:commands lsp-treemacs-errors-list
-:config
-(lsp-treemacs-sync-mode t))
+  :straight t
+  :after lsp-mode
+  :commands lsp-treemacs-errors-list
+  :config
+  (lsp-treemacs-sync-mode t))
 (use-package treemacs-evil
-:straight t
-:after lsp-treemacs)
+  :straight t
+  :after lsp-treemacs)
 (use-package treemacs-projectile
-:straight t
-:after lsp-treemacs)
+  :straight t
+  :after lsp-treemacs)
 
 ;; (use-package dap-mode
 ;;   :straight t
@@ -1081,6 +1195,11 @@ folder, otherwise delete a word"
 ;;   (dap-tooltip-mode 1)
 ;;   (require 'dap-node)
 ;;   (dap-node-setup))
+
+(let* ((auth (auth-source-search :host "api.github.com" :user "S0mbr3^forge"))
+       (token (funcall (plist-get (car auth) :secret))))
+  ;; Now 'token' contains your GitHub token, and you can use it in your code.
+  )
 
 ;; We are making magit getting the full buffer size
 (use-package magit
@@ -1093,6 +1212,35 @@ folder, otherwise delete a word"
 (use-package forge
 :straight t
 :after magit)
+
+(defun my/vc-refresh-after-burying-magit (&rest args)
+  "Refresh VC state after magit-status."
+  (vc-refresh-state))
+
+(defun my/vc-refresh-after-magit-checkout (&rest args)
+  "Refresh VC state after magit-status."
+  (vc-refresh-state))
+
+ (advice-add 'magit-branch-and-checkout :after #'my/vc-refresh-after-magit-checkout)
+ (advice-add 'magit-branch :after #'my/vc-refresh-after-magit-checkout)
+ (advice-add 'magit-checkout :after #'my/vc-refresh-after-magit-checkout)
+ (advice-add 'magit-refresh :after #'my/vc-refresh-after-magit-checkout)
+(advice-add 'magit-mode-bury-buffer :after #'my/vc-refresh-after-burying-magit)
+
+
+;;(add-hook 'magit-post-refresh-hook 'vc-refresh-state)
+
+;; (defun refresh-vc-state (&rest r) (message "%S" (current-buffer))(vc-refresh-state))
+;; (advice-add 'magit-checkout-revision :after 'refresh-vc-state '((name . "magit-refresh-on-checkout-revision")))
+;; (advice-add 'magit-branch-create :after 'refresh-vc-state '((name . "magit-refresh-on-branch-create")))
+;; (advice-add 'magit-branch-and-checkout :after 'refresh-vc-state '((name .  "magit-refresh-on-checkout-and-branch")))
+;; (advice-add 'magit-branch-or-checkout :after 'refresh-vc-state '((name .  "magit-refresh-on-branch-or-checkout")))
+
+;; (defun my/vc-refresh-state-after-shell-command (output)
+;;   (when (string-match "Switched to branch" output)
+;;     (vc-refresh-state)))
+
+;; (add-hook 'comint-output-filter-functions 'my/vc-refresh-state-after-shell-command)
 
 (defun ox/org-mode-setup ()
   (org-indent-mode)
@@ -1252,12 +1400,16 @@ folder, otherwise delete a word"
   :straight t
   :hook (org-mode . ox/org-mode-visual-fill))
 
+(use-package ob-typescript
+  :straight t)
+
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (C . t)
      (shell . t)
+     (typescript . t)
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
@@ -1410,32 +1562,89 @@ folder, otherwise delete a word"
   :straight t
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package dired-hide-dotfiles
-  :straight t
-  :hook (dired-mode . dired-hide-dotfiles-mode)
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "H" 'dired-hide-dotfiles-mode))
 
-(use-package dired-open
-  :straight t
-  :after dired
-  ;;:commands (dired dired-jump)
+(use-package ranger
+  ;;:straight t
+  :straight '(ranger :host github
+		       :local-repo "/home/oxhart/builds/ranger.el/"
+		       :branch "ranger-setup-image-preview")
   :config
-  ;; Strange behaviors not picking always the good program automatically
-  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-  (setq dired-open-extensions '(("png" . "feh")
-				("mkv" . "mpv"))))
+  (global-set-key (kbd "C-c d") 'ranger)
+  (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
+
+  ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
+  (defun my/ranger-clear-header-line ()
+    "Clear the header line."
+    (setq header-line-format nil))
+
+  (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
+
+  (use-package dired-hide-dotfiles
+    :unless (featurep 'ranger)
+    :straight t
+    :hook (dired-mode . dired-hide-dotfiles-mode)
+    :config
+    (evil-collection-define-key 'normal 'dired-mode-map
+	"H" 'dired-hide-dotfiles-mode))
+
+  (use-package dired-preview
+    :unless (featurep 'ranger)
+    :straight t
+    :hook (dired-mode . dired-preview-mode))
+
+  (use-package dired-open
+    :unless (featurep 'ranger)
+    :straight t
+    :after dired
+    ;;:commands (dired dired-jump)
+    :config
+    ;; Strange behaviors not picking always the good program automatically
+    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+    (setq dired-open-extensions '(("png" . "feh")
+				    ("mkv" . "mpv"))))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
-(require 'ansi-color)
 
-(defun my-ansi-colorize-buffer ()
-  (let ((buffer-read-only nil))
-    (ansi-color-apply-on-region (point-min) (point-max))))
+;; (require 'ansi-color)
 
-(add-hook 'compilation-filter-hook 'my-ansi-colorize-buffer)
+;; (defun my-ansi-colorize-buffer ()
+;;   (let ((buffer-read-only nil))
+;;     (ansi-color-apply-on-region (point-min) (point-max))))
+
+;; (add-hook 'compilation-filter-hook 'my-ansi-colorize-buffer)
+
+;; (ignore-errors
+;;   (require 'ansi-color)
+;;   (defun my-colorize-compilation-buffer ()
+;;     (when (eq major-mode 'compilation-mode)
+;;       (ansi-color-apply-on-region compilation-filter-start (point-max))))
+;;   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+;; Builtin since emacs 28
+(use-package ansi-color
+:ensure nil
+:hook (compilation-filter . ansi-color-compilation-filter)
+:config
+;;(setq ansi-color-for-comint-mode t)
+(setq compilation-environment '("TERM=xterm-256color")))
+;;(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter))
+
+;; (defun colorize-compilation-buffer ()
+;;   (when (eq major-mode 'compilation-mode)
+;;     (ansi-color-apply-on-region compilation-filter-start (point-max))))
+
+;; (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+;; (use-package xterm-color
+;; :straight t
+;; :config
+;; (setq compilation-environment '("TERM=xterm-256color"))
+
+;; (defun my/advice-compilation-filter (f proc string)
+;;   (funcall f proc (xterm-color-filter string)))
+
+;; (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
 
 (use-package auto-package-update
   :straight t

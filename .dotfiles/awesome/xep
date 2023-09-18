@@ -11,8 +11,9 @@ echo "Awesome dev is not running, starting..."
 Xephyr :1 -ac -br -noreset -screen 2560x1600 -dpi 96 &
 sleep 0.1
 #DISPLAY=:1.0 awesome -c rc.lua &
+DISPLAY=:1.0 awesome&
 #DISPLAY=:1.0 awesome -c rc-dev.lua &
-DISPLAY=:1.0 awesome -c /etc/xdg/awesome/rc.lua &
+#DISPLAY=:1.0 awesome -c /etc/xdg/awesome/rc.lua &
 instance=$!
 
 while inotifywait -r -e close_write ~/Documents/builds/terminalConfigs/.dotfiles/awesome; do

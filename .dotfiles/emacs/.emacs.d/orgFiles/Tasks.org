@@ -8,5 +8,12 @@
 * TODO Finish documentation
 SCHEDULED: <2023-07-27 jeu.>
 
-* test
-SCHEDULED: <2023-07-27 jeu.>
+
+* TODO CODE again the Queue linked list datastructure
+SCHEDULED: <2023-09-09 sam.>
+
+* TODO code bubble sort
+SCHEDULED: <2023-09-12 ven.>
+
+* TODO code binary_search two_crystalballs
+SCHEDULED: <2023-09-14 dim.>

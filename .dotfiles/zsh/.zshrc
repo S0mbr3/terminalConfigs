@@ -140,7 +140,8 @@ export LANG=en_US.UTF-8
 #   export EDITOR='mvim'
 # fi
 #export VISUAL='nvr -l'
-export VISUAL='nvim'
+#export VISUAL='nvim'
+export VISUAL='emacsclient -n'
 export EDITOR="$VISUAL"
 
 # Compilation flags
@@ -164,6 +165,7 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias c='cht.sh'
+alias e='emacsclient -n'
 #alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
