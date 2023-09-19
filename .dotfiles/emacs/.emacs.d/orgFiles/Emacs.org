@@ -442,13 +442,16 @@ OFFSET can be provided to skip a given number of buffers."
   (interactive "sCommand: ")
   ;;(setq-local buffer-save-without-query nil)
   (save-buffer)
-  (compile (format "%s" ox/command)))
+  (compile (format "%s" ox/command))
+;;(switch-to-buffer "*compilation*")
+)
 
 (defun ox/recompile()
 (interactive)
 (save-buffer)
 (ignore-errors (kill-compilation)) ;; interrupt old compilation
 (recompile)
+;;(switch-to-buffer "*compilation*")
 )
 
 

@@ -9,6 +9,8 @@
 SCHEDULED: <2023-07-27 jeu.>
 
 
+* TODO Learn Matrix exponention and derivative
+
 * TODO CODE again the Queue linked list datastructure
 SCHEDULED: <2023-09-09 sam.>
 

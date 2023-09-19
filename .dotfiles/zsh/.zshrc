@@ -170,8 +170,6 @@ alias e='emacsclient -n'
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
 alias deb='ssh debian'
-#export OPENAI_API_KEY='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'
-export OPENAI_API_KEY='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'
 export PATH="/home/oxhart/scripts:$PATH"
 
 functin zz(){
