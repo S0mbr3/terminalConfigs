@@ -1,4 +1,10 @@
-vim.o.clipboard=vim.o.clipboard.."unnamedplus"
+if vim.fn.has 'nvim' == 1 then
+  -- Use nvim 0.9+ new loader with byte-compilation cache
+  -- https://neovim.io/doc/user/lua.html#vim.loader
+  if vim.loader then vim.loader.enable() end
+end
+--vim.o.clipboard=vim.opt.clipboard:prepend { "unnamedplus" }
+vim.opt.clipboard:prepend { "unnamedplus" }
 
 --vim.o.wildmenu --Show a bar that you can use to expand searches with tabs set by
 --defaut on neovim
@@ -13,26 +19,39 @@ vim.o.nu=true --Add lines number
 vim.o.relativenumber=true
 vim.g.suda_smart_edit = 1
 --vim.o.relativenumber
+-- To use ripgrep for the grep functions
+-- And format it well useful for quickfix
+vim.o.grepprg = 'rg --vimgrep'
+vim.o.grepformat = '%f:%l:%c:%m,%f|%l col %c|%m'
 vim.o.cursorline=true
 vim.o.laststatus=2
-vim.o.insearch=false --show searching as typing
+--vim.o.incsearch=false --show searching as typing
 vim.o.hlsearch=false -- highliting or no the searches
 --vim.o.statusline=[[ %F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%0.3b]\ [HEX=\%02.2B]\ [POS=%04v]\ [%p%%]\ [LEN=%L] ]]
 --vim.cmd([[syntax on ]]) --Add syntax
---vim.o.autoindent=true
+--vim.opt.autoindent=true
+--vim.opt.cpoptions:append "I"
+-- vim.cmd([[ set cpoptions+=I ]])
 vim.o.smartindent=true
 vim.o.encoding="utf-8"
 vim.o.expandtab=true --use always tab
-vim.o.termguicolors=true
-vim.o.formatoptions=vim.o.formatoptions .. "j" --remove comment leader when joining comments
-vim.o.formatoptions=vim.o.formatoptions .. "n" --smart auto-indenting inside numbered of lists
+vim.opt.termguicolors=true
+-- vim.o.formatoptions=vim.o.formatoptions .. "j" --remove comment leader when joining comments
+-- vim.o.formatoptions=vim.o.formatoptions .. "n" --smart auto-indenting inside numbered of lists
+
+--detetec when the files have been change outside of vim or by another buffer of this file
+vim.opt.autoread=true
+
+--vim.opt.formatoptions:remove ( "r", "o", "c"}
+vim.opt.formatoptions:remove { "r", "o"}
+vim.opt.formatoptions:append {"j", "n"}
 vim.o.hidden=true --hide unsaved buffers when changing buffer
 vim.cmd([[ set nojoinspaces ]])
 vim.cmd([[ set directory^="$HOME/tmp/.nvim/swp//" ]])
 vim.o.showcmd=true
 --vim.o.foldmethod="indent"
 --vim.cmd([[ set foldignore=]])
-vim.o.completeopt="menu,menuone,noinsert" --complete options
+vim.opt.completeopt="menu,menuone,noinsert" --complete options
 --vim.cmd([[ let g:completion_matching_strategy_list=["exact", "substring", "fuzzy"] ]])--how completion fill the menu
 
 
@@ -50,27 +69,28 @@ vim.o.switchbuf="usetab" --try to reuse windows/tabs when opening a file in a bu
 vim.o.tabstop=2 --spaces per tab
 
 --liste chars (changing appearance of space, tab etc)
-vim.o.list=true --show whitespace
-vim.o.listchars="nbsp:☠"
-vim.cmd([[
-set listchars+=tab:>-
-set listchars+=extends:»
-set listchars+=precedes:«
-set listchars+=trail:•
-]])
--- enable break indent
-vim.o.breakindent = true
+-- vim.o.list=true --show whitespace
+-- vim.o.listchars="nbsp:☠"
+-- vim.cmd([[
+-- set listchars+=tab:>-
+-- set listchars+=extends:»
+-- set listchars+=precedes:«
+-- set listchars+=trail:•
+-- let &showbreak='+++'
+-- ]])
+
+--vim.o.showbreak='⤷'
 
 -- Save undo history
 vim.o.undofile = true
 
 -- Decrease update time
 vim.o.updatetime = 250
-vim.wo.signcolumn = 'yes'
+vim.wo.signcolumn = 'number'
 
-vim.cmd([[let &showbreak='+++']])
 --neovim messages management
-vim.cmd([[ set shortmess="+=A" ]])--ignore swapfiles messages
+vim.opt.shortmess="aA"
+--vim.cmd([[ set shortmess="+=A" ]])--ignore swapfiles messages
 
 --tab length and behavior managing
 vim.o.shiftround=true --always indent by multiple of shiftwidth

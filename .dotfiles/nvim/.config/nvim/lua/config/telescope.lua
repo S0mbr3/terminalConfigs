@@ -1,6 +1,11 @@
+local builtin = require("telescope.builtin")
+local utils = require("telescope.utils")
+-- ["<leader>fa"] = {function() builtin.find_files({cwd=utils.buffer_dir()}) end,
+-- desc = "find files in cwd"}
+vim.keymap.set('n', '<leader>fa', function () builtin.find_files{cwd = "~/Documents/builds/terminalConfigs/.dotfiles/"} end, { noremap = true, silent = true, desc = '[S]earch [F]files relative' })
+vim.keymap.set('n', '<leader>fr', function () builtin.live_grep{cwd = "~/Documents/builds/terminalConfigs/.dotfiles/", additional_args={"-."}} end, { noremap = true, silent = true, desc = '[S]earch [H]iden [G]rep' })
 vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.api.nvim_set_keymap('n', '<Leader>fa', "<cmd>lua require('telescope.builtin').find_files()<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", { noremap = true, silent = true })

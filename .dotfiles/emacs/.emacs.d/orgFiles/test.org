@@ -1,7 +1,0 @@
-* TODO TEST
-SCHEDULED: <2023-07-28 ven.>
-- [ ] ceci
-  - [ ] cela
-- [ ] Encore ceci
-  - [ ] encore cela
-- [ ] et patata

@@ -12,6 +12,10 @@ end
 
 local packer_bootstrap = ensure_packer()
 
+-- To required luarocks installed packages
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+
 require('plugins')
 require('config')
 require('utils')

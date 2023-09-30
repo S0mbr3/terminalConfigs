@@ -45,11 +45,11 @@ require('nvim-terminal').setup({
 
     terminals = {
         -- keymaps to open nth terminal
-        {keymap = '<leader><M-1>'},
-        {keymap = '<leader><M-2>'},
-        {keymap = '<leader><M-3>'},
-        {keymap = '<leader><M-4>'},
-        {keymap = '<leader><M-5>'},
+        {keymap = '<leader><C-1>'},
+        {keymap = '<leader><C-2>'},
+        {keymap = '<leader><C-3>'},
+        {keymap = '<leader><C-4>'},
+        {keymap = '<leader><C-5>'},
     },
 })
 

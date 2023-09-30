@@ -62,29 +62,14 @@ vim.api.nvim_set_keymap('n', '<Leader>x', ':w|luafile %<CR>', { noremap = false,
 -- but only change the path for the current window
 vim.api.nvim_set_keymap('n', '<Leader>cd', ':lcd %:p:h<CR>', { noremap = true, silent = false })
 
--- switching tab keybinding
-vim.keymap.set({'n', 'i', 'v' }, '<M-1>', '1gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-2>', '2gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-3>', '3gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-4>', '4gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-5>', '5gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-6>', '6gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-7>', '7gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-8>', '8gt', { noremap = true, silent = true })
-vim.keymap.set({'n', 'i', 'v' }, '<M-9>', '9gt', { noremap = true, silent = true })
-
--- for terminal tab switching
-vim.api.nvim_set_keymap('t', '<M-1>', '<C-\\><C-n>1gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-2>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-3>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-4>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-5>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-6>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-7>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-8>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<M-9>', '<C-\\><C-n>2gt', { noremap = true, silent = true })
 
 
 
 -- executing shell commands
 vim.api.nvim_set_keymap('n', '<Leader><C-e>', ':!/bin/bash ~/.config/volumeicon/restart<CR>', { noremap = true, silent = true })
+
+--Compilation commands
+--:copen 50 (for bigger quickfix list)
+vim.api.nvim_set_keymap('n', '<Leader>co', ':copen <CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>cl', ':close<CR>', { noremap = true, silent = true })
+vim.keymap.set({'n', 'v' }, '<Leader>cv', ':lua require("utils.runners"):compile_c()<CR>', { noremap = true, silent = true })

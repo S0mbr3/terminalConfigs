@@ -1,4 +1,3 @@
-
 return require('packer').startup(function(use)
 use({
   "jackMort/ChatGPT.nvim",
@@ -12,16 +11,19 @@ use({
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim"
     }
-})use {
+  })
+  use {
     "nvim-neorg/neorg",
     run = ":Neorg sync-parsers", -- This is the important bit!
     config = function()
-        require("neorg").setup {
-            -- configuration here
-        }
+      require("neorg").setup {
+        -- configuration here
+      }
     end,
   }
-    use 'neovim/nvim-lspconfig'
+  use "folke/neodev.nvim"
+  use {"jbyuki/nabla.nvim"}
+  use 'neovim/nvim-lspconfig'
   use 'mfussenegger/nvim-dap'
   use 'simrat39/rust-tools.nvim'
   use 'p00f/clangd_extensions.nvim'
@@ -53,7 +55,7 @@ use({
   end
   use 'ThePrimeagen/harpoon'
   use 'windwp/nvim-autopairs'
-  use 'wincent/loupe'
+  --use 'wincent/loupe' -- Add very magic to all searchers and replacers
   --use 'vim-airline/vim-airline'
   use {
   'nvim-lualine/lualine.nvim',
@@ -64,7 +66,7 @@ use({
 
   --use 'morhetz/gruvbox'
   use 'owozsh/amora'
-  --use 'lukas-reineke/indent-blankline.nvim'                                            -- Add indentation guides even on blank lines
+  use 'lukas-reineke/indent-blankline.nvim'                                            -- Add indentation guides even on blank lines
   use {'ellisonleao/gruvbox.nvim', requires = {'rktjmp/lush.nvim'}}
   use 'nvim-lua/popup.nvim'
   use {'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim'}}
@@ -92,6 +94,7 @@ use({
   --use 'github/copilot.vim'
   use { 'catppuccin/nvim', as = 'catppuccin'}
   use 'folke/tokyonight.nvim'
+  use "tiagovla/tokyodark.nvim"
   use 'marko-cerovac/material.nvim'
   use {'kdheepak/lazygit.nvim'}
   --use { 'subnut/nvim-ghost.nvim', run = function() vim.fn['nvim_ghost#installer#install()'](0) end }
@@ -107,7 +110,24 @@ use({
         require('nvim-terminal').setup()
     end,
 }
-  use {'edluffy/hologram.nvim'} -- to see images inside neovim
+
+use {
+  'gelguy/wilder.nvim'
+}
+--use {'Vaisakhkm2625/hologram-math-preview.nvim'}
+use {'~/dev/neovim-plugins/hologram-math-preview.nvim', branch= 'show-all-eq-fix'}
+
+--use {'edluffy/hologram.nvim'} -- to see images inside neovim
+use {
+  'vhyrro/hologram.nvim',
+  config = function()
+    require("hologram").setup()
+  end,
+
+  --rocks = {"magick"},
+}
+-- to see images inside neovim
+use {'3rd/image.nvim'} -- next level of images in neovim
   -- color highlither for css
   use 'norcalli/nvim-colorizer.lua'
   --use 'ap/vim-css-color'
@@ -119,4 +139,16 @@ use({
     require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
   end
 }
+-- use {
+--   'rcarriga/nvim-notify',
+--   config = function()
+--     require('notify').setup ({ background_colour = "#000000"})
+--   end
+-- }
+--use 'rcarriga/nvim-notify'
+
+
+use {"folke/noice.nvim", requires = {'rcarriga/nvim-notify', 'MunifTanjim/nui.nvim'}}
+-- use 'MunifTanjim/nui.nvim'
+-- use 'folke/noice.nvim'
 end)

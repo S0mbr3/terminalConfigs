@@ -10,15 +10,17 @@ vim.api.nvim_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').si
 vim.api.nvim_set_keymap('n', '<Leader>lr', "<cmd>Lspsaga rename<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>ld', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>Lspsaga show_line_diagnostics<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>lb', "<cmd>Lspsaga show_buf_diagnostics<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>lw', "<cmd>Lspsaga show_workspace_diagnostics<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>cc', "<cmd>Lspsaga show_cursor_diagnostics<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '[e', "<cmd>Lspsaga diagnostic_jump_prev<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', ']e', "<cmd>Lspsaga diagnostic_jump_next<CR>", { noremap = true, silent = true })
 -- Only jump to error
 vim.keymap.set("n", "[E", function()
-  require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+  require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 vim.keymap.set("n", "]E", function()
-  require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+  require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
 end, { silent = true })
 --vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>Lspsaga term_floaterm<CR>", { noremap = true, silent = true })
 --vim.api.nvim_set_keymap('t', '<A-d>', "<C-\\><C-n><cmd>Lspsaga close_floaterm<CR>", { noremap = true, silent = true })
@@ -119,6 +121,8 @@ local on_attach = function(_, bufnr)
   lsp_keymaps(bufnr)
 end
 
+require("neodev").setup({
+})
 --vim.keymap.set('n', '<cmd>:Format<cr>', {buffer = bufnr, desc='LSP: [F]ormat whole buffer' })
 -- nvim-cmp supports additional completion capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -127,7 +131,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = {'pyright', 'tsserver', 'lua_ls', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "cssls", "eslint", "tailwindcss"}
+local servers = {'pyright', 'tsserver', 'lua_ls', 'angularls', 'bashls', 'phpactor', 'emmet_ls', "clangd", "eslint", "tailwindcss"}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {

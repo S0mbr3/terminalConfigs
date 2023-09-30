@@ -148,6 +148,31 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
+(use-package eaf
+  :straight nil
+  :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
+  :custom
+					; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser)
+  (eaf-browser-auto-import-chrome-cookies t)
+  :config
+  (defalias 'browse-web #'eaf-open-browser)
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+
+(require 'eaf-pyqterminal)
+(require 'eaf-browser)
+(require 'eaf-pdf-viewer)
+
+(use-package chatgpt
+  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :bind ("C-c q" . chatgpt-query))
+
 (use-package persp-mode
   :straight t
   :defer t
@@ -201,7 +226,7 @@
            (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
            (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
       (if first-vterm-buffer
-            first-vterm-buffer
+          first-vterm-buffer
 	nil)))
 
   (defun switch-to-last-persp-vterm ()
@@ -211,7 +236,8 @@
       (message "vterm buffer is :%s" last-persp-vterm-buffer)
       (if last-persp-vterm-buffer
 	  (switch-to-buffer last-persp-vterm-buffer)
-	(message "No last vterm buffer in this perspective to switch to."))))
+	(message "No last vterm buffer in this perspective to switch to.")
+	nil)))
 
   (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
 
@@ -337,6 +363,8 @@ OFFSET can be provided to skip a given number of buffers."
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
 (setq native-comp-async-report-warnings-errors nil) ;; Remove warning of compiled package with Emacs compiled with Native flag
+(setq native-comp-deferred-compilation t) ;; To compile all site-lisp on demand (repos/AUR packages, ELPA, MELPA, whatever)
+ (setq native-compile-prune-cache t) ;; And to keep the eln cache clean add 
 ;;(load-theme 'deeper-blue t)
 
 ;; Make ESC quit prompts
@@ -1009,6 +1037,25 @@ folder, otherwise delete a word"
     (setq projectile-project-search-path `(,my-project-path)))
   (setq projectile-switch-projection-action #'projectile-dired))
 
+(defun my/crunner ()
+  "Make and Run a C program on a vterm buffer based on the makefile recipies
+because compile mode is too slow"
+  (interactive)
+  (if (eq major-mode 'c-mode)
+      (progn 
+	(save-buffer)
+	(let ((target (concat "make && time " "./" (file-name-nondirectory (directory-file-name (file-name-directory buffer-file-name))) "\n"))
+	      (switched nil))
+	  (setq switched (switch-to-last-persp-vterm))
+	  (unless (not (eq switched nil))
+	    (multi-vterm))
+	  (vterm-send-string target)))
+    (print "Not in c-mode")))
+  (ox/leader-keys
+    "cv" '(my/crunner :which-key "Run C code in VTerm"))
+
+;;(add-hook 'after-save-hook 'my/crunner)
+
 (use-package eros
   :straight t
   :init
@@ -1031,10 +1078,10 @@ folder, otherwise delete a word"
 (use-package emmet-mode
   :straight t
   :hook ((typescript-mode . emmet-mode))
-	 ;;(typescript-mode . emmet-preview-mode)))
- :config
-(ox/leader-keys
-"te" '(emmet-preview-mode :which-key "Emmet Preview Mode")))
+  ;;(typescript-mode . emmet-preview-mode)))
+  :config
+  (ox/leader-keys
+    "te" '(emmet-preview-mode :which-key "Emmet Preview Mode")))
 ;; (add-to-list 'emmet-jsx-major-modes tsx-ts-mode)
 ;; (add-to-list 'emmet-jsx-major-modes js2-jsx-mode))
 
@@ -1067,8 +1114,8 @@ folder, otherwise delete a word"
   :defer t)
 
 (use-package flycheck-rust
-:straight t
-:hook (flycheck-mode . flycheck-rust-setup))
+  :straight t
+  :hook (flycheck-mode . flycheck-rust-setup))
 
 (use-package web-mode
   :straight t
@@ -1267,6 +1314,9 @@ folder, otherwise delete a word"
   (setq org-src-tab-acts-natively t)
   (setq org-src-preserve-indentation nil)
   (setq org-edit-src-content-indentation 0)
+  (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
+
   ;;(setq python-indent-offset 4) ; Set indentation to 4 spaces (or any other desired value)
 
 

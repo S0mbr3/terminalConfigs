@@ -142,7 +142,8 @@ export LANG=en_US.UTF-8
 #export VISUAL='nvr -l'
 #export VISUAL='nvim'
 export VISUAL='emacsclient -n'
-export EDITOR="$VISUAL"
+#export EDITOR="$VISUAL"
+export EDITOR='emacsclient -n'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -159,16 +160,18 @@ export EDITOR="$VISUAL"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
+alias ls='lsd --hyperlink=auto'
+alias l='ls -l --hyperlink=auto'
+alias la='ls -a --hyperlink=auto'
+alias lla='ls -la --hyperlink=auto'
+alias lt='ls --tree --hyperlink=auto'
 alias c='cht.sh'
 alias e='emacsclient -n'
 #alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
+#with exec instead of alias to execute it from the file name it is stored
+alias mg='kitty +kitten hyperlinked_grep --smart-case "$@"'
 alias deb='ssh debian'
 export PATH="/home/oxhart/scripts:$PATH"
 
@@ -222,19 +225,20 @@ eval "$(pyenv init -)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/oxhart/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/oxhart/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/oxhart/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/oxhart/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+# __conda_setup="$('/home/oxhart/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/oxhart/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/oxhart/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/oxhart/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
 # <<< conda initialize <<<
 
+export OPENAI_API_KEY="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"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"

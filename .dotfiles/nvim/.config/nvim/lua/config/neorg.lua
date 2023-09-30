@@ -1,7 +1,8 @@
 require('neorg').setup {
   load = {
     ["core.defaults"] = {},
-    ["core.norg.dirman"] = {
+    ["core.export"] = {},
+    ["core.dirman"] = {
       config = {
         workspaces = {
           work = "~/notes/work",
@@ -9,12 +10,12 @@ require('neorg').setup {
         }
       }
     },
-    ['core.norg.completion'] = {
+    ['core.completion'] = {
       config = {
         engine = "nvim-cmp",
       }
     },
-    ['core.norg.concealer'] = {
+    ['core.concealer'] = {
       config = {
         icon_preset = "diamond",
         folds = false,
@@ -24,5 +25,10 @@ require('neorg').setup {
         }
       }
     },
+    ['core.ui.calendar'] = {},
   }
 }
+
+vim.api.nvim_set_keymap('n', '<leader>po', ':lua require("nabla").popup()<CR>' , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>pv', ':lua require("nabla").toggle_virt({autogen=true})<CR>' , { noremap = true, silent = true })
+

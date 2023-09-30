@@ -204,7 +204,11 @@ screen.connect_signal("request::desktop_decoration", function(s)
 	-- Create the wibox
 	s.mywibox = awful.wibar {
 		position = "top",
+		type     = "dock",
+		shape    = function(cr, w, h)
+		   gears.shape.rounded_rect(cr, w, h, 10)end,
 		screen   = s,
+		--opacity  = 0.91,
 		widget   = {
 			layout = wibox.layout.align.horizontal,
 			{ -- Left widgets
@@ -818,7 +822,7 @@ screen.connect_signal("arrange", function(s)
 	local only_one = #s.tiled_clients == 1
 
 	for _, c in pairs(s.clients) do
-		if (only_one and not c.floating) or (c.maximized and not c.virtual_fullscreen) then
+		if (only_one) or (c.maximized and not c.virtual_fullscreen) then
 			c.border_width = 0
 			--   local screen_geometry = set_max_screen_size(c)
 			--   if not not screen_geometry then
@@ -853,7 +857,12 @@ screen.connect_signal("arrange", function(s)
 	end
 end)
 
-
+client.connect_signal("manage", function(c)
+	c.shape = function(cr, w, h)
+		gears.shape.octogon(cr, w, h, 10)
+	end
+	--c.shape = gears.shape.rounded_rect
+end)
 --awful.spawn.with_shell('feh --bg-scale ~/Downloads/wall2.jpg')
 --awful.spawn.with_shell('tilda')
 --awful.spawn.with_shell('sudo systemctl start NetworkManager.service')
