@@ -13,7 +13,7 @@ require("tokyonight").setup({
 require'material'.setup({
   disable={
     background=true
-  },
+    },
   plugins = { -- Uncomment the plugins that you use to highlight them
         -- Available plugins:
         -- "dap",
@@ -46,22 +46,11 @@ vim.api.nvim_set_keymap('n', '<leader>mp', [[<Cmd>lua require('material.function
 -- -- Enable `lukas-reineke/indent-blankline.nvim`
 --See `:help indent_blankline.txt`
 
-require("tokyodark").setup({
-  transparent_background = true
-})
-
-require("catppuccin").setup({
-  transparent_background = true
-})
-
-
---vim.cmd[[colorscheme catppuccin-mocha]]
 --vim.cmd[[colorscheme tokyonight-moon]]
---vim.cmd[[colorscheme tokyonight-night]]
---vim.cmd[[colorscheme material]]
-vim.cmd[[colorscheme tokyodark]]
+--vim.cmd[[colorscheme catppuccin-mocha]]
+vim.cmd[[colorscheme material]]
 
-if (vim.g.colors_name == 'tokyonight-night' or vim.g.colors_name == 'tokyodark') then
-  vim.o.cursorline=false
-  -- Set a bunch of things
-end
+if (vim.g.colors_name == 'tokyonight-night') then
+    vim.o.cursorline=false
+      -- Set a bunch of things
+       end

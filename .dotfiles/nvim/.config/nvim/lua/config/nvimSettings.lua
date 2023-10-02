@@ -16,6 +16,7 @@ vim.g.html_indent_script1 = 'inc'  --better indentation for hml using javascript
 vim.g.html_indent_style1 = 'inc' --better indentation for html using css
 vim.o.path=vim.o.path .. "**"  --allow to search a file with :find command on all subdirectories
 vim.o.nu=true --Add lines number
+vim.opt.ignorecase = true
 vim.o.relativenumber=true
 vim.g.suda_smart_edit = 1
 --vim.o.relativenumber

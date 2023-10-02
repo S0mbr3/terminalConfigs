@@ -1,0 +1,18 @@
+#!/bin/python
+import subprocess
+import time
+
+def get_idle_time():
+    idle_time_output = subprocess.run(['xprintidle'], capture_output=True, text=True).stdout
+    return int(idle_time_output.strip())
+
+def main():
+    while True:
+        idle_time = get_idle_time()  # Get idle time in milliseconds
+        if idle_time >= 500:  # 5 minutes in milliseconds
+            subprocess.run(['cmatrix', '-s'])
+            time.sleep(60)  # Check every minute
+
+if __name__ == "__main__":
+    main()
+

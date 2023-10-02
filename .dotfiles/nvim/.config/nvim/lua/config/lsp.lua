@@ -47,29 +47,29 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 --  This function gets run when an LSP connects to a particular buffer.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 
- vim.diagnostic.config({
-        virtual_text = {
-          source = "if_many",
-        },
-        update_in_insert = true,
-        signs = true,
-        underline = true,
-        severity_sort = true,
-        float = {
-          border = 'rounded',
-          source = 'always',
-          header = '',
-          prefix = '',
-        }
-    })
+vim.diagnostic.config({
+  virtual_text = {
+    source = "if_many",
+  },
+  update_in_insert = true,
+  signs = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  }
+})
 
-    -- Allow to have a floating window with the errors
+-- Allow to have a floating window with the errors
 -- vim.cmd([[
 -- set signcolumn=yes
 -- autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 -- ]])
 
-    local lsp_keymaps = function (bufnr)
+local lsp_keymaps = function (bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -171,6 +171,9 @@ require'lspconfig'.lua_ls.setup {
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
         enable = false,
+      },
+      completion = {
+        callSnippet = "Replace",
       },
     },
   },

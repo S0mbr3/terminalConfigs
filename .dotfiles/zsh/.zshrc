@@ -13,14 +13,13 @@ function_name (){
 }
 function_name
 
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
 
 #Auto-launching ssh-agent to save passphrases
 
@@ -199,6 +198,7 @@ eval "$(nodenv init -)"
 #export TERM=xterm-kitty
 #export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
+export NVIM_APPNAME="nvim"
 ## uncomment below line to allow shell integration with wezterm using wezterm.sh
 #source ~/wezterm.sh
 
@@ -242,3 +242,6 @@ export OPENAI_API_KEY="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"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
+
+# To customize prompt, run `p10k configure` or edit ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
+[[ ! -f ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh
