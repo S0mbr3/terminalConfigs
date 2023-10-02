@@ -39,7 +39,7 @@ vim.api.nvim_set_keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', { noremap = true, sil
 vim.api.nvim_set_keymap('t', '<C-space>', '<C-\\><C-n>', { noremap = true, silent = true })
 vim.keymap.set({'t', 'n', 'i', 'v' }, '<M-s>', '<cmd>lua require("utils.switchterm").switchTerm()<CR>', { noremap = true, silent = true })
 vim.keymap.set('t' , '<C-s>', '<cmd>lua require("utils.switchterm").termSizer()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { noremap = true, silent = false })
+--vim.api.nvim_set_keymap('n', '<Leader>o', ':below 10sp term://$SHELL<cr>i', { noremap = true, silent = false })
 
 --leader mapping
 --Allows to save a file that need sudo permissions

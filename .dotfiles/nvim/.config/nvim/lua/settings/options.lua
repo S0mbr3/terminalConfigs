@@ -16,15 +16,16 @@ vim.g.html_indent_script1 = 'inc'  --better indentation for hml using javascript
 vim.g.html_indent_style1 = 'inc' --better indentation for html using css
 vim.o.path=vim.o.path .. "**"  --allow to search a file with :find command on all subdirectories
 vim.o.nu=true --Add lines number
-vim.opt.ignorecase = true
 vim.o.relativenumber=true
+vim.opt.ignorecase = true
 vim.g.suda_smart_edit = 1
 --vim.o.relativenumber
 -- To use ripgrep for the grep functions
 -- And format it well useful for quickfix
 vim.o.grepprg = 'rg --vimgrep'
 vim.o.grepformat = '%f:%l:%c:%m,%f|%l col %c|%m'
-vim.o.cursorline=true
+vim.o.cursorline=false
+vim.opt.background = "dark"
 vim.o.laststatus=2
 --vim.o.incsearch=false --show searching as typing
 vim.o.hlsearch=false -- highliting or no the searches
@@ -90,7 +91,7 @@ vim.o.updatetime = 250
 vim.wo.signcolumn = 'number'
 
 --neovim messages management
-vim.opt.shortmess="aA"
+vim.opt.shortmess="aAWF"
 --vim.cmd([[ set shortmess="+=A" ]])--ignore swapfiles messages
 
 --tab length and behavior managing
