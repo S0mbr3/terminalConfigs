@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Increase key speed via a rate change
+xset r rate 300 50
+#map the caps lock key to super...
+setxkbmap -option caps:super -variant altgr-intl
+#setxkbmap -options caps:swapescape
+#But when it is pressed only once, treait it as escape.
+killall xcape 2>/dev/null; xcape -e 'Super_L=Escape'
+xmodmap -e 'keycode 135 = Super_R'

@@ -1,0 +1,33 @@
+#!/bin/zsh
+
+#Auto-launching ssh-agent to save passphrases
+
+function sshe(){
+  env=~/.ssh/agent.env
+
+  agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+
+  agent_start () {
+    (umask 077; ssh-agent >| "$env")
+    . "$env" >| /dev/null ; }
+
+    agent_load_env
+
+ # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+ agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+
+ if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+   agent_start
+   kitty --hold sh -c "ssh-add"
+ elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+   kitty --hold sh -c "ssh-add"
+ fi
+
+ unset env
+}
+
+#sshe
+
+# Start ssh-agent if it's not alreaddy running
+[ -n "$SSH_AUTH_SOCK" ] || eval `ssh-agent`
+

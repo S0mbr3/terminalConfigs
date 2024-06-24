@@ -1,5 +1,3 @@
-.git
-scripts/.git
 node_modules
 .dotfiles/nodenv/.nodenv/versions
 nohup.out

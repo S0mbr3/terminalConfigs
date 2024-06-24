@@ -1,0 +1,11 @@
+[Unit]
+Description=Add SSH keys to agent
+After=ssh-agent.service
+
+[Service]
+Type=oneshot
+#ExecStart=/usr/bin/ssh-add /home/YOUR_USERNAME/.ssh/id_rsa
+ExecStart=/usr/bin/ssh-add
+
+[Install]
+WantedBy=default.target
