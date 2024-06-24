@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $# -eq 1 ]]; then
+  typed=$1
+  session=$(tmux ls | awk -v typed="$typed" '$1 ~ ("^" typed) {gsub(":",""); print $1 }' | head -1)
+  if [ -n "$session" ]; then
+    tmux a -t "$session"
+  else
+    echo "No session found matching '$typed'"
+  fi
+else
+  echo "Usage: $0 session_name_part"
+fi
+
+

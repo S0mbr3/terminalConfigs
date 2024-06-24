@@ -4,7 +4,13 @@ function_name (){
     cowsay "The system is running Arch Linux"
   else
     echo "The system is not running Arch Linux"
-    export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
+    #for wsl2 if gui application is set to true in c://Users/Myuser/.wslconfig
+    # then i am not using vcxsrv and no need to export the DISPLAY var 
+    # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0" #prefer this one
+    LIBGL_ALWAYS_INDIRECT=0
+    export LIBGL_ALWAYS_INDIRECT
+    # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
   fi
   #neofetch
   fortune > fortune;
@@ -47,7 +53,7 @@ fi
 unset env
 }
 #nvr -s
-#
+
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -122,7 +128,8 @@ ZSH_THEME=powerlevel10k/powerlevel10k
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-z zsh-autosuggestions zsh-syntax-highlighting)
+#plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git z zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -171,15 +178,18 @@ alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
 #with exec instead of alias to execute it from the file name it is stored
 alias mg='kitty +kitten hyperlinked_grep --smart-case "$@"'
-alias deb='ssh debian'
+alias deb='ssh ledeb'
+alias ts='tmux-sessionizer'
+alias tt='tmux-attacher'
 export PATH="/home/oxhart/scripts:$PATH"
+#bindkey -s '^o' 'tmux-sessionizer^M'
 
 functin zz(){
-  z $1
-  ls
+z $1
+ls
 }
 function bt(){
-  fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
 }
 
 
@@ -194,9 +204,10 @@ result=$(Command)
 if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
-eval "$(nodenv init -)"
-#export TERM=xterm-kitty
-#export TERM=xterm-256color
+#eval "$(nodenv init -)"
+# export TERM=xterm-kitty
+export TERM=tmux-256color
+# export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 export NVIM_APPNAME="nvim"
 ## uncomment below line to allow shell integration with wezterm using wezterm.sh
@@ -204,15 +215,15 @@ export NVIM_APPNAME="nvim"
 
 # for vterm of emacs to pass messages between vterm and the shell
 vterm_printf(){
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
+  if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+    # Tell tmux to pass the escape sequences through
+    printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+  elif [ "${TERM%%-*}" = "screen" ]; then
+    # GNU screen (screen, screen-256color, screen-256color-bce)
+    printf "\eP\e]%s\007\e\\" "$1"
+  else
+    printf "\e]%s\e\\" "$1"
+  fi
 }
 
 HISTSIZE=20000
@@ -245,3 +256,10 @@ export SDKMAN_DIR="/home/oxhart/.sdkman"
 
 # To customize prompt, run `p10k configure` or edit ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+eval "$(atuin init zsh)"

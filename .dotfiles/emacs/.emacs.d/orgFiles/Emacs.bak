@@ -27,7 +27,6 @@
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
 (defconst my-linux-font "FiraCode Retina")
-;;(defconst my-linux-font "Ubuntu Mono")
 (defconst my-wsl-font "Fira Code Retina")
 
 (defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
@@ -41,10 +40,6 @@
 (defvar ox/enable-cape t "Enable Cape package.")
 
 #+end_src
-
-#+RESULTS:
-: ox/enable-cape
-
 * Configure straight and use-package
 
 #+begin_src emacs-lisp
@@ -96,25 +91,25 @@ We use the no-littering package to keep folders where we edit files and the Emac
 #+end_src
 * Themes
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :straight t
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    ;;(load-theme 'doom-challenger-deep t)
-    ;;(load-theme 'doom-moonlight t)
-    (load-theme 'doom-outrun-electric t)
+(use-package doom-themes
+  :straight t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;;(load-theme 'doom-challenger-deep t)
+  ;;(load-theme 'doom-moonlight t)
+  (load-theme 'doom-outrun-electric t)
 
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
-    ;; Enable custom neotree theme (all-the-icons must be installed!)
-    (doom-themes-neotree-config)
-    ;; or for treemacs users
-    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-    (doom-themes-treemacs-config)
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 #+end_src
 
 ** Modeline themes
@@ -192,31 +187,26 @@ We use the no-littering package to keep folders where we edit files and the Emac
 
 * EAF
 #+begin_src emacs-lisp
-  (use-package eaf
-    :disabled t
-    :straight nil
-    :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
-    :custom
-					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-    (eaf-browser-continue-where-left-off t)
-    (eaf-browser-enable-adblocker t)
-    (browse-url-browser-function 'eaf-open-browser)
-    (eaf-browser-auto-import-chrome-cookies t)
-    :config
-    (defalias 'browse-web #'eaf-open-browser)
-    ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
-    ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-  ;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
-  ;;(global-unset-key (kbd "<f1>"))
-  ;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
+(use-package eaf
+  :straight nil
+  :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
+  :custom
+					; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser)
+  (eaf-browser-auto-import-chrome-cookies t)
+  :config
+  (defalias 'browse-web #'eaf-open-browser)
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
-  ;;(require 'eaf-pyqterminal)
-  ;;(require 'eaf-browser)
-  ;;(require 'eaf-pdf-viewer)
+(require 'eaf-pyqterminal)
+(require 'eaf-browser)
+(require 'eaf-pdf-viewer)
 
 #+end_src
 * ChatGpt
@@ -228,192 +218,188 @@ We use the no-littering package to keep folders where we edit files and the Emac
 * Workspaces
 Using persp-mode to create different workspaces
 #+begin_src emacs-lisp
-  (use-package persp-mode
-    :straight t
-    :defer t
-    ;;:hook (persp-mode-hook . my-update-dynamic-persps)
-    :init
-    (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
-    ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
-    :config
+(use-package persp-mode
+  :straight t
+  :defer t
+  ;;:hook (persp-mode-hook . my-update-dynamic-persps)
+  :init
+  (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
+  ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
+  :config
 
 
-    (defun consult-persp-buffer ()
-      "Switch to a buffer within the current perspective using consult."
-      (interactive)
-      (let* ((persp-buffers (mapcar #'buffer-name (persp-buffer-list-restricted)))
-	     (buffer (consult--read persp-buffers
-				    :prompt "Switch to buffer (current perspective): "
-				    :sort t
-				    :require-match t
-				    :category 'buffer
-				    :state (consult--buffer-state))))
-	(switch-to-buffer buffer)))
+  (defun consult-persp-buffer ()
+    "Switch to a buffer within the current perspective using consult."
+    (interactive)
+    (let* ((persp-buffers (mapcar #'buffer-name (persp-buffer-list-restricted)))
+           (buffer (consult--read persp-buffers
+                                  :prompt "Switch to buffer (current perspective): "
+                                  :sort t
+                                  :require-match t
+                                  :category 'buffer
+                                  :state (consult--buffer-state))))
+      (switch-to-buffer buffer)))
 
-    (global-set-key (kbd "C-x b") 'consult-persp-buffer)
+  (global-set-key (kbd "C-x b") 'consult-persp-buffer)
 
-    ;; Add vterm buffers to the current perspective when starting them
-    ;; Automatically add buffers to current perspective when their major mode changes
-    (setq persp-add-buffer-on-after-change-major-mode t)
+  ;; Add vterm buffers to the current perspective when starting them
+  ;; Automatically add buffers to current perspective when their major mode changes
+  (setq persp-add-buffer-on-after-change-major-mode t)
 
-    (defun my-persp-buffer-filter (buf)
-      "Filter out buffers that start with an asterisk, except for vterm buffers."
-      (let ((buf-name (buffer-name buf)))
-	(not (or (and (string-prefix-p "*" buf-name)
-		      (string-prefix-p "*vterm" buf-name))))))
+  (defun my-persp-buffer-filter (buf)
+    "Filter out buffers that start with an asterisk, except for vterm buffers."
+    (let ((buf-name (buffer-name buf)))
+      (not (or (and (string-prefix-p "*" buf-name)
+                    (string-prefix-p "*vterm" buf-name))))))
 
-    ;; Add the custom filter function
-    (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
+  ;; Add the custom filter function
+  (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
 
-    ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
-    (defun harpoon--file-name ()
-      "File name for harpoon on current project."
-      (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
-			    (safe-persp-name (get-current-persp))
-			  "none")))
-	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+  ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
+  (defun harpoon--file-name ()
+    "File name for harpoon on current project."
+    (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
+                          (safe-persp-name (get-current-persp))
+			"none")))
+      (concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
 
-    (defun ox/find-first-vterm-in-persp ()
-      "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
-      (interactive)
-      (let* ((all-buffers-in-emacs (buffer-list))
-	     (all-buffers-in-persp (persp-buffer-list-restricted))
-	     (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
-	     (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
-	(if first-vterm-buffer
-	    first-vterm-buffer
-	  nil)))
+  (defun ox/find-first-vterm-in-persp ()
+    "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
+    (interactive)
+    (let* ((all-buffers-in-emacs (buffer-list))
+           (all-buffers-in-persp (persp-buffer-list-restricted))
+           (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
+           (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
+      (if first-vterm-buffer
+          first-vterm-buffer
+	nil)))
 
-    (defun switch-to-last-persp-vterm ()
-      "Switch to the last visited vterm buffer within the current perspective."
-      (interactive)
-      (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
-	(message "vterm buffer is :%s" last-persp-vterm-buffer)
-	(if last-persp-vterm-buffer
-	    (switch-to-buffer last-persp-vterm-buffer)
-	  (message "No last vterm buffer in this perspective to switch to.")
-	  nil)))
+  (defun switch-to-last-persp-vterm ()
+    "Switch to the last visited vterm buffer within the current perspective."
+    (interactive)
+    (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
+      (message "vterm buffer is :%s" last-persp-vterm-buffer)
+      (if last-persp-vterm-buffer
+	  (switch-to-buffer last-persp-vterm-buffer)
+	(message "No last vterm buffer in this perspective to switch to.")
+	nil)))
 
-    (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
+  (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
 
-    (defun switch-to-next-persp-vterm-from-last (&optional offset)
-      "Switch to the next vterm buffer in the current perspective, starting from the last visited vterm buffer.
-  OFFSET can be provided to skip a given number of buffers."
-      (interactive "P")
-      (let* ((offset (or offset 1))
-	     (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
-	     (all-vterm-buffers multi-vterm-buffer-list)
-	     (persp-buffers (persp-buffer-list-restricted))
-	     (persp-vterm-buffers (cl-intersection all-vterm-buffers persp-buffers :test 'eq))
-	     (buffer-list-len (length persp-vterm-buffers))
-	     (start-buffer (or last-persp-vterm-buffer (current-buffer)))
-	     (my-index (cl-position start-buffer persp-vterm-buffers :test 'eq)))
-	(if my-index
-	    (let ((target-index (mod (+ my-index offset) buffer-list-len)))
-	      (switch-to-buffer (nth target-index persp-vterm-buffers)))
-	  (when persp-vterm-buffers
-	    (switch-to-buffer (car persp-vterm-buffers))))))
+  (defun switch-to-next-persp-vterm-from-last (&optional offset)
+    "Switch to the next vterm buffer in the current perspective, starting from the last visited vterm buffer.
+OFFSET can be provided to skip a given number of buffers."
+    (interactive "P")
+    (let* ((offset (or offset 1))
+	   (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
+           (all-vterm-buffers multi-vterm-buffer-list)
+           (persp-buffers (persp-buffer-list-restricted))
+           (persp-vterm-buffers (cl-intersection all-vterm-buffers persp-buffers :test 'eq))
+           (buffer-list-len (length persp-vterm-buffers))
+           (start-buffer (or last-persp-vterm-buffer (current-buffer)))
+           (my-index (cl-position start-buffer persp-vterm-buffers :test 'eq)))
+      (if my-index
+          (let ((target-index (mod (+ my-index offset) buffer-list-len)))
+            (switch-to-buffer (nth target-index persp-vterm-buffers)))
+	(when persp-vterm-buffers
+          (switch-to-buffer (car persp-vterm-buffers))))))
 
-    (defun switch-to-prev-persp-vterm-from-last (&optional offset)
-      "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
-  OFFSET can be provided to skip a given number of buffers."
-      (interactive "P")
-      (switch-to-next-persp-vterm-from-last (- (or offset 1))))
-
-
-
-    (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
-    (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
+  (defun switch-to-prev-persp-vterm-from-last (&optional offset)
+    "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
+OFFSET can be provided to skip a given number of buffers."
+    (interactive "P")
+    (switch-to-next-persp-vterm-from-last (- (or offset 1))))
 
 
 
-    ;; to share buffers in all perspectives
-    ;;(defvar persp-shared-buffers '("*scratch*" "*Messages*" "*Backtrace*"))
-    ;;(add-hook 'persp-activated-functions
-    ;;#'(lambda (_)
-    ;;(persp-add-buffer persp-shared-buffers)))
+  (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
+  (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
 
 
-    (setq persp-autokill-buffer-on-remove 'kill-weak)
-    (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
 
-    (defvar my-dynamic-persps '()
-      "List of dynamic perspectives, ordered by creation.")
+  ;; to share buffers in all perspectives
+  ;;(defvar persp-shared-buffers '("*scratch*" "*Messages*" "*Backtrace*"))
+  ;;(add-hook 'persp-activated-functions
+  ;;#'(lambda (_)
+  ;;(persp-add-buffer persp-shared-buffers)))
 
-    (defun my-update-dynamic-persps1 ()
-      "Update `my-dynamic-persps` with the current list of perspectives."
-      ;;(message persp-names-cache)
-      ;;(message 'persp-names-current-frame-fast-ordered)
-      ;;(setq my-dynamic-persps (persp-names-current-frame-fast-ordered))
-      (setq my-dynamic-persps (copy-sequence persp-names-cache))
-      ;;(message "Updated my-dynamic-persps: %s" (mapconcat 'identity my-dynamic-persps ", ")))
-      )
 
-    (defun my-update-dynamic-persps ()
-      "Update `my-dynamic-persps` with the current list of perspectives from `persp-names-cache`."
-      (setq my-dynamic-persps (remove "none" persp-names-cache)))
+  (setq persp-autokill-buffer-on-remove 'kill-weak)
+  (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
 
-    (advice-add 'persp-kill :after (lambda (&rest _) (my-update-dynamic-persps)))
-    (advice-add 'persp-switch :after (lambda (&rest _) (my-update-dynamic-persps)))
-    (advice-add 'persp-add-new :after (lambda (&rest _) (my-update-dynamic-persps)))
+  (defvar my-dynamic-persps '()
+    "List of dynamic perspectives, ordered by creation.")
 
-    (defun my-switch-to-persp (name)
-      "Switch to the perspective with NAME and update `my-dynamic-persps`."
-      (interactive "sEnter perspective name: ")
-      (when name
-	(persp-switch name)))
+  (defun my-update-dynamic-persps1 ()
+    "Update `my-dynamic-persps` with the current list of perspectives."
+    ;;(message persp-names-cache)
+    ;;(message 'persp-names-current-frame-fast-ordered)
+    ;;(setq my-dynamic-persps (persp-names-current-frame-fast-ordered))
+    (setq my-dynamic-persps (copy-sequence persp-names-cache))
+    ;;(message "Updated my-dynamic-persps: %s" (mapconcat 'identity my-dynamic-persps ", ")))
+    )
 
-    (defun my-switch-to-persp-by-number (number)
-      "Switch to a perspective based on its position in `my-dynamic-persps`."
-      (interactive "nPress the number key for the perspective: ")
-      (if (eq number 0)
-	  (my-switch-to-persp "none")
-	(let ((name (nth (1- number) (remove "none" my-dynamic-persps))))
-	  (if name
-	      (my-switch-to-persp name)
-	    (message "No perspective at position %d" number)))))
+  (defun my-update-dynamic-persps ()
+    "Update `my-dynamic-persps` with the current list of perspectives from `persp-names-cache`."
+    (setq my-dynamic-persps (remove "none" persp-names-cache)))
 
-    ;; Initialize the list of dynamic perspectives at startup
-    ;;(add-hook 'after-init-hook 'my-update-dynamic-persps)
-    ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
+  (advice-add 'persp-kill :after (lambda (&rest _) (my-update-dynamic-persps)))
+  (advice-add 'persp-switch :after (lambda (&rest _) (my-update-dynamic-persps)))
+  (advice-add 'persp-add-new :after (lambda (&rest _) (my-update-dynamic-persps)))
 
-    ;; Keybinding to create or switch to a named perspective
-    (global-set-key (kbd "C-x p n") 'my-switch-to-persp)
+  (defun my-switch-to-persp (name)
+    "Switch to the perspective with NAME and update `my-dynamic-persps`."
+    (interactive "sEnter perspective name: ")
+    (when name
+      (persp-switch name)))
 
-    ;; Keybindings for Alt+numbers
-    (dotimes (i 10)  ;; Loop from 0 to 9
-      (let ((key (format "C-c %d" i)))
-	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
-  ;; (eval-after-load 'persp-mode
-  ;;   '(my-update-dynamic-persps))
-  (defvar my-persp-init-timer nil
-    "Timer object for delayed initialization of my-dynamic-persps.")
+  (defun my-switch-to-persp-by-number (number)
+    "Switch to a perspective based on its position in `my-dynamic-persps`."
+    (interactive "nPress the number key for the perspective: ")
+    (if (eq number 0)
+	(my-switch-to-persp "none")
+      (let ((name (nth (1- number) (remove "none" my-dynamic-persps))))
+	(if name
+            (my-switch-to-persp name)
+          (message "No perspective at position %d" number)))))
 
-  (defun my-check-persp-init ()
-    "Check if perspectives other than 'none' are available in `persp-names-cache` and initialize if so."
-    (when (and persp-names-cache (> (length persp-names-cache) 1))
-      (my-update-dynamic-persps)
-      (when my-persp-init-timer
-	(cancel-timer my-persp-init-timer)
-	(setq my-persp-init-timer nil))))
+  ;; Initialize the list of dynamic perspectives at startup
+  ;;(add-hook 'after-init-hook 'my-update-dynamic-persps)
+  ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
 
-  (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
+  ;; Keybinding to create or switch to a named perspective
+  (global-set-key (kbd "C-x p n") 'my-switch-to-persp)
 
-  ;;(run-with-timer 5 nil 'my-update-dynamic-persps)
-  ;; (use-package perspective
-  ;;   :straight t
-  ;;   :bind
-  ;;   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
-  ;;   :custom
-  ;;   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  ;;   :init
-  ;;   (persp-mode))
+  ;; Keybindings for Alt+numbers
+  (dotimes (i 10)  ;; Loop from 0 to 9
+    (let ((key (format "M-%d" i)))
+      (global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
+;; (eval-after-load 'persp-mode
+;;   '(my-update-dynamic-persps))
+(defvar my-persp-init-timer nil
+  "Timer object for delayed initialization of my-dynamic-persps.")
+
+(defun my-check-persp-init ()
+  "Check if perspectives other than 'none' are available in `persp-names-cache` and initialize if so."
+  (when (and persp-names-cache (> (length persp-names-cache) 1))
+    (my-update-dynamic-persps)
+    (when my-persp-init-timer
+      (cancel-timer my-persp-init-timer)
+      (setq my-persp-init-timer nil))))
+
+(setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
+
+;;(run-with-timer 5 nil 'my-update-dynamic-persps)
+;; (use-package perspective
+;;   :straight t
+;;   :bind
+;;   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+;;   :custom
+;;   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
+;;   :init
+;;   (persp-mode))
 
 #+end_src
-
-#+RESULTS:
-: [nil 26205 54076 634604 1 my-check-persp-init nil nil 108000 nil]
-
 * Font Configuration
 #+begin_src emacs-lisp
 ;; Set font
@@ -435,8 +421,6 @@ Using persp-mode to create different workspaces
 ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (recentf-mode 1) ;; Enable the recent file mode to select with a number recent files
-(setq recentf-max-menu-items 50)
-(setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
 (display-time-mode 1) ;;Display the time
@@ -531,7 +515,6 @@ Using persp-mode to create different workspaces
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-     "fp" '(project-find-file :which-key "project-find-file")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(recentf-open-files :which-key "Recent opened files")
@@ -1043,8 +1026,6 @@ folder, otherwise delete a word"
 
   (setq vterm-max-scrollback 10000)
   (setq term-prompt-regexp "^[^❯\n]*[❯] *"))
-;;(setq term-prompt-regexp "^[^❯\n]*[.*❯] .*"))
-  ;;(setq term-prompt-regexp "^[^❯\n]*[❯] *"))
 ;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 ;; :hook (vterm-mode . (lambda ()
 ;; 			(evil-emacs-state))))
@@ -1063,10 +1044,6 @@ folder, otherwise delete a word"
     "sn" '(multi-vterm-next :which-key "multi-vterm next")
     "se" '(eshell :whick-key "eshell"))
   (setq multi-vterm-dedicated-window-height-percent 40))
-;; (add-hook 'vterm-mode-hook
-;;           (lambda ()
-;;             (set (make-local-variable 'buffer-face-mode-face) "Ubuntu Mono")
-;;                  (buffer-face-mode t)))
 #+end_src
 
 ** term
@@ -1310,11 +1287,6 @@ because compile mode is too slow"
   :config
   ;;(setq typescript-indent-level 2)
   )
-(use-package prisma-mode
-  :straight (:host github
-  :repo "pimeys/emacs-prisma-mode"
-  :branc "main")
-)
 (use-package emmet-mode
   :straight t
   :hook ((typescript-mode . emmet-mode))
@@ -1391,7 +1363,7 @@ because compile mode is too slow"
   :config(require 'smartparens-config)
 ;; add a blank line when opening a {
   (sp-with-modes
-      '(c++-mode objc-mode c-mode typescript-mode lua-mode)
+      '(c++-mode objc-mode c-mode typescript-mode)
     (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 #+end_src
 * Syntax Checking
@@ -1903,8 +1875,7 @@ because compile mode is too slow"
   (use-package ranger
     ;;:straight t
     :straight '(ranger :host github
-		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
-		       :repo "S0mbr3/ranger.el"
+		       :local-repo "/home/oxhart/builds/ranger.el/"
 		       :branch "ranger-setup-image-preview")
     :config
     (global-set-key (kbd "C-c d") 'ranger)
@@ -2052,11 +2023,6 @@ because compile mode is too slow"
     ;;        (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
       ;;      (define-key comint-mode-map (kbd "<down>") 'comint-next-input)))
 
-#+end_src
-* Games
-#+begin_src emacs-lisp
-(use-package chess
-:straight t)
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp

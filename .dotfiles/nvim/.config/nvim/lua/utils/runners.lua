@@ -9,6 +9,10 @@ function Runners:compile_c()
     print("This is a c file.")
     vim.api.nvim_command('w')
     vim.api.nvim_command("make -k && time ./%:p:h:t")
+  elseif extension == "java" then
+    print("This is a java file.")
+    vim.api.nvim_command('w')
+    vim.api.nvim_command('!gradle run')
   else
     print("This is not a c file.")
   end
