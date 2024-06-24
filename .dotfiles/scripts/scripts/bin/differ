@@ -1,0 +1,6 @@
+#!/bin/bash
+
+conf='/home/oxhart/terminalConfigs/.dotfiles'
+
+
+diff $1 $conf/$2
