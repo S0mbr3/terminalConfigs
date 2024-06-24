@@ -1,48 +1,45 @@
+local lspsaga = require'lspsaga'
 return {
-  {'mfussenegger/nvim-dap'},
-  {'simrat39/rust-tools.nvim'},
-  { 'p00f/clangd_extensions.nvim'},
-  {'neovim/nvim-lspconfig'},
-  {'williamboman/mason.nvim', dependencies = {'hrsh7th/cmp-nvim-lsp'}},
-  {'williamboman/mason-lspconfig.nvim',
+{
+  'glepnir/lspsaga.nvim',
+  branch = "main",
+    keys = {
+      {"gh", "<cmd>Lspsaga finder<CR>"},
+      {"<leader>ca", "<cmd>Lspsaga code_action<CR>", mode = {"n","v"}},
+      {"K", "<cmd>Lspsaga hover_doc<CR>"},
+      {"<C-f>", function() lspsaga.action.smart_scroll_with_saga(1)end},
+      {"<C-b>", function() lspsaga.action.smart_scroll_with_saga(-1)end},
+      {"gs", function() require('lspsaga').signaturehelp.signature_help() end},
+      {"<Leader>lr", "<cmd>Lspsaga rename<CR>"},
+      {"<Leader>ld", function () lspsaga.provider.preview_definition() end},
+      {"<leader>ld", "<cmd>Lspsaga show_line_diagnostics<CR>"},
+      {"<leader>lb", "<cmd>Lspsaga show_buf_diagnostics<CR>"},
+      {"<leader>lw", "<cmd>Lspsaga show_workspace_diagnostics<CR>"},
+      {"<leader>cc", "<cmd>Lspsaga show_cursor_diagnostics<CR>"},
+      {"[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>"},
+      {"]e", "<cmd>Lspsaga diagnostic_jump_next<CR>"},
+      {"[E",
+        [[<cmd>lua require("lspsaga.diagnostic"):goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>]]},
+      {"]E",
+        [[<cmd>lua require("lspsaga.diagnostic"):goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>]]},
+      { "<A-q>", "<cmd>Lspsaga term_toggle<CR>", mode = {"t", "n"}},
+      {"<leader>gp", "<cmd>Lspsaga peek_definition<CR>"},
+      {"<leader>lo", "<cmd>Lspsaga outline<CR>"},
+      {"gd", "<cmd>Lspsaga goto_definition<CR>"}
+    },
   config = function()
-    local keymap = vim.keymap.set
-    vim.api.nvim_set_keymap('n', 'gh', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true })
-    keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
-    -- vim.api.nvim_set_keymap('n', 'ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", { noremap = true, silent = true })
-    -- vim.api.nvim_set_keymap('v', 'ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', 'K', "<cmd>Lspsaga hover_doc<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<C-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<C-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<Leader>lr', "<cmd>Lspsaga rename<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<Leader>ld', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>Lspsaga show_line_diagnostics<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<leader>lb', "<cmd>Lspsaga show_buf_diagnostics<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<leader>lw', "<cmd>Lspsaga show_workspace_diagnostics<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<leader>cc', "<cmd>Lspsaga show_cursor_diagnostics<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '[e', "<cmd>Lspsaga diagnostic_jump_prev<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', ']e', "<cmd>Lspsaga diagnostic_jump_next<CR>", { noremap = true, silent = true })
-    -- Only jump to error
-    vim.keymap.set("n", "[E", function()
-      require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
-    end, { silent = true })
-    vim.keymap.set("n", "]E", function()
-      require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
-    end, { silent = true })
-    --vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>Lspsaga term_floaterm<CR>", { noremap = true, silent = true })
-    --vim.api.nvim_set_keymap('t', '<A-d>', "<C-\\><C-n><cmd>Lspsaga close_floaterm<CR>", { noremap = true, silent = true })
-    -- Float terminal
-    keymap({"n", "t"}, "<A-q>", "<cmd>Lspsaga term_toggle<CR>")
-
-    keymap("n", "<leader>lp", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
-    -- outline
-    keymap("n","<leader>lo", "<cmd>LSoutlineToggle<CR>",{ silent = true })
-
-    keymap("n", "gp", "<cmd>Lspsaga peek_definition<CR>")
-
-    -- Go to Definition
-    keymap("n","gd", "<cmd>Lspsaga goto_definition<CR>")
+    require('lspsaga').setup({})
+  end,
+},
+  {'neovim/nvim-lspconfig',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'p00f/clangd_extensions.nvim',
+      {'williamboman/mason.nvim', dependencies = {'hrsh7th/cmp-nvim-lsp'}},
+      'williamboman/mason-lspconfig.nvim',
+      {'simrat39/rust-tools.nvim', event = 'BufEnter *.rs'},
+    },
+  config = function()
     --end of LSPSAGA CONFIGURATION
 
     -- Diagnostic keymaps
@@ -157,7 +154,7 @@ return {
     require'lspconfig'.emmet_ls.setup({
       on_attach = on_attach,
       capabilities = capabilities,
-      filetypes = { "html", "php", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "typescript"},
+      filetypes = { "html", "php", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less"},
     })
 
     require'lspconfig'.lua_ls.setup {
@@ -230,18 +227,12 @@ return {
     })
   end,
 },
-{
-  'glepnir/lspsaga.nvim',
-  branch = "main",
-  config = function()
-    require('lspsaga').setup({})
-  end,
-},
-{
-  "folke/trouble.nvim",
-  -- opts will be merged with the parent spec
-  opts = { use_diagnostic_signs = true },
-},
+  {
+    "folke/trouble.nvim",
+    enabled = false,
+    -- opts will be merged with the parent spec
+    opts = { use_diagnostic_signs = true },
+  },
 -- add symbols-outline
 {
   "simrat39/symbols-outline.nvim",

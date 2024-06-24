@@ -23,29 +23,29 @@ fi
 
 #Auto-launching ssh-agent to save passphrases
 
-function sshe(){
-  env=~/.ssh/agent.env
-
-  agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
-
-  agent_start () {
-    (umask 077; ssh-agent >| "$env")
-    . "$env" >| /dev/null ; }
-
-    agent_load_env
-
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
-
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-  agent_start
-  ssh-add
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-  ssh-add
-fi
-
-unset env
-}
+# function sshe(){
+#   env=~/.ssh/agent.env
+#
+#   agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+#
+#   agent_start () {
+#     (umask 077; ssh-agent >| "$env")
+#     . "$env" >| /dev/null ; }
+#
+#     agent_load_env
+#
+# # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+# agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+#
+# if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+#   agent_start
+#   ssh-add
+# elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+#   ssh-add
+# fi
+#
+# unset env
+# }
 #nvr -s
 #
 
@@ -166,9 +166,11 @@ alias lla='ls -la --hyperlink=auto'
 alias lt='ls --tree --hyperlink=auto'
 alias c='cht.sh'
 alias e='emacsclient -n'
+#alias ts-node='npx ts-node'
 #alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
+alias sshe=sshe
 #with exec instead of alias to execute it from the file name it is stored
 alias mg='kitty +kitten hyperlinked_grep --smart-case "$@"'
 alias deb='ssh debian'

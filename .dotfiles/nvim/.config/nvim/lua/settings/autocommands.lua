@@ -10,6 +10,7 @@ vim.cmd([[ au FocusGained * :checktime ]]) --when vim can back the focus apply c
 -- })
 
 vim.api.nvim_create_autocmd({"FileType"},{
+  group = vim.api.nvim_create_augroup("formatoptions", { clear = true }),
   pattern = {"*"},
   callback = function(_)
     vim.opt.formatoptions:remove {'r', 'o'}

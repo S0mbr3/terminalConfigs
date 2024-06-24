@@ -136,11 +136,10 @@ return {
       }
     },
       opts = {
-        top_down = false,
+        top_down = true,
         fps = 60,
         background_colour = "#000000"
       }
-    
   },
   {"folke/noice.nvim",event = "VeryLazy",
     enabled = true,

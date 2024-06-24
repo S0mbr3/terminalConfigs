@@ -14,7 +14,7 @@ vim.opt.clipboard:prepend { "unnamedplus" }
 vim.cmd([[let $PATH = '/home/oxhart/.nodenv/versions/16.10.0/bin:' . $PATH]])
 vim.g.html_indent_script1 = 'inc'  --better indentation for hml using javascript
 vim.g.html_indent_style1 = 'inc' --better indentation for html using css
-vim.o.path=vim.o.path .. "**"  --allow to search a file with :find command on all subdirectories
+--vim.o.path=vim.o.path .. "**"  --allow to search a file with :find command on all subdirectories
 vim.o.nu=true --Add lines number
 vim.o.relativenumber=true
 vim.opt.ignorecase = true

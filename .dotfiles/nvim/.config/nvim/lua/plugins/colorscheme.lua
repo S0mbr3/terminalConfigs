@@ -1,4 +1,4 @@
-local colorscheme = "material"
+local colorscheme = "tokyodark"
 return {
   --{'morhetz/gruvbox'}
   { 'catppuccin/nvim', name = 'catppuccin', enabled=true, priority=1000, lazy=false,
@@ -42,7 +42,7 @@ config = function()
       -- "dashboard",
       -- "gitsigns",
       "hop",
-      -- "indent-blankline",
+      --"indent-blankline",
       "lspsaga",
       -- "mini",
       -- "neogit",
@@ -51,7 +51,7 @@ config = function()
       "nvim-tree",
       -- "sneak",
       "telescope",
-      -- "trouble",
+      "trouble",
       -- "which-key",
     },
     lualine_style="stealth",

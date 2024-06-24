@@ -86,9 +86,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- Table of layouts to cover with awful.layout.inc, order matters.
 tag.connect_signal("request::default_layouts", function()
 	awful.layout.append_default_layouts({
+		awful.layout.suit.tile.left,
 		awful.layout.suit.spiral.dwindle,
 		awful.layout.suit.tile,
-		awful.layout.suit.tile.left,
 		awful.layout.suit.floating,
 		awful.layout.suit.tile.bottom,
 		awful.layout.suit.tile.top,
@@ -691,7 +691,7 @@ ruled.client.connect_signal("request::rules", function()
 	ruled.client.append_rule {
 		id         = "floating",
 		rule_any   = {
-			instance = { "copyq", "pinentry", "DTA" }, --DTA = firefox addon DownThemAll
+			instance = { "copyq", "pinentry", "DTA", "Snake" }, --DTA = firefox addon DownThemAll
 			class    = {
 				"Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
 				"Wpa_gui", "veromix", "xtightvncviewer", "Tilda", "org.gnome.Nautilus"
@@ -883,6 +883,8 @@ local autorun = true
 local autorunApps =
 {
 	'/home/oxhart/scripts/start',
+	--'/home/oxhart/scripts/ssh-agent',
+
 	--'setxkbmap -layout us -variant altgr-intl -option nodeadkeys',
 	--'~/.config/volumeicon/restart_volumeicon',
 	--'picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0 --inactive-opacity=1 -b',

@@ -1,6 +1,11 @@
 return {
 {'tpope/vim-surround'}, --useging that allow to surround text
-{'tpope/vim-fugitive'}, --Git wrapper for vim
+{'tpope/vim-fugitive',
+    lazy=false,
+    config = function()
+      vim.api.nvim_set_keymap('n', '\\g', ":Git ", { noremap = true, silent = false })
+    end
+  },
 {'tpope/vim-rhubarb'},                                                              -- Fugitive-companion to interact with github
 { 'lewis6991/gitsigns.nvim', dependencies = { 'nvim-lua/plenary.nvim' } },            -- Add git related info in the signs columns and popups
   {'kdheepak/lazygit.nvim',

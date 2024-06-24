@@ -43,18 +43,20 @@ vim.keymap.set('t' , '<C-s>', '<cmd>lua require("utils.switchterm").termSizer()<
 
 --leader mapping
 --Allows to save a file that need sudo permissions
-vim.api.nvim_set_keymap('n', '<Leader>wf', ':w<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>sa', ':wa<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>sqa', ':wqa<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>qi', ':q<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>qf', ':q!<CR>', { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>qaf', ':qa!<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w', ':w<CR>', { noremap = false, silent = true })
 
 
 vim.api.nvim_set_keymap('n', '<Leader>bd', ':bd<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>bn', ':bn<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>bp', ':bp<CR>', { noremap = false, silent = true })
 
+-- \ mappings
+vim.api.nvim_set_keymap('n', '\\d', ':bd!<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\c', ':close<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\q', ':qa!<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\w', ':wqa!<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\f', '<Leader>ff<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\b', '<Leader>fb<CR>', { noremap = false, silent = true })
 
 vim.api.nvim_set_keymap('n', '<Leader>x', ':w|luafile %<CR>', { noremap = false, silent = true })
 
@@ -73,3 +75,4 @@ vim.api.nvim_set_keymap('n', '<Leader><C-e>', ':!/bin/bash ~/.config/volumeicon/
 vim.api.nvim_set_keymap('n', '<Leader>co', ':copen <CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>cl', ':close<CR>', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v' }, '<Leader>cv', ':lua require("utils.runners"):compile_c()<CR>', { noremap = true, silent = true })
+vim.keymap.set({'n', 'v' }, '<F5>', ':lua require("utils.runners"):compile_c()<CR>', { noremap = true, silent = true })

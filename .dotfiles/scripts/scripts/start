@@ -33,6 +33,12 @@ function start_dhcpcd {
   fi
 }
 
+function start_ssh_agent {
+  if ! pgrep -f "ssh"; then
+    kitty --hold sh -c "eval $(ssh-agent -s)  ssh-add"
+  fi
+}
+
 #nvidia-settings --assign CurrentMetaMode="DP-0: 2560x1600+0+0 { ForceFullCompositionPipeline = On }"
 initialize nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
 initialize setxkbmap -layout us -variant altgr-intl -option nodeadkeys
@@ -41,4 +47,6 @@ initialize picom --fade-in-step=1 --fade-out-step=1 --fade-delta=0 --inactive-op
 #initialize sudo wpa_supplicant -B -i wlp8s0 -c /etc/wpa_supplicant/hiden.conf
 #initialize sudo dhcpcd wlp8s0
 start_bluetooth sudo systemctl start bluetooth
+#start_ssh_agent kitty --hold sh -c "eval $(ssh-agent -s)  ssh-add"
+#start_ssh_agent
 #initialize bluetoothctl

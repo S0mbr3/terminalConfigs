@@ -13,6 +13,7 @@
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
 (defconst my-linux-font "FiraCode Retina")
+;;(defconst my-linux-font "Ubuntu Mono")
 (defconst my-wsl-font "Fira Code Retina")
 
 (defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
@@ -159,10 +160,14 @@
   (eaf-browser-auto-import-chrome-cookies t)
   :config
   (defalias 'browse-web #'eaf-open-browser)
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
+;;(global-unset-key (kbd "<f1>"))
+;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
 
 
 (require 'eaf-pyqterminal)
@@ -371,6 +376,8 @@ OFFSET can be provided to skip a given number of buffers."
 ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (recentf-mode 1) ;; Enable the recent file mode to select with a number recent files
+(setq recentf-max-menu-items 50)
+(setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
 (display-time-mode 1) ;;Display the time
@@ -462,6 +469,7 @@ OFFSET can be provided to skip a given number of buffers."
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
+     "fp" '(project-find-file :which-key "project-find-file")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(recentf-open-files :which-key "Recent opened files")
@@ -833,6 +841,8 @@ folder, otherwise delete a word"
 
   (setq vterm-max-scrollback 10000)
   (setq term-prompt-regexp "^[^❯\n]*[❯] *"))
+;;(setq term-prompt-regexp "^[^❯\n]*[.*❯] .*"))
+  ;;(setq term-prompt-regexp "^[^❯\n]*[❯] *"))
 ;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 ;; :hook (vterm-mode . (lambda ()
 ;; 			(evil-emacs-state))))
@@ -851,6 +861,10 @@ folder, otherwise delete a word"
     "sn" '(multi-vterm-next :which-key "multi-vterm next")
     "se" '(eshell :whick-key "eshell"))
   (setq multi-vterm-dedicated-window-height-percent 40))
+;; (add-hook 'vterm-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'buffer-face-mode-face) "Ubuntu Mono")
+;;                  (buffer-face-mode t)))
 
 (if (eq system-type 'gnu/linux)
 	(setq explicit-shell-file-name "zsh")
@@ -1075,6 +1089,11 @@ because compile mode is too slow"
   :config
   ;;(setq typescript-indent-level 2)
   )
+(use-package prisma-mode
+  :straight (:host github
+  :repo "pimeys/emacs-prisma-mode"
+  :branc "main")
+)
 (use-package emmet-mode
   :straight t
   :hook ((typescript-mode . emmet-mode))
@@ -1148,7 +1167,7 @@ because compile mode is too slow"
   :config(require 'smartparens-config)
 ;; add a blank line when opening a {
   (sp-with-modes
-      '(c++-mode objc-mode c-mode typescript-mode)
+      '(c++-mode objc-mode c-mode typescript-mode lua-mode)
     (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 
 (use-package flycheck
@@ -1619,8 +1638,8 @@ because compile mode is too slow"
 (use-package ranger
   ;;:straight t
   :straight '(ranger :host github
-		       :local-repo "/home/oxhart/builds/ranger.el/"
-		       :branch "ranger-setup-image-preview")
+      	       :local-repo "/home/oxhart/builds/ranger.el/"
+      	       :branch "ranger-setup-image-preview")
   :config
   (global-set-key (kbd "C-c d") 'ranger)
   (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
@@ -1638,7 +1657,7 @@ because compile mode is too slow"
     :hook (dired-mode . dired-hide-dotfiles-mode)
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
-	"H" 'dired-hide-dotfiles-mode))
+      "H" 'dired-hide-dotfiles-mode))
 
   (use-package dired-preview
     :unless (featurep 'ranger)
@@ -1654,7 +1673,7 @@ because compile mode is too slow"
     ;; Strange behaviors not picking always the good program automatically
     ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
     (setq dired-open-extensions '(("png" . "feh")
-				    ("mkv" . "mpv"))))
+      			    ("mkv" . "mpv"))))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
@@ -1756,6 +1775,9 @@ because compile mode is too slow"
   ;;        (lambda ()
     ;;        (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
       ;;      (define-key comint-mode-map (kbd "<down>") 'comint-next-input)))
+
+(use-package chess
+:straight t)
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
