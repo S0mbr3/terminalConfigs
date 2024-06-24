@@ -13,7 +13,6 @@
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
 (defconst my-linux-font "FiraCode Retina")
-;;(defconst my-linux-font "Ubuntu Mono")
 (defconst my-wsl-font "Fira Code Retina")
 
 (defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
@@ -70,7 +69,7 @@
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;;(load-theme 'doom-challenger-deep t)
   ;;(load-theme 'doom-moonlight t)
   (load-theme 'doom-outrun-electric t)
@@ -150,30 +149,25 @@
   (global-ligature-mode t))
 
 (use-package eaf
-  :disabled t
   :straight nil
   :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
   :custom
-					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+					; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t)
   (browse-url-browser-function 'eaf-open-browser)
   (eaf-browser-auto-import-chrome-cookies t)
   :config
   (defalias 'browse-web #'eaf-open-browser)
-  ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
-;;(global-unset-key (kbd "<f1>"))
-;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
-;;(require 'eaf-pyqterminal)
-;;(require 'eaf-browser)
-;;(require 'eaf-pdf-viewer)
+(require 'eaf-pyqterminal)
+(require 'eaf-browser)
+(require 'eaf-pdf-viewer)
 
 (use-package chatgpt
   :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
@@ -193,13 +187,13 @@
     "Switch to a buffer within the current perspective using consult."
     (interactive)
     (let* ((persp-buffers (mapcar #'buffer-name (persp-buffer-list-restricted)))
-	     (buffer (consult--read persp-buffers
-				    :prompt "Switch to buffer (current perspective): "
-				    :sort t
-				    :require-match t
-				    :category 'buffer
-				    :state (consult--buffer-state))))
-	(switch-to-buffer buffer)))
+           (buffer (consult--read persp-buffers
+                                  :prompt "Switch to buffer (current perspective): "
+                                  :sort t
+                                  :require-match t
+                                  :category 'buffer
+                                  :state (consult--buffer-state))))
+      (switch-to-buffer buffer)))
 
   (global-set-key (kbd "C-x b") 'consult-persp-buffer)
 
@@ -210,8 +204,8 @@
   (defun my-persp-buffer-filter (buf)
     "Filter out buffers that start with an asterisk, except for vterm buffers."
     (let ((buf-name (buffer-name buf)))
-	(not (or (and (string-prefix-p "*" buf-name)
-		      (string-prefix-p "*vterm" buf-name))))))
+      (not (or (and (string-prefix-p "*" buf-name)
+                    (string-prefix-p "*vterm" buf-name))))))
 
   ;; Add the custom filter function
   (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
@@ -220,30 +214,30 @@
   (defun harpoon--file-name ()
     "File name for harpoon on current project."
     (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
-			    (safe-persp-name (get-current-persp))
-			  "none")))
-	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+                          (safe-persp-name (get-current-persp))
+			"none")))
+      (concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
 
   (defun ox/find-first-vterm-in-persp ()
     "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
     (interactive)
     (let* ((all-buffers-in-emacs (buffer-list))
-	     (all-buffers-in-persp (persp-buffer-list-restricted))
-	     (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
-	     (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
-	(if first-vterm-buffer
-	    first-vterm-buffer
-	  nil)))
+           (all-buffers-in-persp (persp-buffer-list-restricted))
+           (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
+           (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
+      (if first-vterm-buffer
+          first-vterm-buffer
+	nil)))
 
   (defun switch-to-last-persp-vterm ()
     "Switch to the last visited vterm buffer within the current perspective."
     (interactive)
     (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
-	(message "vterm buffer is :%s" last-persp-vterm-buffer)
-	(if last-persp-vterm-buffer
-	    (switch-to-buffer last-persp-vterm-buffer)
-	  (message "No last vterm buffer in this perspective to switch to.")
-	  nil)))
+      (message "vterm buffer is :%s" last-persp-vterm-buffer)
+      (if last-persp-vterm-buffer
+	  (switch-to-buffer last-persp-vterm-buffer)
+	(message "No last vterm buffer in this perspective to switch to.")
+	nil)))
 
   (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
 
@@ -252,18 +246,18 @@
 OFFSET can be provided to skip a given number of buffers."
     (interactive "P")
     (let* ((offset (or offset 1))
-	     (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
-	     (all-vterm-buffers multi-vterm-buffer-list)
-	     (persp-buffers (persp-buffer-list-restricted))
-	     (persp-vterm-buffers (cl-intersection all-vterm-buffers persp-buffers :test 'eq))
-	     (buffer-list-len (length persp-vterm-buffers))
-	     (start-buffer (or last-persp-vterm-buffer (current-buffer)))
-	     (my-index (cl-position start-buffer persp-vterm-buffers :test 'eq)))
-	(if my-index
-	    (let ((target-index (mod (+ my-index offset) buffer-list-len)))
-	      (switch-to-buffer (nth target-index persp-vterm-buffers)))
-	  (when persp-vterm-buffers
-	    (switch-to-buffer (car persp-vterm-buffers))))))
+	   (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
+           (all-vterm-buffers multi-vterm-buffer-list)
+           (persp-buffers (persp-buffer-list-restricted))
+           (persp-vterm-buffers (cl-intersection all-vterm-buffers persp-buffers :test 'eq))
+           (buffer-list-len (length persp-vterm-buffers))
+           (start-buffer (or last-persp-vterm-buffer (current-buffer)))
+           (my-index (cl-position start-buffer persp-vterm-buffers :test 'eq)))
+      (if my-index
+          (let ((target-index (mod (+ my-index offset) buffer-list-len)))
+            (switch-to-buffer (nth target-index persp-vterm-buffers)))
+	(when persp-vterm-buffers
+          (switch-to-buffer (car persp-vterm-buffers))))))
 
   (defun switch-to-prev-persp-vterm-from-last (&optional offset)
     "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
@@ -312,17 +306,17 @@ OFFSET can be provided to skip a given number of buffers."
     "Switch to the perspective with NAME and update `my-dynamic-persps`."
     (interactive "sEnter perspective name: ")
     (when name
-	(persp-switch name)))
+      (persp-switch name)))
 
   (defun my-switch-to-persp-by-number (number)
     "Switch to a perspective based on its position in `my-dynamic-persps`."
     (interactive "nPress the number key for the perspective: ")
     (if (eq number 0)
-	  (my-switch-to-persp "none")
-	(let ((name (nth (1- number) (remove "none" my-dynamic-persps))))
-	  (if name
-	      (my-switch-to-persp name)
-	    (message "No perspective at position %d" number)))))
+	(my-switch-to-persp "none")
+      (let ((name (nth (1- number) (remove "none" my-dynamic-persps))))
+	(if name
+            (my-switch-to-persp name)
+          (message "No perspective at position %d" number)))))
 
   ;; Initialize the list of dynamic perspectives at startup
   ;;(add-hook 'after-init-hook 'my-update-dynamic-persps)
@@ -333,8 +327,8 @@ OFFSET can be provided to skip a given number of buffers."
 
   ;; Keybindings for Alt+numbers
   (dotimes (i 10)  ;; Loop from 0 to 9
-    (let ((key (format "C-c %d" i)))
-	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
+    (let ((key (format "M-%d" i)))
+      (global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
 ;; (eval-after-load 'persp-mode
 ;;   '(my-update-dynamic-persps))
 (defvar my-persp-init-timer nil
@@ -345,8 +339,8 @@ OFFSET can be provided to skip a given number of buffers."
   (when (and persp-names-cache (> (length persp-names-cache) 1))
     (my-update-dynamic-persps)
     (when my-persp-init-timer
-	(cancel-timer my-persp-init-timer)
-	(setq my-persp-init-timer nil))))
+      (cancel-timer my-persp-init-timer)
+      (setq my-persp-init-timer nil))))
 
 (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
 
@@ -377,8 +371,6 @@ OFFSET can be provided to skip a given number of buffers."
 ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (recentf-mode 1) ;; Enable the recent file mode to select with a number recent files
-(setq recentf-max-menu-items 50)
-(setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
 (display-time-mode 1) ;;Display the time
@@ -470,7 +462,6 @@ OFFSET can be provided to skip a given number of buffers."
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-     "fp" '(project-find-file :which-key "project-find-file")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(recentf-open-files :which-key "Recent opened files")
@@ -842,8 +833,6 @@ folder, otherwise delete a word"
 
   (setq vterm-max-scrollback 10000)
   (setq term-prompt-regexp "^[^❯\n]*[❯] *"))
-;;(setq term-prompt-regexp "^[^❯\n]*[.*❯] .*"))
-  ;;(setq term-prompt-regexp "^[^❯\n]*[❯] *"))
 ;;(setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 ;; :hook (vterm-mode . (lambda ()
 ;; 			(evil-emacs-state))))
@@ -862,10 +851,6 @@ folder, otherwise delete a word"
     "sn" '(multi-vterm-next :which-key "multi-vterm next")
     "se" '(eshell :whick-key "eshell"))
   (setq multi-vterm-dedicated-window-height-percent 40))
-;; (add-hook 'vterm-mode-hook
-;;           (lambda ()
-;;             (set (make-local-variable 'buffer-face-mode-face) "Ubuntu Mono")
-;;                  (buffer-face-mode t)))
 
 (if (eq system-type 'gnu/linux)
 	(setq explicit-shell-file-name "zsh")
@@ -1090,11 +1075,6 @@ because compile mode is too slow"
   :config
   ;;(setq typescript-indent-level 2)
   )
-(use-package prisma-mode
-  :straight (:host github
-  :repo "pimeys/emacs-prisma-mode"
-  :branc "main")
-)
 (use-package emmet-mode
   :straight t
   :hook ((typescript-mode . emmet-mode))
@@ -1168,7 +1148,7 @@ because compile mode is too slow"
   :config(require 'smartparens-config)
 ;; add a blank line when opening a {
   (sp-with-modes
-      '(c++-mode objc-mode c-mode typescript-mode lua-mode)
+      '(c++-mode objc-mode c-mode typescript-mode)
     (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 
 (use-package flycheck
@@ -1639,8 +1619,7 @@ because compile mode is too slow"
 (use-package ranger
   ;;:straight t
   :straight '(ranger :host github
-		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
-		       :repo "S0mbr3/ranger.el"
+		       :local-repo "/home/oxhart/builds/ranger.el/"
 		       :branch "ranger-setup-image-preview")
   :config
   (global-set-key (kbd "C-c d") 'ranger)
@@ -1777,9 +1756,6 @@ because compile mode is too slow"
   ;;        (lambda ()
     ;;        (define-key comint-mode-map (kbd "<up>") 'comint-previous-input)
       ;;      (define-key comint-mode-map (kbd "<down>") 'comint-next-input)))
-
-(use-package chess
-:straight t)
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
