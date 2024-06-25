@@ -6,7 +6,7 @@ termpath="/home/oxhart/terminalConfigs/.dotfiles"
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find $termpath/nvim/.config $termpath/scripts/scripts ~/dev/learn ~/dev/c -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/work $termpath/nvim/.config $termpath/scripts/scripts ~/dev/learn ~/dev/learn/angular ~/dev/c -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
