@@ -571,7 +571,7 @@ folder, otherwise delete a word"
 ;;     (setq-local
 ;;      completion-at-point-functions
 ;;      (cl-substitute
-;;       (apply #'cape-super-capf (cl-substitute (car host) :completion (cl-pushnew :completion +corfu-global-capes)))
+;;       (apply #'cape-capf-super (cl-substitute (car host) :completion (cl-pushnew :completion +corfu-global-capes)))
 ;;       (car host)
 ;;       completion-at-point-functions))))
 ;; (add-hook 'lsp-mode-hook #'+corfu--load-capes)
@@ -648,11 +648,11 @@ folder, otherwise delete a word"
     ;; TODO 2022-02-28: Maybe use `cape-wrap-predicate' to have candidates
     ;; listed when I want?
     ;;(add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
-    (add-to-list 'completion-at-point-functions #'cape-yasnippet)
+    (add-to-list 'completion-at-point-functions #'yasnippet-capf)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
   )
 (defun ox/cape-hook ()
-  (add-to-list 'completion-at-point-functions #'cape-yasnippet)
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   )
@@ -662,19 +662,18 @@ folder, otherwise delete a word"
     (message "lsp-completion-mode running")
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions
-		 (cape-super-capf  #'cape-yasnippet #'lsp-completion-at-point #'cape-dabbrev)))
+		 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev)))
   (defun ox/cape1-hook ()
     (setq-local completion-at-point-functions
 		'(lsp-completion-at-point
 		  cape-file
-		  cape-yasnippet
+		  yasnippet-capf
 		  cape-dabbrev)))
 
-  (use-package cape-yasnippet
-    :straight '(cape-yasnippet :host github
-			       :repo "elken/cape-yasnippet")
-    :after cape yasnippet
-    )
+  (use-package yasnippet-capf
+    :straight '(yasnippet-capf :host github
+			       :repo "elken/yasnippet-capf")
+    :after cape yasnippet)
 
 
 
@@ -1200,6 +1199,27 @@ because compile mode is too slow"
   (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; (setq lsp-clients-angular-language-server-command					   ;;
+  ;; '("node"										   ;;
+  ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules/@angular/language-server" ;;
+  ;;   "--ngProbeLocations"								   ;;
+  ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
+  ;;   "--tsProbeLocations"								   ;;
+  ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
+  ;;   "--stdio"))									   ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (setq lsp-clients-angular-language-server-command
+  '("node"
+    "/usr/local/lib/node_modules/@angular/language-server"
+    "--ngProbeLocations"
+    "/usr/local/lib/node_modules"
+    "--tsProbeLocations"
+    "/usr/local/lib/node_modules"
+    "--stdio"))
+
   ;; ;; Configure Emmet LSP
   ;;  (lsp-register-client
   ;;   (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
