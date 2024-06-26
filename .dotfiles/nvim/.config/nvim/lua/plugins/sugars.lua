@@ -10,34 +10,41 @@ return {
   --     vim.fn["firenvim#install"](0)
   --   end
   -- },
+
   {'nvim-tree/nvim-tree.lua',
     dependencies = {'nvim-tree/nvim-web-devicons'},
-    config = function()
-      --vim.cmd([[ let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } ]]) -- List of filenames that gets highlighted with NvimTreeSpecialFile
-      vim.api.nvim_set_keymap("n", '<Leader>nl', '<cmd>lua require("nvim-tree.api").marks.list()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", '<Leader>nn', '<cmd>lua require("nvim-tree.api").marks.navigate.next()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", '<Leader>np', '<cmd>lua require("nvim-tree.api").marks.navigate.prev()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", '<Leader>ns', '<cmd>lua require("nvim-tree.api").marks.navigate.select()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>ne', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-      --vic.api.nvim_set_keymap('n', '<Leader>r', ':NvimTreeRefresh<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>nf', ':NvimTreeFindFile<CR>', { noremap = true, silent = true })
-      --vim.g.nvim_tree_disable_window_picker=1
-      --vim.cmd([[ highlight NvimTreeFolderIcon guibg=blue]])
-      require'nvim-tree'.setup({
-        renderer = {
-          special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md", "MAKEFILE" },
-        }
-      })
+    keys = {
+      {"<leader>nl", function() require'nvim-tree.api'.marks.list() end,
+        desc = "Retrive all marked nodes."},
 
-    end
+      {"<leader>nn", function() require'nvim-tree.api'.marks.navigate.next() end,
+        desc = "Navigate to the next marked node, wraps. Opens files as per |nvim-tree.actions.open_file| Works best with |nvim-tree.update_focused_file| enabled. "},
+
+      {"<leader>np", function() require'nvim-tree.api'.marks.navigate.prev() end,
+        desc = "As per nvim-tree-api.marks.navigate.next()"},
+
+      {"<leader>ns", function() require'nvim-tree.api'.marks.navigate.select() end,
+        desc = "    Prompts for selection of a marked node as per |nvim-tree-api.marks.navigate.next()| "},
+
+      {"<leader>ne", '<cmd>NvimTreeToggle<CR>'},
+      {"<leader>nf", '<cmd>NvimTreeFindFile<CR>'}
+    },
+    opts = {
+      renderer = {
+        special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md", "MAKEFILE" },
+      }
+    }
   }, -- for file icons
 
   {'numToStr/Comment.nvim',
     opts = {
       -- add any options here
     },
-    lazy = false,
+    --lazy = false,
   },
+  {'tpope/vim-apathy',
+    lazy = true},
+  event = "InsertEnter",
   {'lambdalisue/suda.vim'},
   {'brooth/far.vim'}, --asynchronous search and replace operations on a set of files
   {'Shougo/echodoc.vim'}, --print completed documention
@@ -103,49 +110,42 @@ return {
   },
 
   {
-    'smoka7/hop.nvim',
-    --branch = 'v1', -- optional but strongly recommended
-    config = function()
-      -- you can configure Hop the way you like here; see :h hop-config
-      require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-      vim.api.nvim_set_keymap('n', '<leader>hh', ':HopWord<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>e', ':HopChar1<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>hp', ':HopPattern<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<leader>hw', ':HopChar2<CR>', { noremap = true, silent = true })
-    end
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
+    opts = {
+      keys = 'etovxqpdygfblzhckisuran'
+    },
+    keys = {
+      {"<leader>hh", "<cmd>HopWord<CR>", desc = "[J]ump to a word" },
+      {"<leader>e", "<cmd>HopChar1<CR>", desc = "[J]ump to a pattern of 1 character" },
+      {"<leader>hp", "<cmd>HopPattern<CR>", desc = "[J]ump to a pattern of x characters" },
+      {"<leader>hw", "<cmd>HopChar2<CR>", desc = "[J]ump to a pattern of 2 character" }
+    }
   },
 
   {'ThePrimeagen/harpoon',
-    config = function()
-      vim.api.nvim_set_keymap('n', '<Leader>p', ':lua require("harpoon.mark").add_file()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>H', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>1', ':lua require("harpoon.ui").nav_file(1)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>2', ':lua require("harpoon.ui").nav_file(2)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>3', ':lua require("harpoon.ui").nav_file(3)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>4', ':lua require("harpoon.ui").nav_file(4)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>5', ':lua require("harpoon.ui").nav_file(5)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>6', ':lua require("harpoon.ui").nav_file(6)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>7', ':lua require("harpoon.ui").nav_file(7)<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<Leader>8', ':lua require("harpoon.ui").nav_file(8)<CR>', { noremap = true, silent = true })
+    keys = {
+      {"<Leader>p", function() require'harpoon.mark'.add_file() end, desc = "[H]arpoon a [File]"},
+      {"<Leader>H", function() require'harpoon.ui'.toggle_quick_menu() end, desc = "[T]oggle [H]arpoon [M]enu"},
+      {"<Leader>1", function() require'harpoon.ui'.nav_file(1)() end, desc = "[G]oto [H]arpooned [F]ile 1"},
+      {"<Leader>2", function() require'harpoon.ui'.nav_file(2)() end, desc = "[G]oto [H]arpooned [F]ile 2"},
+      {"<Leader>3", function() require'harpoon.ui'.nav_file(3)() end, desc = "[G]oto [H]arpooned [F]ile 3"},
+      {"<Leader>4", function() require'harpoon.ui'.nav_file(4)() end, desc = "[G]oto [H]arpooned [F]ile 4"},
+      {"<Leader>5", function() require'harpoon.ui'.nav_file(5)() end, desc = "[G]oto [H]arpooned [F]ile 5"},
+      {"<Leader>6", function() require'harpoon.ui'.nav_file(6)() end, desc = "[G]oto [H]arpooned [F]ile 6"},
+      {"<Leader>7", function() require'harpoon.ui'.nav_file(7)() end, desc = "[G]oto [H]arpooned [F]ile 7"},
+      {"<Leader>8", function() require'harpoon.ui'.nav_file(8)() end, desc = "[G]oto [H]arpooned [F]ile 8"}
 
-    end,
+    }
   },
   {'nvim-pack/nvim-spectre',
     dependencies = {'nvim-lua/plenary.nvim'},
-    config = function()
-      vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
-        desc = "Toggle Spectre"
-      })
-      vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-        desc = "Search current word"
-      })
-      vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-        desc = "Search current word"
-      })
-      vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-        desc = "Search on current file"
-      })
-    end
+    enabled = true,
+    keys = {
+      {"<leader>S", function() require'spectre'.toggle()end, desc= "Toggle Spectre"},
+      {"<leader>sw", function() require'spectre'.open_visual({select_word=true})end, desc= "Search current word"},
+      {"<leader>sp", function() require'spectre'.open_file_search({select_word=true})end, desc= "Search on current file"},
+    }
   },
   {
     'mikesmithgh/kitty-scrollback.nvim',

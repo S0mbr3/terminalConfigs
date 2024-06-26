@@ -891,6 +891,8 @@ folder, otherwise delete a word"
     (consult-project-root-function #'ox/get-project-root)
     (completion-in-region-function #'consult-completion-in-region)
     :config
+    ;; Customizing the find command to exclude git and node_modules folders
+    (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
     (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
     (ox/leader-keys
       "t" '(:ignore t :which-key "toggles")

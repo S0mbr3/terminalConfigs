@@ -234,6 +234,9 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
+# to ini phpenv
+eval "$(phpenv init -)"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 # __conda_setup="$('/home/oxhart/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
