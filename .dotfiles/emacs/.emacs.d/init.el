@@ -651,24 +651,12 @@ folder, otherwise delete a word"
     (add-to-list 'completion-at-point-functions #'yasnippet-capf)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
   )
-(defun ox/cape-hook ()
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  )
 (defun ox/cape-test-hook ()
   (lsp-completion-mode -1)
   ;; (lambda () (lsp-completion-mode nil)
     (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions
-		 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev)))
-  (defun ox/cape1-hook ()
-    (setq-local completion-at-point-functions
-		'(lsp-completion-at-point
-		  cape-file
-		  yasnippet-capf
-		  cape-dabbrev)))
+		 (cape-capf-super  #'lsp-completion-at-point #'yasnippet-capf #'cape-file #'cape-dabbrev)))
 
   (use-package yasnippet-capf
     :straight '(yasnippet-capf :host github
@@ -1220,11 +1208,13 @@ because compile mode is too slow"
     "/usr/local/lib/node_modules"
     "--stdio"))
 
-  ;; ;; Configure Emmet LSP
-  ;;  (lsp-register-client
-  ;;   (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
-  ;;                    :major-modes '(typescript-mode html-mode css-mode)
-  ;;                    :server-id 'emmet-ls))
+  ;; Configure Emmet LSP
+   (lsp-register-client
+    (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
+                     :major-modes '(typescript-mode html-mode css-mode)
+                     :server-id 'emmet-ls))
+   (setq lsp-emmet-show-expanded-abbreviation t) ;; Show the expanded abbreviation in completion.
+   (setq lsp-emmet-show-abbreviation-as-suggestion t) ;; Show abbreviation as suggestion.
   ;; Configure TailwindCSS Intellisense
   ;; (lsp-register-client
   ;;  (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-intellisense" "--stdio")
