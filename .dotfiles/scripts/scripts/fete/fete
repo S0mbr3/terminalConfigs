@@ -1,6 +1,10 @@
 #!/bin/bash
+set -a
+source $HOME/terminalConfigs/.env
+set +a
 
 path=$HOME/scripts/fete
 
-url="$(printf 'https://fetedujour.fr/api/v2/hWTeWBPpqsDadjhb/json-normal\?api_key\=hWTeWBPpqsDadjhb\&f\=json\&t\=normal')"
-curl -s "$url" --output "$path/day.json"
+#url="$(printf 'https://fetedujour.fr/api/v2/hWTeWBPpqsDadjhb/json-normal\?api_key\=hWTeWBPpqsDadjhb\&f\=json\&t\=normal')"
+#curl -s "$url" --output "$path/day.json"
+curl -s "$fete_url" --output "$path/day.json"
