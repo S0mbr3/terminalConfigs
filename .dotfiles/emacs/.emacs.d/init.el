@@ -12,9 +12,11 @@
 (defconst my-font-size 200)
 (defconst my-opacity 90)
 (defconst my-leader-key "SPC")
-(defconst my-linux-font "FiraCode Retina")
+;;(defconst my-linux-font "FiraCode Retina")
 ;;(defconst my-linux-font "Ubuntu Mono")
-(defconst my-wsl-font "Fira Code Retina")
+;;(defconst my-wsl-font "Fira Code Retina")
+(defconst my-linux-font "0xProto Nerd Font")
+(defconst my-windows-font "0xProto Nerd Font")
 
 (defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
 			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/todo.org"
@@ -363,7 +365,7 @@ OFFSET can be provided to skip a given number of buffers."
 ;; Set font
 (if (eq system-type 'gnu/linux)
     (set-face-attribute 'default nil :font my-linux-font :height my-font-size)
-  (set-face-attribute 'default nil :font my-wsl-font :height my-font-size))
+  (set-face-attribute 'default nil :font my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
 
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
