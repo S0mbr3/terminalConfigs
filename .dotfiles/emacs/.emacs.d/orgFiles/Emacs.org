@@ -1412,7 +1412,8 @@ because compile mode is too slow"
    (rust-mode . lsp-deferred)
    (js-mode . lsp-deferred))
   :init
-  (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-keymap-prefix "C-c C-l")
+  ;;(define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
@@ -1464,10 +1465,19 @@ because compile mode is too slow"
   "lr" 'xref-find-references
   "ln" 'lsp-ui-find-next-reference
   "lp" 'lsp-ui-find-prev-reference
-  "ls" 'counsel-imenu
+  ;;"ls" 'counsel-imenu
+  "ls" 'consult-lsp-diagnostics
   "le" 'lsp-ui-flycheck-list
   "lS" 'lsp-ui-sideline-mode
-  "lX" 'lsp-execute-code-action)
+  "lX" 'lsp-execute-code-action
+  "lg"  '(:ignore t :which-key "find")
+  "lgr" 'lsp-find-references
+  "lgg" 'lsp-find-definition
+  "lge" 'lsp-treemacs-errors-list
+  "lf" '(:ignore t :which-key "format")
+  "l==" 'lsp-format-buffer
+  "l=r" 'lsp-format-region
+   )
 (use-package lsp-ui
   :straight t
   :after lsp-mode
