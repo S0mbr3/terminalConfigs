@@ -72,7 +72,10 @@ vim.o.hidden=true --hide unsaved buffers when changing buffer
 vim.cmd([[ set nojoinspaces ]])
 vim.cmd([[ set directory^="$HOME/tmp/.nvim/swp//" ]])
 vim.o.showcmd=true
-vim.o.foldmethod="manual"
+--vim.o.foldmethod="manual"
+vim.o.foldexpr="nvim_treesitter#foldexpr()"
+vim.o.foldmethod="expr"
+vim.o.foldlevel=20
 --vim.cmd([[ set foldignore=]])
 vim.opt.completeopt="menu,menuone,noinsert" --complete options
 --vim.cmd([[ let g:completion_matching_strategy_list=["exact", "substring", "fuzzy"] ]])--how completion fill the menu
