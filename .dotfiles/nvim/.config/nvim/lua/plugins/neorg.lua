@@ -1,5 +1,7 @@
   return {
     "nvim-neorg/neorg",
+    lazy = false,
+    version = "*",
     build = ":Neorg sync-parsers",
     dependencies = { "nvim-lua/plenary.nvim", 'hrsh7th/nvim-cmp', 'luarocks.nvim' },
     config = function()

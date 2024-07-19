@@ -364,8 +364,8 @@ OFFSET can be provided to skip a given number of buffers."
 
 ;; Set font
 (if (eq system-type 'gnu/linux)
-    (set-face-attribute 'default nil :font my-linux-font :height my-font-size)
-  (set-face-attribute 'default nil :font my-windows-font :height my-font-size))
+    (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
+  (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
 
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
@@ -1349,7 +1349,8 @@ because compile mode is too slow"
   :hook (org-mode . ox/org-mode-setup)
   :config
   (message "hi from org-mode")
-  (setq org-ellipsis " ⮧"
+  ;;(setq org-ellipsis " ⮧"
+  (setq org-ellipsis " ↲"
 	org-hide-emphasis-markers t)
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)

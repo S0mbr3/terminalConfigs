@@ -420,8 +420,8 @@ Using persp-mode to create different workspaces
 #+begin_src emacs-lisp
 ;; Set font
 (if (eq system-type 'gnu/linux)
-    (set-face-attribute 'default nil :font my-linux-font :height my-font-size)
-  (set-face-attribute 'default nil :font my-windows-font :height my-font-size))
+    (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
+  (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
 #+end_src
 * Basic Settings
