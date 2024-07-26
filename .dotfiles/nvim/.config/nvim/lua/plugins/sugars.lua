@@ -157,5 +157,42 @@ return {
     config = function()
       require('kitty-scrollback').setup()
     end,
+  },
+  {
+  "folke/zen-mode.nvim",
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+      window = {
+        backdrop = 1,
+        width=.50,
+        height=1,
+        options = {
+          number = false,
+          relativenumber = false
+        }
+      }
+  }
+},
+  {
+    'junegunn/goyo.vim',
+    config = function ()
+      vim.g.goyo_height=120
+      vim.g.goyo_width=50
+    end
+  },
+  {
+    "Pocco81/true-zen.nvim",
+    opts={
+      modes = {
+        ataraxis = {
+          minimum_writing_area = {
+            width=50,
+          },
+        }
+
+      }
+    }
   }
 }
