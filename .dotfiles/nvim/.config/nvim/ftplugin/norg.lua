@@ -14,3 +14,4 @@ vim.o.scrolloff=999
     width = .50 -- width will be 85% of the editor width
   } ]]
 --})
+-- vim.cmd([[Goyo]])

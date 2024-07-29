@@ -125,7 +125,7 @@ vim.o.smarttab=true
 vim.o.softtabstop=-1 --use shiftwidth for tabs/bse
 
 --scrolling around corner
-vim.o.scrolloff=3 --start scrolling 3 lines before edge of viewport
+vim.o.scrolloff=0 --start scrolling 3 lines before edge of viewport
 vim.o.sidescrolloff=3
 
 -- [[ Highlight on yank ]]

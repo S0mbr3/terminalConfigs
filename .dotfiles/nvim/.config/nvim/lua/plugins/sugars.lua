@@ -136,7 +136,19 @@ return {
       {"<Leader>7", function() require'harpoon.ui'.nav_file(7)() end, desc = "[G]oto [H]arpooned [F]ile 7"},
       {"<Leader>8", function() require'harpoon.ui'.nav_file(8)() end, desc = "[G]oto [H]arpooned [F]ile 8"}
 
-    }
+    },
+    {
+      "leath-dub/snipe.nvim",
+      config = function()
+        local snipe = require("snipe")
+        snipe.setup({
+          ui = {
+            position="center"
+          }
+        })
+        vim.keymap.set("n", "<Leader>t", snipe.create_buffer_menu_toggler())
+      end
+    },
   },
   {'nvim-pack/nvim-spectre',
     dependencies = {'nvim-lua/plenary.nvim'},
@@ -159,11 +171,14 @@ return {
     end,
   },
   {
-  "folke/zen-mode.nvim",
-  opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
+    "folke/zen-mode.nvim",
+    keys = {
+      {"\\z", "<cmd>ZenMode<cr>", desc="Activate ZenMode"}
+    },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
       window = {
         backdrop = 1,
         width=.50,
@@ -173,9 +188,11 @@ return {
           relativenumber = false
         }
       }
-  }
-},
-  {
+    }
+  },
+  -- Following plugins goyo.vim and true-zen.nvim are like zen-mode.
+  -- I just prefer actually using zen-mode
+  --[[ {
     'junegunn/goyo.vim',
     config = function ()
       vim.g.goyo_height=120
@@ -194,5 +211,5 @@ return {
 
       }
     }
-  }
+  } ]]
 }
