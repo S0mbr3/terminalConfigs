@@ -2099,8 +2099,28 @@ because compile mode is too slow"
   :straight t)
 (use-package frog-jump-buffer
   :straight t
+  :hook (frog-menu-after-init .  ox/custom-frog-face-outrun)
   :config
-  (setq frog-jump-buffer-use-all-the-icons-ivy t))
+  (setq frog-jump-buffer-use-all-the-icons-ivy t)
+  )
+(defun ox/custom-frog-face-outrun ()
+  "Change, faces for frog-meny and posframe to adapt frog-menu-buffer with the doom-outrun-electric theme"
+  (custom-set-faces
+   ;; Frog Menu Faces
+   `(frog-menu-border ((t (:background "#ffd400" :foreground "#ffd400" :weight bold)))) ;; Brighter border color
+   `(frog-menu-prompt-face ((t (:foreground "#ff2afc" :weight bold)))) ;; Prompt color
+   `(frog-menu-actions-face ((t (:foreground "#a7da1e")))) ;; Actions color
+   `(frog-menu-candidates-face ((t (:background "#0c0a20" :foreground "#f2f3f7")))) ;; Candidates color
+   `(frog-menu-action-keybinding-face ((t (:foreground "#42c6ff")))) ;; Action keybinding color
+   `(frog-menu-posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+
+   ;; Posframe Faces
+   `(posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+   )
+  )
+  ;; (defun my/frog-menu-hook () (
+  ;; 			       (setq-local avy-background nil))
+  ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
