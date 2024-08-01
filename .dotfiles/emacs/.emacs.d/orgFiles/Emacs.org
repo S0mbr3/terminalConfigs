@@ -1791,8 +1791,6 @@ because compile mode is too slow"
   :straight t
   :after org)
 #+end_src
-
-
 * Treesitter
 
 #+begin_src emacs-lisp
@@ -2094,10 +2092,15 @@ because compile mode is too slow"
 (use-package chess
 :straight t)
 #+end_src
-** Buffers
+* Buffers
 #+begin_src emacs-lisp
-(use-package frog-jump-buffer
+;;all-the-icons-ivy package is required to activate icons support in frog-jump-buffer
+(use-package all-the-icons-ivy
   :straight t)
+(use-package frog-jump-buffer
+  :straight t
+  :config
+  (setq frog-jump-buffer-use-all-the-icons-ivy t))
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
