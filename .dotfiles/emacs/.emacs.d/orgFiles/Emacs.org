@@ -1784,6 +1784,14 @@ because compile mode is too slow"
     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ox/org-babel-tangle-config)))
 #+end_src
 
+** Org-drill
+#+begin_src emacs-lisp
+(use-package org-drill
+  :straight t
+  :after org)
+#+end_src
+
+
 * Treesitter
 
 #+begin_src emacs-lisp
@@ -1953,7 +1961,9 @@ because compile mode is too slow"
     (use-package dired-preview
       :unless (featurep 'ranger)
       :straight t
-      :hook (dired-mode . dired-preview-mode))
+      :hook (dired-mode . dired-preview-mode)
+      :config
+      (dired-preview-global-mode 1))
 
     (use-package dired-open
       :unless (featurep 'ranger)
@@ -2082,6 +2092,11 @@ because compile mode is too slow"
 #+begin_src emacs-lisp
 (use-package chess
 :straight t)
+#+end_src
+** Buffers
+#+begin_src emacs-lisp
+(use-package frog-jump-buffer
+  :straight t)
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp

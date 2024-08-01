@@ -53,6 +53,7 @@ vim.api.nvim_set_keymap('n', '<Leader>bp', ':bp<CR>', { noremap = false, silent 
 -- \ mappings
 vim.api.nvim_set_keymap('n', '\\d', ':bd!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '\\c', ':close<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '\\o', ':copen <CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '\\q', ':qa!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '\\w', ':wqa!<CR>', { noremap = false, silent = true })
 vim.api.nvim_set_keymap('n', '\\x', ':x<CR>', { noremap = false, silent = true })
@@ -71,7 +72,5 @@ vim.api.nvim_set_keymap('n', '<Leader><C-e>', ':!/bin/bash ~/.config/volumeicon/
 
 --Compilation commands
 --:copen 50 (for bigger quickfix list)
-vim.api.nvim_set_keymap('n', '<Leader>co', ':copen <CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>cl', ':close<CR>', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v' }, '<Leader>cv', ':lua require("utils.runners"):compile_c()<CR>', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v' }, '<F5>', ':lua require("utils.runners"):compile_c()<CR>', { noremap = true, silent = true })
