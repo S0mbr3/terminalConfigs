@@ -528,6 +528,7 @@ Using persp-mode to create different workspaces
     :global-prefix my-global-leader)
   (ox/leader-keys
     "r" '(restart-emacs :which-key "restart")
+    "b" '(frog-jump-buffer :which-key "frog-jump-buffer")
 
     ";" '(comment-or-uncomment-region :which-key "comment or uncomment region")
     "\\" '(ox/eval :which-key "eval-last-sexp")

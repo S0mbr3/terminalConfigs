@@ -467,6 +467,7 @@ OFFSET can be provided to skip a given number of buffers."
     :global-prefix my-global-leader)
   (ox/leader-keys
     "r" '(restart-emacs :which-key "restart")
+    "b" '(frog-jump-buffer :which-key "frog-jump-buffer")
 
     ";" '(comment-or-uncomment-region :which-key "comment or uncomment region")
     "\\" '(ox/eval :which-key "eval-last-sexp")
@@ -1530,6 +1531,10 @@ because compile mode is too slow"
 
     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ox/org-babel-tangle-config)))
 
+(use-package org-drill
+  :straight t
+  :after org)
+
 ;;(require 'treesit)
 ;;(setq treesit-extra-load-path '("/usr/local/lib"))
 ;;
@@ -1689,7 +1694,9 @@ because compile mode is too slow"
   (use-package dired-preview
     :unless (featurep 'ranger)
     :straight t
-    :hook (dired-mode . dired-preview-mode))
+    :hook (dired-mode . dired-preview-mode)
+    :config
+    (dired-preview-global-mode 1))
 
   (use-package dired-open
     :unless (featurep 'ranger)
@@ -1805,6 +1812,9 @@ because compile mode is too slow"
 
 (use-package chess
 :straight t)
+
+(use-package frog-jump-buffer
+  :straight t)
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
