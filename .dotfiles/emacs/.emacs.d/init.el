@@ -1824,22 +1824,38 @@ because compile mode is too slow"
   )
 (defun ox/custom-frog-face-outrun ()
   "Change, faces for frog-meny and posframe to adapt frog-menu-buffer with the doom-outrun-electric theme"
+  ;; Custom faces for frog-menu and posframe
   (custom-set-faces
    ;; Frog Menu Faces
-   `(frog-menu-border ((t (:background "#ffd400" :foreground "#ffd400" :weight bold)))) ;; Brighter border color
-   `(frog-menu-prompt-face ((t (:foreground "#ff2afc" :weight bold)))) ;; Prompt color
-   `(frog-menu-actions-face ((t (:foreground "#a7da1e")))) ;; Actions color
-   `(frog-menu-candidates-face ((t (:background "#0c0a20" :foreground "#f2f3f7")))) ;; Candidates color
-   `(frog-menu-action-keybinding-face ((t (:foreground "#42c6ff")))) ;; Action keybinding color
-   `(frog-menu-posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+   `(frog-menu-border ((t (:background nil)))) ;; No border color
+   `(frog-menu-posframe ((t (:background nil :foreground "inherit")))) ;; Transparent background
+   `(frog-menu-prompt-face ((t (:foreground "inherit" :weight bold :background nil)))) ;; Transparent prompt background
+   `(frog-menu-actions-face ((t (:foreground "#4c00b0" :background nil)))) ;; Transparent actions background
+   `(frog-menu-candidates-face ((t (:background nil :foreground "inherit")))) ;; Transparent candidates background
+   `(frog-menu-action-keybinding-face ((t (:foreground "#4c00b0" :background nil)))) ;; Transparent action keybinding background
+   `(frog-menu-posframe-background-face ((t (:background nil)))) ;; Transparent posframe background
 
    ;; Posframe Faces
-   `(posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+   `(posframe-background-face ((t (:background nil)))) ;; Transparent posframe background
    )
+
+  ;; (custom-set-faces
+  ;;  ;; Frog Menu Faces
+  ;;  `(frog-menu-border ((t (:background "#ffd400" :foreground "#ffd400" :weight bold)))) ;; Brighter border color
+  ;;  `(frog-menu-prompt-face ((t (:foreground "#ff2afc" :weight bold)))) ;; Prompt color
+  ;;  `(frog-menu-actions-face ((t (:foreground "#a7da1e")))) ;; Actions color
+  ;;  `(frog-menu-candidates-face ((t (:background "#0c0a20" :foreground "#f2f3f7")))) ;; Candidates color
+  ;;  `(frog-menu-action-keybinding-face ((t (:foreground "#42c6ff")))) ;; Action keybinding color
+  ;;  `(frog-menu-posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+
+  ;;  ;; Posframe Faces
+  ;;  `(posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
+  ;;  )
+
   )
-  ;; (defun my/frog-menu-hook () (
-  ;; 			       (setq-local avy-background nil))
-  ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
+;; (defun my/frog-menu-hook () (
+;; 			       (setq-local avy-background nil))
+;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
