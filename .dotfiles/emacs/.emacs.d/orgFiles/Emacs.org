@@ -1510,6 +1510,9 @@ because compile mode is too slow"
   :after lsp-treemacs)
 
 #+end_src
+
+#+RESULTS:
+
 * Dap mode
 #+begin_src emacs-lisp
 ;; (use-package dap-mode
@@ -1790,6 +1793,14 @@ because compile mode is too slow"
 (use-package org-drill
   :straight t
   :after org)
+#+end_src
+* Org Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :straight t
+  :config
+   (org-roam-db-autosync-mode)
+)
 #+end_src
 * Treesitter
 

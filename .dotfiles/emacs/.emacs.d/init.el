@@ -1535,6 +1535,12 @@ because compile mode is too slow"
   :straight t
   :after org)
 
+(use-package org-roam
+  :straight t
+  :config
+   (org-roam-db-autosync-mode)
+)
+
 ;;(require 'treesit)
 ;;(setq treesit-extra-load-path '("/usr/local/lib"))
 ;;
@@ -1830,9 +1836,9 @@ because compile mode is too slow"
    `(frog-menu-border ((t (:background nil)))) ;; No border color
    `(frog-menu-posframe ((t (:background nil :foreground "inherit")))) ;; Transparent background
    `(frog-menu-prompt-face ((t (:foreground "inherit" :weight bold :background nil)))) ;; Transparent prompt background
-   `(frog-menu-actions-face ((t (:foreground "#4c00b0" :background nil)))) ;; Transparent actions background
+   `(frog-menu-actions-face ((t (:foreground "inherit" :background nil)))) ;; Transparent actions background
    `(frog-menu-candidates-face ((t (:background nil :foreground "inherit")))) ;; Transparent candidates background
-   `(frog-menu-action-keybinding-face ((t (:foreground "#4c00b0" :background nil)))) ;; Transparent action keybinding background
+   `(frog-menu-action-keybinding-face ((t (:foreground "inherit" :background nil)))) ;; Transparent action keybinding background
    `(frog-menu-posframe-background-face ((t (:background nil)))) ;; Transparent posframe background
 
    ;; Posframe Faces
