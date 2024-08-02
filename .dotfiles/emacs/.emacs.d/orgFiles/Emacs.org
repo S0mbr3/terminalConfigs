@@ -1,6 +1,6 @@
 #+title Ox Emacs Configuration
 #+STARTUP: overview
-#+PROPERTY: header-args:emacs-lisp :tangle ../init.el
+#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :auto-tangle t
 
 * Things to test
 - Should consider trying out the [[https://github.com/emacsmirror/gcmh][GCMH]] package instead of manually tweaking the garbage collector treshold 
@@ -1592,7 +1592,8 @@ because compile mode is too slow"
   :ensure nil
   ;;:pin org
   :commands (org-capture org-agenda)
-  :hook (org-mode . ox/org-mode-setup)
+  :hook ((org-mode . ox/org-mode-setup)
+	 (org-mode . ox/org-mode-init))
   :config
   (message "hi from org-mode")
   ;;(setq org-ellipsis " ⮧"
@@ -1778,14 +1779,49 @@ because compile mode is too slow"
 ** Auto-tangle Configuration Files
 #+begin_src emacs-lisp
 ;; Automatically tangle our Emacs.org config file when we save it
-(defun ox/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-		      (expand-file-name "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Emacs.org"))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+;; (defun ox/org-babel-tangle-config ()
+;;   (when (string-equal (buffer-file-name)
+;; 		      (expand-file-name "~/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Emacs.org"))
+;;     ;; Dynamic scoping to the rescue
+;;     (let ((org-confirm-babel-evaluate nil))
+;;       (org-babel-tangle))))
 
-    (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ox/org-babel-tangle-config)))
+;;     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ox/org-babel-tangle-config)))
+
+
+
+
+(defun ox/org-buffer-property (name)
+  "Get the value of a buffer-wide Org property NAME."
+  (save-excursion
+    (goto-char (point-min))
+    (if (re-search-forward (concat "^#\\+PROPERTY:.*" name " +\\(.*\\)") nil t)
+        (progn
+          (message "Found property %s with value %s" name (match-string 1))
+          (match-string 1))
+      (message "Property %s not found" name)
+      nil)))
+
+(defun ox/org-babel-tangle-config ()
+  "Automatically tangle Org files with the :auto-tangle property set to t."
+  (message "Running ox/org-babel-tangle-config")
+  (let ((org-confirm-babel-evaluate nil))
+    (org-babel-tangle)))
+
+(defun ox/check-and-add-tangle-hook ()
+  "Check for the auto-tangle property and add tangle hook if needed."
+  (message "Checking for auto-tangle property...")
+  (let ((auto-tangle (ox/org-buffer-property ":auto-tangle")))
+    (if (and auto-tangle (string= auto-tangle "t"))
+        (progn
+          (message "Auto-tangle property found. Adding after-save-hook...")
+          (add-hook 'after-save-hook #'ox/org-babel-tangle-config nil 'local))
+      (message "Auto-tangle property not set to t"))))
+
+(defun ox/org-mode-init ()
+  "Initialize Org mode with tangle hook check."
+  (message "Initializing Org mode...")
+  (ox/check-and-add-tangle-hook))
 #+end_src
 
 ** Org-drill
@@ -2154,3 +2190,6 @@ because compile mode is too slow"
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
 #+end_src
+
+
+
