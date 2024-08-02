@@ -2155,16 +2155,16 @@ because compile mode is too slow"
   ;; Custom faces for frog-menu and posframe
   (custom-set-faces
    ;; Frog Menu Faces
-   `(frog-menu-border ((t (:background nil)))) ;; No border color
-   `(frog-menu-posframe ((t (:background nil :foreground "inherit")))) ;; Transparent background
-   `(frog-menu-prompt-face ((t (:foreground "inherit" :weight bold :background nil)))) ;; Transparent prompt background
-   `(frog-menu-actions-face ((t (:foreground "inherit" :background nil)))) ;; Transparent actions background
-   `(frog-menu-candidates-face ((t (:background nil :foreground "inherit")))) ;; Transparent candidates background
-   `(frog-menu-action-keybinding-face ((t (:foreground "inherit" :background nil)))) ;; Transparent action keybinding background
-   `(frog-menu-posframe-background-face ((t (:background nil)))) ;; Transparent posframe background
+   `(frog-menu-border ((t (:background unspecified)))) ;; No border color
+   `(frog-menu-posframe ((t (:background unspecified :foreground "inherit")))) ;; Transparent background
+   `(frog-menu-prompt-face ((t (:foreground unspecified :weight bold :background unspecified)))) ;; Transparent prompt background
+   `(frog-menu-actions-face ((t (:foreground unspecified :background unspecified)))) ;; Transparent actions background
+   `(frog-menu-candidates-face ((t (:background unspecified :foreground unspecified)))) ;; Transparent candidates background
+   `(frog-menu-action-keybinding-face ((t (:foreground unspecified :background unspecified)))) ;; Transparent action keybinding background
+   `(frog-menu-posframe-background-face ((t (:background unspecified)))) ;; Transparent posframe background
 
    ;; Posframe Faces
-   `(posframe-background-face ((t (:background nil)))) ;; Transparent posframe background
+   `(posframe-background-face ((t (:background unspecified)))) ;; Transparent posframe background
    )
 
   ;; (custom-set-faces
