@@ -17,7 +17,7 @@ return {
 },
 {'folke/tokyonight.nvim',enabled=true, lazy=false,priority = 1000,
 opts = {
-    transparent=true,
+    transparent=false,
     terminal_colors=true,
     dim_inactive=true,
 },
@@ -43,7 +43,7 @@ opts = {
 config = function()
   require'material'.setup({
     disable={
-      background=true
+      background=not vim.g.started_by_firenvim
     },
     plugins = { -- Uncomment the plugins that you use to highlight them
       -- Available plugins:

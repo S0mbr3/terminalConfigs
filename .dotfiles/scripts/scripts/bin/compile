@@ -1,0 +1,5 @@
+#!/bin/sh
+
+tmux next-window
+tmux send-keys "make -k" Enter
+# Enter copy mode and set mode-keys to vi

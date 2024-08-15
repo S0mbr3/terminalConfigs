@@ -252,7 +252,6 @@ eval "$(phpenv init -)"
 # unset __conda_setup
 # <<< conda initialize <<<
 
-export OPENAI_API_KEY="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"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"

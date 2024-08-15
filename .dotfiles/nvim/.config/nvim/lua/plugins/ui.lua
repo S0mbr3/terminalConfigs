@@ -1,7 +1,7 @@
 -- The noice variable is responsible to activate noice.nvim
 -- if noice.nvim is activated we will want to enable nvim-notify,
 -- and customise lualine with lualine-so-fancy.nvim
-local noice = true;
+local noice = false;
 -- checking i neovim has been started by firenvim
 if vim.g.started_by_firenvim then
   noice = false
