@@ -67,25 +67,25 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-(use-package doom-themes
-  :straight t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+  (use-package doom-themes
+    :straight t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;;(load-theme 'doom-challenger-deep t)
-  ;;(load-theme 'doom-moonlight t)
-  (load-theme 'doom-outrun-electric t)
+    ;;(load-theme 'doom-challenger-deep t)
+    ;;(load-theme 'doom-moonlight t)
+    (load-theme 'doom-outrun-electric t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
 
 (use-package doom-modeline
   :straight t
@@ -151,50 +151,50 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
-(use-package eaf
-  :disabled t
-  :straight nil
-  :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
-  :custom
+  (use-package eaf
+    :disabled t
+    :straight nil
+    :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
+    :custom
 					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  (eaf-browser-continue-where-left-off t)
-  (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser)
-  (eaf-browser-auto-import-chrome-cookies t)
-  :config
-  (defalias 'browse-web #'eaf-open-browser)
-  ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
-;;(global-unset-key (kbd "<f1>"))
-;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
+    (eaf-browser-continue-where-left-off t)
+    (eaf-browser-enable-adblocker t)
+    (browse-url-browser-function 'eaf-open-browser)
+    (eaf-browser-auto-import-chrome-cookies t)
+    :config
+    (defalias 'browse-web #'eaf-open-browser)
+    ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
+    ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  ;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
+  ;;(global-unset-key (kbd "<f1>"))
+  ;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
 
 
-;;(require 'eaf-pyqterminal)
-;;(require 'eaf-browser)
-;;(require 'eaf-pdf-viewer)
+  ;;(require 'eaf-pyqterminal)
+  ;;(require 'eaf-browser)
+  ;;(require 'eaf-pdf-viewer)
 
 (use-package chatgpt
   :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
   :bind ("C-c q" . chatgpt-query))
 
-(use-package persp-mode
-  :straight t
-  :defer t
-  ;;:hook (persp-mode-hook . my-update-dynamic-persps)
-  :init
-  (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
-  ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
-  :config
+  (use-package persp-mode
+    :straight t
+    :defer t
+    ;;:hook (persp-mode-hook . my-update-dynamic-persps)
+    :init
+    (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
+    ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
+    :config
 
 
-  (defun consult-persp-buffer ()
-    "Switch to a buffer within the current perspective using consult."
-    (interactive)
-    (let* ((persp-buffers (mapcar #'buffer-name (persp-buffer-list-restricted)))
+    (defun consult-persp-buffer ()
+      "Switch to a buffer within the current perspective using consult."
+      (interactive)
+      (let* ((persp-buffers (mapcar #'buffer-name (persp-buffer-list-restricted)))
 	     (buffer (consult--read persp-buffers
 				    :prompt "Switch to buffer (current perspective): "
 				    :sort t
@@ -203,33 +203,33 @@
 				    :state (consult--buffer-state))))
 	(switch-to-buffer buffer)))
 
-  (global-set-key (kbd "C-x b") 'consult-persp-buffer)
+    (global-set-key (kbd "C-x b") 'consult-persp-buffer)
 
-  ;; Add vterm buffers to the current perspective when starting them
-  ;; Automatically add buffers to current perspective when their major mode changes
-  (setq persp-add-buffer-on-after-change-major-mode t)
+    ;; Add vterm buffers to the current perspective when starting them
+    ;; Automatically add buffers to current perspective when their major mode changes
+    (setq persp-add-buffer-on-after-change-major-mode t)
 
-  (defun my-persp-buffer-filter (buf)
-    "Filter out buffers that start with an asterisk, except for vterm buffers."
-    (let ((buf-name (buffer-name buf)))
+    (defun my-persp-buffer-filter (buf)
+      "Filter out buffers that start with an asterisk, except for vterm buffers."
+      (let ((buf-name (buffer-name buf)))
 	(not (or (and (string-prefix-p "*" buf-name)
 		      (string-prefix-p "*vterm" buf-name))))))
 
-  ;; Add the custom filter function
-  (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
+    ;; Add the custom filter function
+    (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
 
-  ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
-  (defun harpoon--file-name ()
-    "File name for harpoon on current project."
-    (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
+    ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
+    (defun harpoon--file-name ()
+      "File name for harpoon on current project."
+      (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
 			    (safe-persp-name (get-current-persp))
 			  "none")))
 	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
 
-  (defun ox/find-first-vterm-in-persp ()
-    "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
-    (interactive)
-    (let* ((all-buffers-in-emacs (buffer-list))
+    (defun ox/find-first-vterm-in-persp ()
+      "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
+      (interactive)
+      (let* ((all-buffers-in-emacs (buffer-list))
 	     (all-buffers-in-persp (persp-buffer-list-restricted))
 	     (sorted-buffers-in-persp (cl-remove-if-not (lambda (buf) (member buf all-buffers-in-persp)) all-buffers-in-emacs))
 	     (first-vterm-buffer (cl-find-if (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) sorted-buffers-in-persp)))
@@ -237,23 +237,23 @@
 	    first-vterm-buffer
 	  nil)))
 
-  (defun switch-to-last-persp-vterm ()
-    "Switch to the last visited vterm buffer within the current perspective."
-    (interactive)
-    (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
+    (defun switch-to-last-persp-vterm ()
+      "Switch to the last visited vterm buffer within the current perspective."
+      (interactive)
+      (let ((last-persp-vterm-buffer (ox/find-first-vterm-in-persp)))
 	(message "vterm buffer is :%s" last-persp-vterm-buffer)
 	(if last-persp-vterm-buffer
 	    (switch-to-buffer last-persp-vterm-buffer)
 	  (message "No last vterm buffer in this perspective to switch to.")
 	  nil)))
 
-  (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
+    (global-set-key (kbd "C-c v") 'switch-to-last-persp-vterm)
 
-  (defun switch-to-next-persp-vterm-from-last (&optional offset)
-    "Switch to the next vterm buffer in the current perspective, starting from the last visited vterm buffer.
-OFFSET can be provided to skip a given number of buffers."
-    (interactive "P")
-    (let* ((offset (or offset 1))
+    (defun switch-to-next-persp-vterm-from-last (&optional offset)
+      "Switch to the next vterm buffer in the current perspective, starting from the last visited vterm buffer.
+  OFFSET can be provided to skip a given number of buffers."
+      (interactive "P")
+      (let* ((offset (or offset 1))
 	     (last-persp-vterm-buffer (ox/find-first-vterm-in-persp))
 	     (all-vterm-buffers multi-vterm-buffer-list)
 	     (persp-buffers (persp-buffer-list-restricted))
@@ -267,100 +267,100 @@ OFFSET can be provided to skip a given number of buffers."
 	  (when persp-vterm-buffers
 	    (switch-to-buffer (car persp-vterm-buffers))))))
 
-  (defun switch-to-prev-persp-vterm-from-last (&optional offset)
-    "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
-OFFSET can be provided to skip a given number of buffers."
-    (interactive "P")
-    (switch-to-next-persp-vterm-from-last (- (or offset 1))))
+    (defun switch-to-prev-persp-vterm-from-last (&optional offset)
+      "Switch to the previous vterm buffer in the current perspective, starting from the last visited vterm buffer.
+  OFFSET can be provided to skip a given number of buffers."
+      (interactive "P")
+      (switch-to-next-persp-vterm-from-last (- (or offset 1))))
 
 
 
-  (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
-  (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
+    (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
+    (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
 
 
 
-  ;; to share buffers in all perspectives
-  ;;(defvar persp-shared-buffers '("*scratch*" "*Messages*" "*Backtrace*"))
-  ;;(add-hook 'persp-activated-functions
-  ;;#'(lambda (_)
-  ;;(persp-add-buffer persp-shared-buffers)))
+    ;; to share buffers in all perspectives
+    ;;(defvar persp-shared-buffers '("*scratch*" "*Messages*" "*Backtrace*"))
+    ;;(add-hook 'persp-activated-functions
+    ;;#'(lambda (_)
+    ;;(persp-add-buffer persp-shared-buffers)))
 
 
-  (setq persp-autokill-buffer-on-remove 'kill-weak)
-  (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
+    (setq persp-autokill-buffer-on-remove 'kill-weak)
+    (add-hook 'window-setup-hook #'(lambda () (persp-mode 1)))
 
-  (defvar my-dynamic-persps '()
-    "List of dynamic perspectives, ordered by creation.")
+    (defvar my-dynamic-persps '()
+      "List of dynamic perspectives, ordered by creation.")
 
-  (defun my-update-dynamic-persps1 ()
-    "Update `my-dynamic-persps` with the current list of perspectives."
-    ;;(message persp-names-cache)
-    ;;(message 'persp-names-current-frame-fast-ordered)
-    ;;(setq my-dynamic-persps (persp-names-current-frame-fast-ordered))
-    (setq my-dynamic-persps (copy-sequence persp-names-cache))
-    ;;(message "Updated my-dynamic-persps: %s" (mapconcat 'identity my-dynamic-persps ", ")))
-    )
+    (defun my-update-dynamic-persps1 ()
+      "Update `my-dynamic-persps` with the current list of perspectives."
+      ;;(message persp-names-cache)
+      ;;(message 'persp-names-current-frame-fast-ordered)
+      ;;(setq my-dynamic-persps (persp-names-current-frame-fast-ordered))
+      (setq my-dynamic-persps (copy-sequence persp-names-cache))
+      ;;(message "Updated my-dynamic-persps: %s" (mapconcat 'identity my-dynamic-persps ", ")))
+      )
 
-  (defun my-update-dynamic-persps ()
-    "Update `my-dynamic-persps` with the current list of perspectives from `persp-names-cache`."
-    (setq my-dynamic-persps (remove "none" persp-names-cache)))
+    (defun my-update-dynamic-persps ()
+      "Update `my-dynamic-persps` with the current list of perspectives from `persp-names-cache`."
+      (setq my-dynamic-persps (remove "none" persp-names-cache)))
 
-  (advice-add 'persp-kill :after (lambda (&rest _) (my-update-dynamic-persps)))
-  (advice-add 'persp-switch :after (lambda (&rest _) (my-update-dynamic-persps)))
-  (advice-add 'persp-add-new :after (lambda (&rest _) (my-update-dynamic-persps)))
+    (advice-add 'persp-kill :after (lambda (&rest _) (my-update-dynamic-persps)))
+    (advice-add 'persp-switch :after (lambda (&rest _) (my-update-dynamic-persps)))
+    (advice-add 'persp-add-new :after (lambda (&rest _) (my-update-dynamic-persps)))
 
-  (defun my-switch-to-persp (name)
-    "Switch to the perspective with NAME and update `my-dynamic-persps`."
-    (interactive "sEnter perspective name: ")
-    (when name
+    (defun my-switch-to-persp (name)
+      "Switch to the perspective with NAME and update `my-dynamic-persps`."
+      (interactive "sEnter perspective name: ")
+      (when name
 	(persp-switch name)))
 
-  (defun my-switch-to-persp-by-number (number)
-    "Switch to a perspective based on its position in `my-dynamic-persps`."
-    (interactive "nPress the number key for the perspective: ")
-    (if (eq number 0)
+    (defun my-switch-to-persp-by-number (number)
+      "Switch to a perspective based on its position in `my-dynamic-persps`."
+      (interactive "nPress the number key for the perspective: ")
+      (if (eq number 0)
 	  (my-switch-to-persp "none")
 	(let ((name (nth (1- number) (remove "none" my-dynamic-persps))))
 	  (if name
 	      (my-switch-to-persp name)
 	    (message "No perspective at position %d" number)))))
 
-  ;; Initialize the list of dynamic perspectives at startup
-  ;;(add-hook 'after-init-hook 'my-update-dynamic-persps)
-  ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
+    ;; Initialize the list of dynamic perspectives at startup
+    ;;(add-hook 'after-init-hook 'my-update-dynamic-persps)
+    ;;(add-hook 'persp-mode-hook 'my-update-dynamic-persps)
 
-  ;; Keybinding to create or switch to a named perspective
-  (global-set-key (kbd "C-x p n") 'my-switch-to-persp)
+    ;; Keybinding to create or switch to a named perspective
+    (global-set-key (kbd "C-x p n") 'my-switch-to-persp)
 
-  ;; Keybindings for Alt+numbers
-  (dotimes (i 10)  ;; Loop from 0 to 9
-    (let ((key (format "C-c %d" i)))
+    ;; Keybindings for Alt+numbers
+    (dotimes (i 10)  ;; Loop from 0 to 9
+      (let ((key (format "C-c %d" i)))
 	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
-;; (eval-after-load 'persp-mode
-;;   '(my-update-dynamic-persps))
-(defvar my-persp-init-timer nil
-  "Timer object for delayed initialization of my-dynamic-persps.")
+  ;; (eval-after-load 'persp-mode
+  ;;   '(my-update-dynamic-persps))
+  (defvar my-persp-init-timer nil
+    "Timer object for delayed initialization of my-dynamic-persps.")
 
-(defun my-check-persp-init ()
-  "Check if perspectives other than 'none' are available in `persp-names-cache` and initialize if so."
-  (when (and persp-names-cache (> (length persp-names-cache) 1))
-    (my-update-dynamic-persps)
-    (when my-persp-init-timer
+  (defun my-check-persp-init ()
+    "Check if perspectives other than 'none' are available in `persp-names-cache` and initialize if so."
+    (when (and persp-names-cache (> (length persp-names-cache) 1))
+      (my-update-dynamic-persps)
+      (when my-persp-init-timer
 	(cancel-timer my-persp-init-timer)
 	(setq my-persp-init-timer nil))))
 
-(setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
+  (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
 
-;;(run-with-timer 5 nil 'my-update-dynamic-persps)
-;; (use-package perspective
-;;   :straight t
-;;   :bind
-;;   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
-;;   :custom
-;;   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-;;   :init
-;;   (persp-mode))
+  ;;(run-with-timer 5 nil 'my-update-dynamic-persps)
+  ;; (use-package perspective
+  ;;   :straight t
+  ;;   :bind
+  ;;   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
+  ;;   :custom
+  ;;   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
+  ;;   :init
+  ;;   (persp-mode))
 
 ;; Set font
 (if (eq system-type 'gnu/linux)
@@ -920,6 +920,9 @@ folder, otherwise delete a word"
 ;;hook to start modes without evil mode
 (defun ox/evil-hook ()
   (message "ox/evil-hook was called") ; add this line
+  ;; Unbind RET key so emacs can use it instead of evil useful to make
+  ;; org-return-follows-link working in evil-mode
+  (define-key evil-motion-state-map (kbd "RET") nil) 
   (dolist (mode '(Custom-mode
 		    eshell-mode
 		    git-rebase-mode
@@ -1359,146 +1362,154 @@ because compile mode is too slow"
   (setq org-log-into-drawer t)
   (setq org-agenda-files my-org-files)
   (setq org-src-tab-acts-natively t)
-  (setq org-src-preserve-indentation nil)
+  (setq org-src-preserve-indentation t)
   (setq org-edit-src-content-indentation 0)
   (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
+  (setq org-return-follows-link t) ;; Allow to follow links using RET key
+  (setq org-link-frame-setup
+        '((vm . vm-visit-folder-other-frame)
+          (vm-imap . vm-visit-imap-folder-other-frame)
+          (gnus . org-gnus-no-new-news)
+          (file . find-file)
+          (wl . wl-other-frame)))
 
-  ;;(setq python-indent-offset 4) ; Set indentation to 4 spaces (or any other desired value)
+
+	;;(setq python-indent-offset 4) ; Set indentation to 4 spaces (or any other desired value)
 
 
-  (require 'org-indent)
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-	  (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+	(require 'org-indent)
+	(require 'org-habit)
+	(add-to-list 'org-modules 'org-habit)
+	(setq org-todo-keywords
+	      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-  (setq org-refile-targets
-	'(("Archive.org" :maxlevel . 1)
-	  ("Tasks.org" :maxlevel . 1)))
+	(setq org-refile-targets
+	      '(("Archive.org" :maxlevel . 1)
+		("Tasks.org" :maxlevel . 1)))
 
-  ;; Save Org buffers after refiling!
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+	;; Save Org buffers after refiling!
+	(advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-  (setq org-tag-alist
-	'((:startgroup)
+	(setq org-tag-alist
+	      '((:startgroup)
 					; Put mutually exclusive tags here
-	  (:endgroup)
-	  ("@errand" . ?E)
-	  ("@home" . ?H)
-	  ("@work" . ?W)
-	  ("agenda" . ?a)
-	  ("planning" . ?p)
-	  ("publish" . ?P)
-	  ("batch" . ?b)
-	  ("note" . ?n)
-	  ("idea" . ?i)))
+		(:endgroup)
+		("@errand" . ?E)
+		("@home" . ?H)
+		("@work" . ?W)
+		("agenda" . ?a)
+		("planning" . ?p)
+		("publish" . ?P)
+		("batch" . ?b)
+		("note" . ?n)
+		("idea" . ?i)))
 
-  ;; Configure custom agenda views
-  (setq org-agenda-custom-commands
-	'(("d" "Dashboard"
-	   ((agenda "" ((org-deadline-warning-days 7)))
-	    (todo "NEXT"
-		  ((org-agenda-overriding-header "Next Tasks")))
-	    (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+	;; Configure custom agenda views
+	(setq org-agenda-custom-commands
+	      '(("d" "Dashboard"
+		 ((agenda "" ((org-deadline-warning-days 7)))
+		  (todo "NEXT"
+			((org-agenda-overriding-header "Next Tasks")))
+		  (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-	  ("n" "Next Tasks"
-	   ((todo "NEXT"
-		  ((org-agenda-overriding-header "Next Tasks")))))
+		("n" "Next Tasks"
+		 ((todo "NEXT"
+			((org-agenda-overriding-header "Next Tasks")))))
 
-	  ("W" "Work Tasks" tags-todo "+work-email")
+		("W" "Work Tasks" tags-todo "+work-email")
 
-	  ;; Low-effort next actions
-	  ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-	   ((org-agenda-overriding-header "Low Effort Tasks")
-	    (org-agenda-max-todos 20)
-	    (org-agenda-files org-agenda-files)))
+		;; Low-effort next actions
+		("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+		 ((org-agenda-overriding-header "Low Effort Tasks")
+		  (org-agenda-max-todos 20)
+		  (org-agenda-files org-agenda-files)))
 
-	  ("w" "Workflow Status"
-	   ((todo "WAIT"
-		  ((org-agenda-overriding-header "Waiting on External")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "REVIEW"
-		  ((org-agenda-overriding-header "In Review")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "PLAN"
-		  ((org-agenda-overriding-header "In Planning")
-		   (org-agenda-todo-list-sublevels nil)
-		   (org-agenda-files org-agenda-files)))
-	    (todo "BACKLOG"
-		  ((org-agenda-overriding-header "Project Backlog")
-		   (org-agenda-todo-list-sublevels nil)
-		   (org-agenda-files org-agenda-files)))
-	    (todo "READY"
-		  ((org-agenda-overriding-header "Ready for Work")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "ACTIVE"
-		  ((org-agenda-overriding-header "Active Projects")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "COMPLETED"
-		  ((org-agenda-overriding-header "Completed Projects")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "CANC"
-		  ((org-agenda-overriding-header "Cancelled Projects")
-		   (org-agenda-files org-agenda-files)))))))
+		("w" "Workflow Status"
+		 ((todo "WAIT"
+			((org-agenda-overriding-header "Waiting on External")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "REVIEW"
+			((org-agenda-overriding-header "In Review")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "PLAN"
+			((org-agenda-overriding-header "In Planning")
+			 (org-agenda-todo-list-sublevels nil)
+			 (org-agenda-files org-agenda-files)))
+		  (todo "BACKLOG"
+			((org-agenda-overriding-header "Project Backlog")
+			 (org-agenda-todo-list-sublevels nil)
+			 (org-agenda-files org-agenda-files)))
+		  (todo "READY"
+			((org-agenda-overriding-header "Ready for Work")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "ACTIVE"
+			((org-agenda-overriding-header "Active Projects")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "COMPLETED"
+			((org-agenda-overriding-header "Completed Projects")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "CANC"
+			((org-agenda-overriding-header "Cancelled Projects")
+			 (org-agenda-files org-agenda-files)))))))
 
-  (setq org-capture-templates
-	`(("t" "Tasks / Projects")
-	  ("tt" "Task" entry (file+olp "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org" "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+	(setq org-capture-templates
+	      `(("t" "Tasks / Projects")
+		("tt" "Task" entry (file+olp "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org" "Inbox")
+		 "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-	  ("j" "Journal Entries")
-	  ("jj" "Journal" entry
-           (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
-           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-           :clock-in :clock-resume
-           :empty-lines 1)
-	  ("jm" "Meeting" entry
-           (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
-           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
+		("j" "Journal Entries")
+		("jj" "Journal" entry
+		 (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		 "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+		 ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+		 :clock-in :clock-resume
+		 :empty-lines 1)
+		("jm" "Meeting" entry
+		 (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		 "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+		 :clock-in :clock-resume
+		 :empty-lines 1)
 
-	  ("w" "Workflows")
-	  ("we" "Checking Email" entry (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
-           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+		("w" "Workflows")
+		("we" "Checking Email" entry (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-	  ("m" "Metrics Capture")
-	  ("mw" "Weight" table-line (file+headline "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Metrics.org" "Weight")
-	   "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+		("m" "Metrics Capture")
+		("mw" "Weight" table-line (file+headline "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Metrics.org" "Weight")
+		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
-  (define-key global-map (kbd "C-c j")
-	      (lambda () (interactive) (org-capture nil "jj")))
-  (ox/leader-keys
-    "o" '(:ignore t :which-key "Org")
-    "oa" '(org-agenda :which-key "Open org-agenda")
-    "ot" '(org-todo-list :which-key "Open all TODO lists")
-    "oc" '(org-capture :which-key "Open org-capture")))
+	(define-key global-map (kbd "C-c j")
+		    (lambda () (interactive) (org-capture nil "jj")))
+	(ox/leader-keys
+	  "o" '(:ignore t :which-key "Org")
+	  "oa" '(org-agenda :which-key "Open org-agenda")
+	  "ot" '(org-todo-list :which-key "Open all TODO lists")
+	  "oc" '(org-capture :which-key "Open org-capture")))
 
 
-(use-package org-superstar
-  :straight t
-  :after org
-  :config
-  ;;(setq org-superstar-hide-leading-stars t)
-  (setq org-superstar-leading-bullet " ")
-  ;; Hide away leading stars on terminal.
-  (setq org-superstar-leading-fallback ?\s))
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (org-superstar-mode 1)))
+  (use-package org-superstar
+    :straight t
+    :after org
+    :config
+    ;;(setq org-superstar-hide-leading-stars t)
+    (setq org-superstar-leading-bullet " ")
+    ;; Hide away leading stars on terminal.
+    (setq org-superstar-leading-fallback ?\s))
+  (add-hook 'org-mode-hook
+	    (lambda ()
+	      (org-superstar-mode 1)))
 
-;; Center the text, and set a max column width to go next line in org mode
-(defun ox/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-	visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
+  ;; Center the text, and set a max column width to go next line in org mode
+  (defun ox/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+	  visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
 
-(use-package visual-fill-column
-  :straight t
-  :hook (org-mode . ox/org-mode-visual-fill))
+  (use-package visual-fill-column
+    :straight t
+    :hook (org-mode . ox/org-mode-visual-fill))
 
 (use-package ob-typescript
   :straight t)
@@ -1508,6 +1519,7 @@ because compile mode is too slow"
    'org-babel-load-languages
    '((emacs-lisp . t)
      (C . t)
+     (makefile . t)
      (shell . t)
      (typescript . t)
      (python . t)))
@@ -1573,8 +1585,12 @@ because compile mode is too slow"
 
 (use-package org-roam
   :straight t
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
   :config
-   (org-roam-db-autosync-mode)
+   ;;(org-roam-db-autosync-mode)
+   (org-roam-db-autosync-enable)
 )
 
 ;;(require 'treesit)
@@ -1686,69 +1702,69 @@ because compile mode is too slow"
 
 ;; kill current buffer without the annoying confirmation message
 
-;; This package allow single buffer navigation in Dired
-;; like (dired-kill-when-opening-new-dired-buffer t) does
-;; (use-package dired-single
-;;   :config
-;;   (evil-collection-define-key 'normal 'dired-mode-map
-;;     "h" 'dired-single-up-directory
-;;     "l" 'dired-single-buffer))
-(use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :config
-  (setq dired-kill-when-opening-new-dired-buffer t)
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-up-directory
-    "l" 'dired-find-file))
+  ;; This package allow single buffer navigation in Dired
+  ;; like (dired-kill-when-opening-new-dired-buffer t) does
+  ;; (use-package dired-single
+  ;;   :config
+  ;;   (evil-collection-define-key 'normal 'dired-mode-map
+  ;;     "h" 'dired-single-up-directory
+  ;;     "l" 'dired-single-buffer))
+  (use-package dired
+    :ensure nil
+    :commands (dired dired-jump)
+    :custom ((dired-listing-switches "-agho --group-directories-first"))
+    :config
+    (setq dired-kill-when-opening-new-dired-buffer t)
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-up-directory
+      "l" 'dired-find-file))
 
-(use-package all-the-icons-dired
-  :straight t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package all-the-icons-dired
+    :straight t
+    :hook (dired-mode . all-the-icons-dired-mode))
 
 
-(use-package ranger
-  ;;:straight t
-  :straight '(ranger :host github
+  (use-package ranger
+    ;;:straight t
+    :straight '(ranger :host github
 		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
 		       :repo "S0mbr3/ranger.el"
 		       :branch "ranger-setup-image-preview")
-  :config
-  (global-set-key (kbd "C-c d") 'ranger)
-  (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
-
-  ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
-  (defun my/ranger-clear-header-line ()
-    "Clear the header line."
-    (setq header-line-format nil))
-
-  (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
-
-  (use-package dired-hide-dotfiles
-    :unless (featurep 'ranger)
-    :straight t
-    :hook (dired-mode . dired-hide-dotfiles-mode)
     :config
-    (evil-collection-define-key 'normal 'dired-mode-map
+    (global-set-key (kbd "C-c d") 'ranger)
+    (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
+
+    ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
+    (defun my/ranger-clear-header-line ()
+      "Clear the header line."
+      (setq header-line-format nil))
+
+    (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
+
+    (use-package dired-hide-dotfiles
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-hide-dotfiles-mode)
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
 	"H" 'dired-hide-dotfiles-mode))
 
-  (use-package dired-preview
-    :unless (featurep 'ranger)
-    :straight t
-    :hook (dired-mode . dired-preview-mode)
-    :config
-    (dired-preview-global-mode 1))
+    (use-package dired-preview
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-preview-mode)
+      :config
+      (dired-preview-global-mode 1))
 
-  (use-package dired-open
-    :unless (featurep 'ranger)
-    :straight t
-    :after dired
-    ;;:commands (dired dired-jump)
-    :config
-    ;; Strange behaviors not picking always the good program automatically
-    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-    (setq dired-open-extensions '(("png" . "feh")
+    (use-package dired-open
+      :unless (featurep 'ranger)
+      :straight t
+      :after dired
+      ;;:commands (dired dired-jump)
+      :config
+      ;; Strange behaviors not picking always the good program automatically
+      ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+      (setq dired-open-extensions '(("png" . "feh")
 				    ("mkv" . "mpv"))))
 
 ;; When using compile or recompile command if there is some colord characters
