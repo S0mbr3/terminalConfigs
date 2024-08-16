@@ -477,7 +477,7 @@
      "fp" '(project-find-file :which-key "project-find-file")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
-    "fr" '(recentf-open-files :which-key "Recent opened files")
+    "fr" '(consult-recent-file :which-key "Consult recent files")
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
 
@@ -1708,6 +1708,28 @@ because compile mode is too slow"
 ;;(add-hook 'window-size-change-functions 'adjust-compilation-window-height)
 
 ;; kill current buffer without the annoying confirmation message
+
+(use-package indent-bars
+  :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  ;; Add other languages as needed
+  (indent-bars-treesit-scope '((python function_definition class_definition for_statement
+	  if_statement with_statement while_statement)))
+  ;; wrap may not be needed if no-descend-list is enough
+  ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
+  ;;				      list list_comprehension
+  ;;				      dictionary dictionary_comprehension
+  ;;				      parenthesized_expression subscript)))
+  :hook ((python-base-mode yaml-mode c-mode makefile-gmake-mode) . indent-bars-mode))
+
+(use-package aggressive-indent
+  :straight nil
+  :disabled t
+  :hook((python-base-mode yaml-mode c-mode makefile-gmake-mode) . agressive-indent-mode)
+  :config
+  (global-aggressive-indent-mode 1))
 
   ;; This package allow single buffer navigation in Dired
   ;; like (dired-kill-when-opening-new-dired-buffer t) does
