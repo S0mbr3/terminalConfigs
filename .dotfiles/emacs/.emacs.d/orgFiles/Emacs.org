@@ -67,6 +67,7 @@
 ;;(setq use-package-always-defer t)
 (setq use-package-always-ensure nil)
 (setq package-enable-at-startup nil)
+(setq package-native-compile t)
 ;;(setq use-package-compute-statistics t)
 ;;(setq use-package-verbose t)
 
@@ -1869,13 +1870,19 @@ because compile mode is too slow"
 ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
-:straight t
-:defer 0)
+:straight nil
+:disabled t
+:after tree-sitter
+;;:defer 0
+)
 (use-package tree-sitter
 :straight t
-:after tree-sitter-langs
+;;:after tree-sitter-langs
 :config
-;; Activate tree-sitter globally (minor mode registered on every buffer)
+;; Loading tree-sitter-modules from casouri/tree-sitter-module
+;; Preventing from manually installing tree-sitter grammars
+(setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"))
+;; Activate tree-sitter globally (minor mode registered on every buffer
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 #+end_src
