@@ -1,13 +1,20 @@
 * INBOX
 
-** TODO  Make keybinding with general for org and org capture
+** COMPLETED Make keybinding with general for org and org capture
+CLOSED: [2024-08-16 Fri 03:28]
   [2023-07-28 ven. 00:45]
   [[file:~/.emacs.d/init.el::("jm" "Meeting" entry]]
 
-* Active
-* TODO Finish documentation
-SCHEDULED: <2023-07-27 jeu.>
+** TODO finish linked list 
+SCHEDULED: <2024-08-19 Mon>
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2024-08-16 Fri 03:26]
+:END:
+  [2024-08-16 Fri 03:19]
+  [[file:~/org-roam/test.c::}]]
+  
 
+* Active
 
 * TODO Learn Matrix exponention and derivative
 

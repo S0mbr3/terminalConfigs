@@ -2,14 +2,17 @@ function_name (){
   toilet "Hello Ox"
   if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
     cowsay "The system is running Arch Linux"
-  else
-    echo "The system is not running Arch Linux"
+  elif [[ "$(uname -a | cut -d' ' -f3 | cut -d'-' -f4)" == "WSL2" ]]; then
+    cowsay "The system is running under WSL2"
+    sudo service ssh start
     #for wsl2 if gui application is set to true in c://Users/Myuser/.wslconfig
     # then i am not using vcxsrv and no need to export the DISPLAY var 
     # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0" #prefer this one
     LIBGL_ALWAYS_INDIRECT=0
     export LIBGL_ALWAYS_INDIRECT
     # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+  else
+    echo "The system is running something strange O.O"
 
   fi
   #neofetch
@@ -38,19 +41,19 @@ function sshe(){
     (umask 077; ssh-agent >| "$env")
     . "$env" >| /dev/null ; }
 
-    agent_load_env
+  agent_load_env
 
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+  # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+  agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
 
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-  agent_start
-  ssh-add
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-  ssh-add
-fi
+  if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add ~/.ssh/id_* 2>/dev/null # Add all private keys
+  elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+    ssh-add ~/.ssh/id_* 2>/dev/null
+  fi
 
-unset env
+  unset env
 }
 #nvr -s
 
@@ -265,3 +268,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 eval "$(atuin init zsh)"
+

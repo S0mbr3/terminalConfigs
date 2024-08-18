@@ -18,10 +18,10 @@
 (defconst my-linux-font "0xProto Nerd Font")
 (defconst my-windows-font "0xProto Nerd Font")
 
-(defconst my-org-files '("~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org"
-			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/todo.org"
-			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Habits.org"
-			 "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/birthdays.org"))
+(defconst my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
+			 "~/.emacs.d/orgFiles/todo.org"
+			 "~/.emacs.d/orgFiles/Habits.org"
+			 "~/.emacs.d/orgFiles/birthdays.org"))
 
  ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
 (defvar ox/enable-ivy nil )
@@ -351,7 +351,8 @@
 	(cancel-timer my-persp-init-timer)
 	(setq my-persp-init-timer nil))))
 
-  (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init))
+  (with-eval-after-load 'persp-mode
+  (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init)))
 
   ;;(run-with-timer 5 nil 'my-update-dynamic-persps)
   ;; (use-package perspective
@@ -1457,28 +1458,28 @@ because compile mode is too slow"
 
 	(setq org-capture-templates
 	      `(("t" "Tasks / Projects")
-		("tt" "Task" entry (file+olp "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Tasks.org" "Inbox")
+		("tt" "Task" entry (file+olp "~/.emacs.d/orgFiles/Tasks.org" "Inbox")
 		 "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 		("j" "Journal Entries")
 		("jj" "Journal" entry
-		 (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		 (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
 		 "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
 		 ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 		("jm" "Meeting" entry
-		 (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		 (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
 		 "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 
 		("w" "Workflows")
-		("we" "Checking Email" entry (file+olp+datetree "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Journal.org")
+		("we" "Checking Email" entry (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
 		 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 		("m" "Metrics Capture")
-		("mw" "Weight" table-line (file+headline "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/Metrics.org" "Weight")
+		("mw" "Weight" table-line (file+headline "~/.emacs.d/orgFiles/Metrics.org" "Weight")
 		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
 	(define-key global-map (kbd "C-c j")
@@ -1795,6 +1796,11 @@ because compile mode is too slow"
       ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
       (setq dired-open-extensions '(("png" . "feh")
 				    ("mkv" . "mpv"))))
+
+(use-package ssh-config-mode
+  :straight t
+  :mode (("~/.ssh/config\\'" . ssh-config-mode)
+         ("sshd?_config\\'" . ssh-config-mode)))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
