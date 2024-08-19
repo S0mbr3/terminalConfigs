@@ -475,6 +475,7 @@
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
+    "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
      "fp" '(project-find-file :which-key "project-find-file")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
@@ -854,6 +855,7 @@ folder, otherwise delete a word"
     "so" '(multi-vterm-dedicated-toggle :which-key "toggle multi-vterm")
     "sp" '(multi-vterm-prev :which-key "multi-vterm prev")
     "sn" '(multi-vterm-next :which-key "multi-vterm next")
+    "sd" '(ox/ledeb-vterm :which-key "vterm ledeb")
     "se" '(eshell :whick-key "eshell"))
   (setq multi-vterm-dedicated-window-height-percent 40))
 ;; (add-hook 'vterm-mode-hook
@@ -1801,6 +1803,26 @@ because compile mode is too slow"
   :straight t
   :mode (("~/.ssh/config\\'" . ssh-config-mode)
          ("sshd?_config\\'" . ssh-config-mode)))
+(setq tramp-shell-prompt-pattern "\\(?:^\\|\\)[^]\n#-%>❯]*#?[]#-%>❯][[:blank:]]*")
+(add-to-list 'tramp-connection-properties
+             (list (regexp-quote "/sshx:ledeb:")
+                   "remote-shell" "/usr/bin/zsh"))
+(add-to-list 'tramp-connection-properties
+             (list (regexp-quote "/ssh:ledeb:")
+                   "remote-shell" "/usr/bin/zsh"))
+(setq vterm-tramp-shells '(("docker" "/bin/sh")
+			   ("ssh" "/usr/bin/zsh")))
+(defun ox/ledeb-vterm ()
+  "Open vterm in ledeb server"
+  (interactive)
+  (print "salut")
+  (let ((default-directory "/ssh:ledeb:"))
+    (multi-vterm)))
+
+(defun ox/ledeb-dired ()
+  "Open dired in ledeb server"
+  (interactive)
+    (dired "/ssh:ledeb:"))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
