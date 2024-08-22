@@ -7,9 +7,9 @@ function_name (){
     sudo service ssh start
     #for wsl2 if gui application is set to true in c://Users/Myuser/.wslconfig
     # then i am not using vcxsrv and no need to export the DISPLAY var 
-    # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0" #prefer this one
-    LIBGL_ALWAYS_INDIRECT=0
-    export LIBGL_ALWAYS_INDIRECT
+    export DISPLAY=$(ip route|awk '/^default/{print $3}'):0.0
+    # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
+    export LIBGL_ALWAYS_INDIRECT=0
     # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
   else
     echo "The system is running something strange O.O"
