@@ -255,9 +255,6 @@ eval "$(phpenv init -)"
 # unset __conda_setup
 # <<< conda initialize <<<
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/oxhart/.sdkman"
-[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
 [[ ! -f ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh
@@ -269,3 +266,8 @@ export NVM_DIR="$HOME/.nvm"
 
 eval "$(atuin init zsh)"
 
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+
+export SDKMAN_DIR="/home/oxhart/.sdkman"
+[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
