@@ -1481,6 +1481,7 @@ because compile mode is too slow"
   "lgr" 'lsp-find-references
   "lgg" 'lsp-find-definition
   "lge" 'lsp-treemacs-errors-list
+  "lgq" 'lsp-treemacs-quickfix-list
   "lf" '(:ignore t :which-key "format")
   "l==" 'lsp-format-buffer
   "l=r" 'lsp-format-region
