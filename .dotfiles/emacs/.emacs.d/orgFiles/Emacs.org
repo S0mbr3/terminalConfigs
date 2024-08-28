@@ -1770,10 +1770,11 @@ because compile mode is too slow"
 	(define-key global-map (kbd "C-c j")
 		    (lambda () (interactive) (org-capture nil "jj")))
 	(ox/leader-keys
-	  "o" '(:ignore t :which-key "Org")
-	  "oa" '(org-agenda :which-key "Open org-agenda")
-	  "ot" '(org-todo-list :which-key "Open all TODO lists")
-	  "oc" '(org-capture :which-key "Open org-capture")))
+	  "o" '(:ignore t :which-key "org")
+	  "oa" '(org-agenda :which-key "open org-agenda")
+	  "ot" '(org-todo-list :which-key "open all todo lists")
+	  "oc" '(org-capture :which-key "open org-capture")
+	  "oh" '((lambda () (interactive) (find-file "~/.emacs.d/orgFiles/Habits.org")) :which-key "Open Habits.org")))
 
 
   (use-package org-superstar
