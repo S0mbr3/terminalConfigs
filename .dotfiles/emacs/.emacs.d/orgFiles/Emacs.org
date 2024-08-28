@@ -1102,6 +1102,39 @@ folder, otherwise delete a word"
     (setq eshell-visual-commands '("htop" "zsh" "vim"))))
 #+end_src
 
+* My-switch-to-persp-vterm-by-number
+Creating a function to target a specific vterm buffer inside a specific perspective.
+It first parse every buffer in the perspective seeking for vterm buffers only in the good order.
+Then it switch to the vterm buffer by it's number.
+
+the loop bind keys to this function.
+The current-i variable is a workaround to prevent elisp dynamical scope in the lambda to only catch the i reference and having the correct number to bind by taking the good i value at each iteration of the loop.
+#+begin_src emacs-lisp
+(let ((i 1))
+(while (< i 10)  ;; Loop from 0 to 9
+  (let* ((current-i i)
+	 (key (format "C-c t %d" i))
+	 (command-name (intern (format "my-persp-vterm-%d" i))))
+     (defalias command-name (lambda()
+		       (interactive)
+		       (my-switch-to-persp-vterm-by-number current-i)))
+     (keymap-global-set key command-name))
+  (setq i (+ i 1))))
+
+(defun my-switch-to-persp-vterm-by-number (number)
+  "Target a vterm buffer in persp by NUMBER."
+  (interactive "nPress the number key for the persp-vterm: ")
+  (let* ((index 0)
+	 (number (1- number))
+	 (all-buffers-in-persp (reverse (persp-buffer-list-restricted)))
+    	 (persp-vterm-buffers (cl-remove-if-not (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) all-buffers-in-persp)))
+
+    (while (< index number)
+	   (setq index (+ 1 index)))
+    (if (setq vterm-persp-p (elt persp-vterm-buffers index))
+	(switch-to-buffer vterm-persp-p))
+  ))
+#+end_src
 * Evil Mode
 
 #+begin_src emacs-lisp
