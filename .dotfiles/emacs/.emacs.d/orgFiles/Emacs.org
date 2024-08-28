@@ -1630,6 +1630,7 @@ because compile mode is too slow"
 	(add-to-list 'org-modules 'org-habit)
 	(setq org-todo-keywords
 	      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+		(sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
 		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
 	(setq org-refile-targets
@@ -1646,6 +1647,8 @@ because compile mode is too slow"
 		("@errand" . ?E)
 		("@home" . ?H)
 		("@work" . ?W)
+		("@learn" . ?L)
+		("@wsl-configs" . ?w)
 		("agenda" . ?a)
 		("planning" . ?p)
 		("publish" . ?P)
@@ -1660,6 +1663,10 @@ because compile mode is too slow"
 		  (todo "NEXT"
 			((org-agenda-overriding-header "Next Tasks")))
 		  (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+		("h" "Habit Tasks"
+		 ((todo "HABIT"
+			((org-agenda-overriding-header "Habit Tasks")))))
 
 		("n" "Next Tasks"
 		 ((todo "NEXT"
