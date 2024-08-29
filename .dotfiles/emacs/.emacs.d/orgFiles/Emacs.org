@@ -9,6 +9,13 @@
 - [[https://github.com/ema2159/centaur-tabs][Centaur tabs]] for modern tabs management
 - [[https://github.com/for-GET/know-your-http-well][know-your-http-well]] HTTP headers, media-types, methods, relations and status codes, all summarized and linking to their specification. 
 - Set lexical binding for *scratch* buffer with (setq lexical-binding t)
+* Enabling/Disabling features
+#+begin_src emacs-lisp :tangle nil
+ ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
+(setq ox/enable-ivy nil )
+(setq ox/enable-vertico t)
+(setq ox/enable-cape t "Enable Cape package.")
+#+end_src
 * Startup Performance
 #+begin_src emacs-lisp
 ;;; -*- lexical-binding: t; -*-
