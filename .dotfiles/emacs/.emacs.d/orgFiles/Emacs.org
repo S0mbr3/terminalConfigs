@@ -1,6 +1,6 @@
 #+title Ox Emacs Configuration
 #+STARTUP: overview
-#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :auto-tangle t
+#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :auto-tangle t :lexical t
 
 * Things to test
 - Should consider trying out the [[https://github.com/emacsmirror/gcmh][GCMH]] package instead of manually tweaking the garbage collector treshold 
@@ -8,8 +8,10 @@
 - [[https://github.com/linktohack/evil-commentary][evil-commentary]] to have easy and fast commenting motions in evil mode
 - [[https://github.com/ema2159/centaur-tabs][Centaur tabs]] for modern tabs management
 - [[https://github.com/for-GET/know-your-http-well][know-your-http-well]] HTTP headers, media-types, methods, relations and status codes, all summarized and linking to their specification. 
+- Set lexical binding for *scratch* buffer with (setq lexical-binding t)
 * Startup Performance
 #+begin_src emacs-lisp
+;;; -*- lexical-binding: t; -*-
 (setq gc-cons-threshold (* 50 1000 000))
 (defun ox/display-startup-time()
 (message "Emacs loaded in %s with %d garbage collections."
