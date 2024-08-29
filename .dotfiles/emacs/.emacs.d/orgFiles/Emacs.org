@@ -1,6 +1,6 @@
 #+title Ox Emacs Configuration
 #+STARTUP: overview
-#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :auto-tangle t :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :lexical t :auto-tangle t 
 
 * Things to test
 - Should consider trying out the [[https://github.com/emacsmirror/gcmh][GCMH]] package instead of manually tweaking the garbage collector treshold 
@@ -1110,31 +1110,39 @@ Then it switch to the vterm buffer by it's number.
 
 the loop bind keys to this function.
 The current-i variable is a workaround to prevent elisp dynamical scope in the lambda to only catch the i reference and having the correct number to bind by taking the good i value at each iteration of the loop.
-#+begin_src emacs-lisp
-(let ((i 1))
-(while (< i 10)  ;; Loop from 0 to 9
-  (let* ((current-i i)
-	 (key (format "C-c t %d" i))
-	 (command-name (intern (format "my-persp-vterm-%d" i))))
-     (defalias command-name (lambda()
-		       (interactive)
-		       (my-switch-to-persp-vterm-by-number current-i)))
-     (keymap-global-set key command-name))
-  (setq i (+ i 1))))
 
+As none have every buffers we just switch to the vterm buffer by it's number.
+#+begin_src emacs-lisp
 (defun my-switch-to-persp-vterm-by-number (number)
   "Target a vterm buffer in persp by NUMBER."
   (interactive "nPress the number key for the persp-vterm: ")
   (let* ((index 0)
 	 (number (1- number))
 	 (all-buffers-in-persp (reverse (persp-buffer-list-restricted)))
-    	 (persp-vterm-buffers (cl-remove-if-not (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) all-buffers-in-persp)))
+	 (persp-vterm-buffers (cl-remove-if-not (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) all-buffers-in-persp)))
+    (if persp-vterm-buffers
+	(if (get-current-persp)
+	    (progn
+	      (while (< index number)
+		(setq index (+ 1 index)))
+	      (if (setq vterm-persp-p (elt persp-vterm-buffers index))
+		  (switch-to-buffer vterm-persp-p)))
+	  (switch-to-buffer (format "*vterminal<%d>*" (1+ number))))
+      (message "No vterm buffer in the perspective")
+      )
+    ))
 
-    (while (< index number)
-	   (setq index (+ 1 index)))
-    (if (setq vterm-persp-p (elt persp-vterm-buffers index))
-	(switch-to-buffer vterm-persp-p))
-  ))
+(let ((i 1))
+(while (< i 10)  ;; Loop from 0 to 9
+  (let* ((current-i i)
+	 (key (format "C-c t %d" i))
+	 (command-name (intern (format "my-persp-vterm-%d" i))))
+     (defalias command-name
+       (lambda()
+		       (interactive)
+		       (my-switch-to-persp-vterm-by-number current-i)))
+     (keymap-global-set key command-name))
+  (setq i (+ i 1))))
 #+end_src
 * Evil Mode
 
