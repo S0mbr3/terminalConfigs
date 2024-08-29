@@ -38,8 +38,11 @@
 ;;(setq my-linux-font "FiraCode Retina")
 ;;(setq my-linux-font "Ubuntu Mono")
 ;;(setq my-wsl-font "Fira Code Retina")
-(setq my-linux-font "0xProto Nerd Font")
-(setq my-windows-font "0xProto Nerd Font")
+;; (setq my-linux-font "0xProto Nerd Font")
+;; (setq my-windows-font "0xProto Nerd Font")
+
+(setq my-linux-font "CaskadiyaCove Nerd Font")
+(setq my-windows-font "CaskadiyaCove Nerd Font")
 
 (setq my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
 			 "~/.emacs.d/orgFiles/todo.org"
