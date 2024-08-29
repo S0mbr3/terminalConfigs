@@ -1,6 +1,6 @@
 #+title Ox Emacs Configuration
 #+STARTUP: overview
-#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :lexical t :auto-tangle t 
+#+PROPERTY: header-args:emacs-lisp :tangle ../init.el :lexical t :auto-tangle t
 
 * Things to test
 - Should consider trying out the [[https://github.com/emacsmirror/gcmh][GCMH]] package instead of manually tweaking the garbage collector treshold 
@@ -9,13 +9,6 @@
 - [[https://github.com/ema2159/centaur-tabs][Centaur tabs]] for modern tabs management
 - [[https://github.com/for-GET/know-your-http-well][know-your-http-well]] HTTP headers, media-types, methods, relations and status codes, all summarized and linking to their specification. 
 - Set lexical binding for *scratch* buffer with (setq lexical-binding t)
-* Enabling/Disabling features
-#+begin_src emacs-lisp :tangle nil
- ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
-(setq ox/enable-ivy nil )
-(setq ox/enable-vertico t)
-(setq ox/enable-cape t "Enable Cape package.")
-#+end_src
 * Startup Performance
 #+begin_src emacs-lisp
 ;;; -*- lexical-binding: t; -*-
@@ -41,14 +34,17 @@
 ;; (setq my-linux-font "0xProto Nerd Font")
 ;; (setq my-windows-font "0xProto Nerd Font")
 
-(setq my-linux-font "CaskadiyaCove Nerd Font")
-(setq my-windows-font "CaskadiyaCove Nerd Font")
+(setq my-linux-font "CaskaydiaCove Nerd Font")
+(setq my-windows-font "CaskaydiaCove Nerd Font")
 
 (setq my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
 			 "~/.emacs.d/orgFiles/todo.org"
 			 "~/.emacs.d/orgFiles/Habits.org"
 			 "~/.emacs.d/orgFiles/birthdays.org"))
 
+(setq ox/enable-ivy nil )
+(setq ox/enable-vertico t)
+(setq ox/enable-cape t )
 #+end_src
 
 * Configure straight and use-package
