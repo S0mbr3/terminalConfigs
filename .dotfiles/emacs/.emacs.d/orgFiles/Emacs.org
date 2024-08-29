@@ -31,30 +31,22 @@
 #+end_src
 * Variables
 #+begin_src emacs-lisp
-(defconst my-project-path "~/dev")
-(defconst my-font-size 200)
-(defconst my-opacity 90)
-(defconst my-leader-key "SPC")
-;;(defconst my-linux-font "FiraCode Retina")
-;;(defconst my-linux-font "Ubuntu Mono")
-;;(defconst my-wsl-font "Fira Code Retina")
-(defconst my-linux-font "0xProto Nerd Font")
-(defconst my-windows-font "0xProto Nerd Font")
+(setq my-project-path "~/dev")
+(setq my-font-size 200)
+(setq my-opacity 90)
+(setq my-leader-key "SPC")
+;;(setq my-linux-font "FiraCode Retina")
+;;(setq my-linux-font "Ubuntu Mono")
+;;(setq my-wsl-font "Fira Code Retina")
+(setq my-linux-font "0xProto Nerd Font")
+(setq my-windows-font "0xProto Nerd Font")
 
-(defconst my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
+(setq my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
 			 "~/.emacs.d/orgFiles/todo.org"
 			 "~/.emacs.d/orgFiles/Habits.org"
 			 "~/.emacs.d/orgFiles/birthdays.org"))
 
- ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
-(defvar ox/enable-ivy nil )
-(defvar ox/enable-vertico t)
-(defvar ox/enable-cape t "Enable Cape package.")
-
 #+end_src
-
-#+RESULTS:
-: ox/enable-cape
 
 * Configure straight and use-package
 
