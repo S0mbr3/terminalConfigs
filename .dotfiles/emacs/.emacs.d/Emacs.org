@@ -563,7 +563,7 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 
 
 ** Ivy/counsel/swiper/company
-#+begin_src emacs-lisp :tangle (if  ox/enable-ivy "../init.el" "no")
+#+begin_src emacs-lisp :tangle (if  ox/enable-ivy "./init.el" "no")
 (use-package ivy
   :straight t
   :diminish
@@ -679,7 +679,7 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 
 ** Vertico/consult/orderless/marginalia/embark/corfu
 
-#+begin_src emacs-lisp :tangle (if  ox/enable-vertico "../init.el" "no")
+#+begin_src emacs-lisp :tangle (if  ox/enable-vertico "./init.el" "no")
 (defun ox/minibuffer-backward-kill (arg)
   "When minibuffer is completing a file name delete up to parent
 folder, otherwise delete a word"
