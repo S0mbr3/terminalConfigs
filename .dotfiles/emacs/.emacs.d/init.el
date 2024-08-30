@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (setq gc-cons-threshold (* 50 1000 000))
 (defun ox/display-startup-time()
 (message "Emacs loaded in %s with %d garbage collections."
@@ -8,25 +9,27 @@
 
 (add-hook 'emacs-startup-hook #'ox/display-startup-time)
 
-(defconst my-project-path "~/dev")
-(defconst my-font-size 200)
-(defconst my-opacity 90)
-(defconst my-leader-key "SPC")
-;;(defconst my-linux-font "FiraCode Retina")
-;;(defconst my-linux-font "Ubuntu Mono")
-;;(defconst my-wsl-font "Fira Code Retina")
-(defconst my-linux-font "0xProto Nerd Font")
-(defconst my-windows-font "0xProto Nerd Font")
+(setq my-project-path "~/dev")
+(setq my-font-size 200)
+(setq my-opacity 90)
+(setq my-leader-key "SPC")
+;;(setq my-linux-font "FiraCode Retina")
+;;(setq my-linux-font "Ubuntu Mono")
+;;(setq my-wsl-font "Fira Code Retina")
+;; (setq my-linux-font "0xProto Nerd Font")
+;; (setq my-windows-font "0xProto Nerd Font")
 
-(defconst my-org-files '("~/.emacs.d/orgFiles/Tasks.org"
-			 "~/.emacs.d/orgFiles/todo.org"
-			 "~/.emacs.d/orgFiles/Habits.org"
-			 "~/.emacs.d/orgFiles/birthdays.org"))
+(setq my-linux-font "CaskaydiaCove Nerd Font")
+(setq my-windows-font "CaskaydiaCove Nerd Font")
 
- ;; Variables to tangle certain src blocks from the Emacs.org creating the init.el
-(defvar ox/enable-ivy nil )
-(defvar ox/enable-vertico t)
-(defvar ox/enable-cape t "Enable Cape package.")
+(setq my-org-files '("~/org-files/Tasks.org"
+			 "~/org-files/todo.org"
+			 "~/org-files/Habits.org"
+			 "~/org-files/birthdays.org"))
+
+(setq ox/enable-ivy nil )
+(setq ox/enable-vertico t)
+(setq ox/enable-cape t )
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -498,259 +501,6 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.3))
 
-(defun ox/minibuffer-backward-kill (arg)
-  "When minibuffer is completing a file name delete up to parent
-folder, otherwise delete a word"
-  (interactive "p")
-  (if minibuffer-completing-file-name
-      ;; Borrowed from https://github.com/raxod502/selectrum/issues/498#issuecomment-803283608
-      (if (string-match-p "/." (minibuffer-contents))
-	  (zap-up-to-char (- arg) ?/)
-	(delete-minibuffer-contents))
-    (backward-kill-word arg)))
-
-(defun my-vertico-alt-done ()
-  "Mimic the behavior of `ivy-alt-done' in Vertico."
-  (interactive)
-  (if-let ((file (vertico--candidate)))
-      (if (file-directory-p file)
-	  (vertico-insert)
-	(vertico-exit))
-    (vertico-exit-input)))
-
-
-(use-package vertico
-  :straight '(vertico :host github
-		      :repo "minad/vertico"
-		      :branch "main")
-  :bind (:map vertico-map
-	      ("C-j" . vertico-next)
-	      ("C-k" . vertico-previous)
-	      ;;("C-f" . vertico-exit)
-	      ;;("C-f" . vertico-exit-input)
-	      ("C-f" . my-vertico-alt-done)
-	      ("TAB" . my-vertico-alt-done)
-	      ("?" . minibuffer-completion-help)
-	      ("RET" . minibuffer-force-complete-and-exit)
-	      ;;("M-TAB" . minibuffer-complete)
-	      ("M-TAB" . vertico-exit-input)
-	      :map minibuffer-local-map
-	      ("M-h" . ox/minibuffer-backward-kill))
-  :custom
-  (vertico-cycle t)
-  :custom-face
-  (vertico-current ((t (:background "#3a3f5a"))))
-  :init
-  (savehist-mode)
-  (vertico-mode))
-
-(use-package yasnippet
-  :straight t
-  :hook (prog-mode . yas-minor-mode)
-  :config
-  (yas-reload-all))
-
-(use-package yasnippet-snippets
-  :straight t
-  :after yasnippet)
-
-;; (defvar +corfu-global-capes
-;;   '(cape-yasnippet
-;;     :completion
-;;     cape-dict)
-;;   "A list of global capes to be available at all times.
-;; The key :completion is used to specify where completion candidates should be
-;; placed, otherwise they come first.")
-
-;; (defvar +corfu-capf-hosts
-;;   '(lsp-completion-at-point
-;;     eglot-completion-at-point
-;;     elisp-completion-at-point
-;;     tags-completion-at-point-function)
-;;   "A prioritised list of host capfs to create a super cape onto from
-;;   `+corfu-global-capes'.")
-
-;; (defun +corfu--load-capes ()
-;;   "Load all capes specified in `+corfu-global-capes'."
-;;   (interactive)
-;;   (when-let ((host (cl-intersection +corfu-capf-hosts completion-at-point-functions)))
-;;     (setq-local
-;;      completion-at-point-functions
-;;      (cl-substitute
-;;       (apply #'cape-capf-super (cl-substitute (car host) :completion (cl-pushnew :completion +corfu-global-capes)))
-;;       (car host)
-;;       completion-at-point-functions))))
-;; (add-hook 'lsp-mode-hook #'+corfu--load-capes)
-;; (add-hook 'change-major-mode-hook #'+corfu--load-capes)
-
-(use-package corfu
-  ;; :straight '(corfu :host github
-  ;; 		    :repo "minad/corfu")
-  :straight (corfu :files (:defaults "extensions/*")
-		   :includes (corfu-info corfu-history))
-
-  :bind (:map corfu-map
-	      ("C-j" . corfu-next)
-	      ("C-k" . corfu-previous)
-	      ("C-f" . corfu-insert)
-	      ("C-e" . corfu-quit)
-	      ("M-p" . corfu-popupinfo-scroll-up)
-	      ("M-n" . corfu-popupinfo-scroll-down))
-  :custom
-  (corfu-auto t)
-  (corfu-cycle t)
-  ;;(corfu-auto-delay 0)
-  (corfu-auto-prefix 1)
-  :config
-  (general-define-key
-   :states 'insert
-   "C-e" 'corfu-quit)
-
-  :init
-  (global-corfu-mode)
-  (corfu-popupinfo-mode))
-
-
-(use-package cape
-  :straight t
-  :after corfu
-  :hook (lsp-after-initialize . ox/cape-test-hook) ;; Needed for cape capf to work 
-  ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
-  ;; :init
-  ;; ;; NOTE: The order matters!
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; (add-to-list 'completion-at-point-functions #'cape-yasnippet)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-line)
-  ;; ;;(load-file "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/cape-yasnippet.el")
-
-  ;; ;; Silence the pcomplete capf, no errors or messages !
-  ;; ;; Important for corfu
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-  ;; ;; Ensure that pcomplete does not write to the buffer
-  ;; ;; and behaves as a pure 'completion-at-point-function'
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
-  ;; (add-hook 'eshell-mode-hook
-  ;; 	    (lambda () (setq-local corfu-quit-at-boundary t
-  ;; 				   corfu-quit-no-match t
-  ;; 				   corfu-auto nil)
-  ;; 	      (corfu-mode)))
-  :init
-  ;; (use-package company
-  ;; :straight t)
-  (defun ox/cape-capf-setup-lsp ()
-    "Replace the default `lsp-completion-at-point' with its
-`cape-capf-buster' version. Also add `cape-file' and
-`company-yasnippet' backends."
-    (setf (elt (cl-member 'lsp-completion-at-point completion-at-point-functions) 0)
-	  (cape-capf-buster #'lsp-completion-at-point))
-    ;; TODO 2022-02-28: Maybe use `cape-wrap-predicate' to have candidates
-    ;; listed when I want?
-    ;;(add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
-    (add-to-list 'completion-at-point-functions #'yasnippet-capf)
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
-  )
-(defun ox/cape-test-hook ()
-  (lsp-completion-mode -1)
-  ;; (lambda () (lsp-completion-mode nil)
-    (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions
-		 (cape-capf-super  #'lsp-completion-at-point #'yasnippet-capf #'cape-file #'cape-dabbrev)))
-
-  (use-package yasnippet-capf
-    :straight '(yasnippet-capf :host github
-			       :repo "elken/yasnippet-capf")
-    :after cape yasnippet)
-
-
-
-  (use-package orderless
-    :straight t
-    :init
-    (setq completion-styles '(orderless)
-	  completion-category-defaults nil
-	  completion-category-overrides '((file (styles . (partial-completion))))))
-
-  (defun ox/get-project-root ()
-    (when (fboundp 'projectile-project-root)
-      (projectile-project-root)))
-
-  (use-package consult
-    :straight t
-    :after which-key
-    :demand t
-    :bind (("C-s" . consult-line)
-	   ("C-M-l" . consult-imenu)
-	   ("C-M-j" . persp-switch-to-buffer*)
-	   ([remap describe-key]      . helpful-key)
-	   ([remap describe-command]  . helpful-command)
-	   ([remap describe-variable] . helpful-variable)
-	   ([remap describe-function] . helpful-callable)
-	   :map minibuffer-local-map
-	   ("C-r" . consult-history))
-    :custom
-    (consult-project-root-function #'ox/get-project-root)
-    (completion-in-region-function #'consult-completion-in-region)
-    :config
-    ;; Customizing the find command to exclude git and node_modules folders
-    (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-    (ox/leader-keys
-      "t" '(:ignore t :which-key "toggles")
-      "tt" '(consult-theme :which-key "Load themes"))
-    (consult-preview-at-point-mode))
-
-  (use-package consult-lsp
-    :straight t
-    :after (lsp-mode consult))
-
-  (use-package all-the-icons-completion
-    :straight t
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :config
-    ;;(all-the-icons-completion-mode)
-    )
-
-  (use-package marginalia
-    :after vertico
-    :straight t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
-
-
-
-  (use-package embark
-    :straight t
-    :bind (("C-S-a" . embark-act)
-	   :map minibuffer-local-map
-	   ("C-d" . embark-act))
-    :config
-
-    ;; Show Embark actions via which-key
-    (setq embark-action-indicator
-	  (lambda (map)
-	    (which-key--show-keymap "Embark" map nil nil 'no-paging)
-	    #'which-key--hide-popup-ignore-command)
-	  embark-become-indicator embark-action-indicator))
-
-  (use-package embark-consult
-    :straight '(embark-consult :host github
-			       :repo "oantolin/embark"
-			       :files ("embark-consult.el"))
-    :after (embark consult)
-    :demand t
-    :hook
-    (embark-collect-mode . embark-consult-preview-minor-mode))
-
 (use-package wgrep
   :straight t) ;; edit grep searches
 
@@ -896,6 +646,37 @@ folder, otherwise delete a word"
   (with-eval-after-load 'esh-opt
     (setq eshell-destroy-buffer-when-process-dies t)
     (setq eshell-visual-commands '("htop" "zsh" "vim"))))
+
+(defun my-switch-to-persp-vterm-by-number (number)
+  "Target a vterm buffer in persp by NUMBER."
+  (interactive "nPress the number key for the persp-vterm: ")
+  (let* ((index 0)
+	 (number (1- number))
+	 (all-buffers-in-persp (reverse (persp-buffer-list-restricted)))
+	 (persp-vterm-buffers (cl-remove-if-not (lambda (buf) (string-match-p "^\\*vterminal<[0-9]+>\\*$" (buffer-name buf))) all-buffers-in-persp)))
+    (if persp-vterm-buffers
+	(if (get-current-persp)
+	    (progn
+	      (while (< index number)
+		(setq index (+ 1 index)))
+	      (if (setq vterm-persp-p (elt persp-vterm-buffers index))
+		  (switch-to-buffer vterm-persp-p)))
+	  (switch-to-buffer (format "*vterminal<%d>*" (1+ number))))
+      (message "No vterm buffer in the perspective")
+      )
+    ))
+
+(let ((i 1))
+(while (< i 10)  ;; Loop from 0 to 9
+  (let* ((current-i i)
+	 (key (format "C-c t %d" i))
+	 (command-name (intern (format "my-persp-vterm-%d" i))))
+     (defalias command-name
+       (lambda()
+		       (interactive)
+		       (my-switch-to-persp-vterm-by-number current-i)))
+     (keymap-global-set key command-name))
+  (setq i (+ i 1))))
 
 ;; Dependencies for evil mode undo features
 ;; (use-package undo-tree
@@ -1256,6 +1037,7 @@ because compile mode is too slow"
   "lgr" 'lsp-find-references
   "lgg" 'lsp-find-definition
   "lge" 'lsp-treemacs-errors-list
+  "lgq" 'lsp-treemacs-quickfix-list
   "lf" '(:ignore t :which-key "format")
   "l==" 'lsp-format-buffer
   "l=r" 'lsp-format-region
@@ -1387,6 +1169,7 @@ because compile mode is too slow"
 	(add-to-list 'org-modules 'org-habit)
 	(setq org-todo-keywords
 	      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+		(sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
 		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
 	(setq org-refile-targets
@@ -1403,6 +1186,8 @@ because compile mode is too slow"
 		("@errand" . ?E)
 		("@home" . ?H)
 		("@work" . ?W)
+		("@learn" . ?L)
+		("@wsl-configs" . ?w)
 		("agenda" . ?a)
 		("planning" . ?p)
 		("publish" . ?P)
@@ -1417,6 +1202,10 @@ because compile mode is too slow"
 		  (todo "NEXT"
 			((org-agenda-overriding-header "Next Tasks")))
 		  (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+		("h" "Habit Tasks"
+		 ((todo "HABIT"
+			((org-agenda-overriding-header "Habit Tasks")))))
 
 		("n" "Next Tasks"
 		 ((todo "NEXT"
@@ -1460,37 +1249,38 @@ because compile mode is too slow"
 
 	(setq org-capture-templates
 	      `(("t" "Tasks / Projects")
-		("tt" "Task" entry (file+olp "~/.emacs.d/orgFiles/Tasks.org" "Inbox")
+		("tt" "Task" entry (file+olp "~/org-files/Tasks.org" "Inbox")
 		 "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 		("j" "Journal Entries")
 		("jj" "Journal" entry
-		 (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
+		 (file+olp+datetree "~/org-files/Journal.org")
 		 "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
 		 ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 		("jm" "Meeting" entry
-		 (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
+		 (file+olp+datetree "~/org-files/Journal.org")
 		 "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 
 		("w" "Workflows")
-		("we" "Checking Email" entry (file+olp+datetree "~/.emacs.d/orgFiles/Journal.org")
+		("we" "Checking Email" entry (file+olp+datetree "~/org-files/Journal.org")
 		 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 		("m" "Metrics Capture")
-		("mw" "Weight" table-line (file+headline "~/.emacs.d/orgFiles/Metrics.org" "Weight")
+		("mw" "Weight" table-line (file+headline "~/org-files/Metrics.org" "Weight")
 		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
 	(define-key global-map (kbd "C-c j")
 		    (lambda () (interactive) (org-capture nil "jj")))
 	(ox/leader-keys
-	  "o" '(:ignore t :which-key "Org")
-	  "oa" '(org-agenda :which-key "Open org-agenda")
-	  "ot" '(org-todo-list :which-key "Open all TODO lists")
-	  "oc" '(org-capture :which-key "Open org-capture")))
+	  "o" '(:ignore t :which-key "org")
+	  "oa" '(org-agenda :which-key "open org-agenda")
+	  "ot" '(org-todo-list :which-key "open all todo lists")
+	  "oc" '(org-capture :which-key "open org-capture")
+	  "oh" '((lambda () (interactive) (find-file "~/org-files/Habits.org")) :which-key "Open Habits.org")))
 
 
   (use-package org-superstar
