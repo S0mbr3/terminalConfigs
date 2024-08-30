@@ -1673,7 +1673,7 @@ because compile mode is too slow"
 	(setq org-todo-keywords
 	      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
 		(sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
-		(sequence "BUYING(b)" "|" "bought(b!)")
+		(sequence "BUYING(B)" "|" "bought(b!)")
 		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
 	(setq org-refile-targets
