@@ -37,10 +37,10 @@
 (setq my-linux-font "CaskaydiaCove Nerd Font")
 (setq my-windows-font "CaskaydiaCove Nerd Font")
 
-(setq my-org-files '("~/org-files/Tasks.org"
-			 "~/org-files/todo.org"
-			 "~/org-files/Habits.org"
-			 "~/org-files/birthdays.org"))
+(setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
+			 "~/syncthing/Sync/org-files/todo.org"
+			 "~/syncthing/Sync/org-files/Habits.org"
+			 "~/syncthing/Sync/org-files/birthdays.org"))
 
 (setq ox/enable-ivy nil )
 (setq ox/enable-vertico t)
@@ -1751,28 +1751,28 @@ because compile mode is too slow"
 
 	(setq org-capture-templates
 	      `(("t" "Tasks / Projects")
-		("tt" "Task" entry (file+olp "~/org-files/Tasks.org" "Inbox")
+		("tt" "Task" entry (file+olp "~/syncthing/Sync/org-files/Tasks.org" "Inbox")
 		 "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 		("j" "Journal Entries")
 		("jj" "Journal" entry
-		 (file+olp+datetree "~/org-files/Journal.org")
+		 (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
 		 "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
 		 ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 		("jm" "Meeting" entry
-		 (file+olp+datetree "~/org-files/Journal.org")
+		 (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
 		 "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
 		 :clock-in :clock-resume
 		 :empty-lines 1)
 
 		("w" "Workflows")
-		("we" "Checking Email" entry (file+olp+datetree "~/org-files/Journal.org")
+		("we" "Checking Email" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
 		 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 		("m" "Metrics Capture")
-		("mw" "Weight" table-line (file+headline "~/org-files/Metrics.org" "Weight")
+		("mw" "Weight" table-line (file+headline "~/syncthing/Sync/org-files/Metrics.org" "Weight")
 		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
 	(define-key global-map (kbd "C-c j")
@@ -1782,7 +1782,7 @@ because compile mode is too slow"
 	  "oa" '(org-agenda :which-key "open org-agenda")
 	  "ot" '(org-todo-list :which-key "open all todo lists")
 	  "oc" '(org-capture :which-key "open org-capture")
-	  "oh" '((lambda () (interactive) (find-file "~/org-files/Habits.org")) :which-key "Open Habits.org")))
+	  "oh" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Habits.org")) :which-key "Open Habits.org")))
 
 
   (use-package org-superstar
