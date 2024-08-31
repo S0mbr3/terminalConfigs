@@ -1792,7 +1792,8 @@ because compile mode is too slow"
 	  "oa" '(org-agenda :which-key "open org-agenda")
 	  "ot" '(org-todo-list :which-key "open all todo lists")
 	  "oc" '(org-capture :which-key "open org-capture")
-	  "oh" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Habits.org")) :which-key "Open Habits.org")))
+	  "oh" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Habits.org")) :which-key "Open Habits.org")
+	  "ow" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Metrics.org")) :which-key "Open Metrics.org")))
 
 
   (use-package org-superstar
