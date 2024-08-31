@@ -48,7 +48,7 @@
 (straight-use-package 'use-package)
 
 ;;(setq use-package-always-defer t)
-(setq use-package-always-ensure nil)
+;;(setq use-package-always-ensure nil)
 (setq package-enable-at-startup nil)
 (setq package-native-compile t)
 ;;(setq use-package-compute-statistics t)
@@ -1389,11 +1389,15 @@ because compile mode is too slow"
 
 
 (use-package org
+  ;;:straight t
   :ensure nil
   ;;:pin org
   :commands (org-capture org-agenda)
   :hook ((org-mode . ox/org-mode-setup)
-	 (org-mode . ox/org-mode-init))
+	 (org-mode . ox/org-mode-init)
+	 (org-mode . (lambda()
+		       (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
+	 (org-mode . (lambda () (org-superstar-mode 1))))
   :config
   (message "hi from org-mode")
   ;;(setq org-ellipsis " ⮧"
@@ -1578,18 +1582,6 @@ because compile mode is too slow"
 	  "ow" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Metrics.org")) :which-key "Open Metrics.org")))
 
 
-  (use-package org-superstar
-    :straight t
-    :after org
-    :config
-    ;;(setq org-superstar-hide-leading-stars t)
-    (setq org-superstar-leading-bullet " ")
-    ;; Hide away leading stars on terminal.
-    (setq org-superstar-leading-fallback ?\s))
-  (add-hook 'org-mode-hook
-	    (lambda ()
-	      (org-superstar-mode 1)))
-
   ;; Center the text, and set a max column width to go next line in org mode
   (defun ox/org-mode-visual-fill ()
     (setq visual-fill-column-width 100
@@ -1599,6 +1591,21 @@ because compile mode is too slow"
   (use-package visual-fill-column
     :straight t
     :hook (org-mode . ox/org-mode-visual-fill))
+
+  (use-package org-superstar
+    :straight t
+    :after org
+    :config
+    ;;(setq org-superstar-hide-leading-stars t)
+    (setq org-superstar-leading-bullet " ")
+    ;; Hide away leading stars on terminal.
+    (setq org-superstar-leading-fallback ?\s))
+
+(use-package org-modern
+  :straight nil
+  :disabled t
+:config
+(with-eval-after-load 'org (global-org-modern-mode)))
 
 (use-package ob-typescript
   :straight t)

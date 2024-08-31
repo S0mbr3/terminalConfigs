@@ -67,7 +67,7 @@
 (straight-use-package 'use-package)
 
 ;;(setq use-package-always-defer t)
-(setq use-package-always-ensure nil)
+;;(setq use-package-always-ensure nil)
 (setq package-enable-at-startup nil)
 (setq package-native-compile t)
 ;;(setq use-package-compute-statistics t)
