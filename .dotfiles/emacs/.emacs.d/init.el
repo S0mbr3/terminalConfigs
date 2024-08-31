@@ -1428,7 +1428,7 @@ because compile mode is too slow"
 		(sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
 		(sequence "BUYING(b1)" "|" "bought(B!)")
 		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
-		(sequence "A-PLAN(p1)" "A-READY(r1)" "A-ACTIVE(a1)" "A-REVIEW(v1)" "A-WAIT(w1@/!)" "A-HOLD(h1)" "|" "A-COMPLETED(c)" "A-CANC(k@)")))
+		(sequence "A-PLAN()" "A-READY()" "A-ACTIVE()" "A-REVIEW()" "A-WAIT(@/!)" "A-HOLD()" "|" "A-COMPLETED(c)" "A-CANC(k@)")))
 
 	(setq org-refile-targets
 	      '(("Archive.org" :maxlevel . 1)
@@ -1668,7 +1668,7 @@ because compile mode is too slow"
   (message "Initializing Org mode...")
   (ox/check-and-add-tangle-hook))
 
-(use-package org-drill
+(use-package org-fc
   :straight t
   :after org)
 
