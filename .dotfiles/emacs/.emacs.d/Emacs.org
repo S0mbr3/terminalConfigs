@@ -41,6 +41,7 @@
 			 "~/syncthing/Sync/org-files/todo.org"
 			 "~/syncthing/Sync/org-files/Habits.org"
 			 "~/syncthing/Sync/org-files/Shopping.org"
+			 "~/syncthing/Sync/org-files/Journal.org"
 			 "~/syncthing/Sync/org-files/birthdays.org"))
 
 (setq ox/enable-ivy nil )
@@ -1673,8 +1674,9 @@ because compile mode is too slow"
 	(setq org-todo-keywords
 	      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
 		(sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
-		(sequence "BUYING(B)" "|" "bought(b!)")
-		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+		(sequence "BUYING(b1)" "|" "bought(B!)")
+		(sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
+		(sequence "A-PLAN(p1)" "A-READY(r1)" "A-ACTIVE(a1)" "A-REVIEW(v1)" "A-WAIT(w1@/!)" "A-HOLD(h1)" "|" "A-COMPLETED(c)" "A-CANC(k@)")))
 
 	(setq org-refile-targets
 	      '(("Archive.org" :maxlevel . 1)
@@ -1753,6 +1755,30 @@ because compile mode is too slow"
 			 (org-agenda-files org-agenda-files)))
 		  (todo "CANC"
 			((org-agenda-overriding-header "Cancelled Projects")
+			 (org-agenda-files org-agenda-files)))))
+
+		("v" "Activities Status"
+		 ((todo "A-WAIT"
+			((org-agenda-overriding-header "Waiting on External")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-REVIEW"
+			((org-agenda-overriding-header "In Review")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-PLAN"
+			((org-agenda-overriding-header "In Planning")
+			 (org-agenda-todo-list-sublevels nil)
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-READY"
+			((org-agenda-overriding-header "Ready to Go")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-ACTIVE"
+			((org-agenda-overriding-header "Active Activities")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-COMPLETED"
+			((org-agenda-overriding-header "Completed Activities")
+			 (org-agenda-files org-agenda-files)))
+		  (todo "A-CANC"
+			((org-agenda-overriding-header "Cancelled Activities")
 			 (org-agenda-files org-agenda-files)))))))
 
 	(setq org-capture-templates
@@ -1780,6 +1806,10 @@ because compile mode is too slow"
 		("w" "Workflows")
 		("we" "Checking Email" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
 		 "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+		("v" "Activities")
+		("va" "Activities idea" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+		 "* A-PLAN %? :activities:" :clock-in :clock-resume :empty-lines 1)
 
 		("m" "Metrics Capture")
 		("mw" "Weight" table-line (file+headline "~/syncthing/Sync/org-files/Metrics.org" "Weight")
