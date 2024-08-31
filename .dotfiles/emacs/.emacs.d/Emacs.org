@@ -1864,6 +1864,7 @@ because compile mode is too slow"
      (makefile . t)
      (shell . t)
      (typescript . t)
+     (gnuplot .t )
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
@@ -2188,6 +2189,17 @@ Allow to create flashcards for the Zettelkasten learning methods (space repetiti
   "Open dired in ledeb server"
   (interactive)
     (dired "/ssh:ledeb:"))
+#+end_src
+* Gnuplot mode
+#+begin_src emacs-lisp
+(use-package gnuplot
+  :straight t)
+(use-package gnuplot-mode
+  :straight t
+  :config
+  ;; automatically open files ending with .gp or .gnuplot in gnuplot mode
+(setq auto-mode-alist 
+      (append '(("\\.\\(gp\\|gnuplot\\)$" . gnuplot-mode)) auto-mode-alist)))
 #+end_src
 * Compilation Mode
 #+begin_src emacs-lisp

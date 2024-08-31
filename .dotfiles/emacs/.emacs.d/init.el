@@ -1611,6 +1611,7 @@ because compile mode is too slow"
      (makefile . t)
      (shell . t)
      (typescript . t)
+     (gnuplot .t )
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
@@ -1908,6 +1909,15 @@ because compile mode is too slow"
   "Open dired in ledeb server"
   (interactive)
     (dired "/ssh:ledeb:"))
+
+(use-package gnuplot
+  :straight t)
+(use-package gnuplot-mode
+  :straight t
+  :config
+  ;; automatically open files ending with .gp or .gnuplot in gnuplot mode
+(setq auto-mode-alist 
+      (append '(("\\.\\(gp\\|gnuplot\\)$" . gnuplot-mode)) auto-mode-alist)))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
