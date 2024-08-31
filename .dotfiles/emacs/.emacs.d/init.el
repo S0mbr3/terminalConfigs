@@ -1389,20 +1389,28 @@ because compile mode is too slow"
 
 
 (use-package org
-  ;;:straight t
-  :ensure nil
+  :straight t
+  ;;:ensure nil
   ;;:pin org
   :commands (org-capture org-agenda)
   :hook ((org-mode . ox/org-mode-setup)
 	 (org-mode . ox/org-mode-init)
 	 (org-mode . (lambda()
 		       (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
-	 (org-mode . (lambda () (org-superstar-mode 1))))
+	 (org-mode . (lambda () (org-superstar-mode 0))))
   :config
   (message "hi from org-mode")
   ;;(setq org-ellipsis " ⮧"
   (setq org-ellipsis " ↲"
-	org-hide-emphasis-markers t)
+	org-hide-emphasis-markers t
+	org-pretty-entities t
+	org-agenda-time-grid
+	'((daily today require-timed)
+   (800 1000 1200 1400 1600 1800 2000)
+   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+ org-agenda-current-time-string
+ "◀── now ─────────────────────────────────────────────────")
+
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
@@ -1602,8 +1610,8 @@ because compile mode is too slow"
     (setq org-superstar-leading-fallback ?\s))
 
 (use-package org-modern
-  :straight nil
-  :disabled t
+  :straight t
+  ;;:disabled t
 :config
 (with-eval-after-load 'org (global-org-modern-mode)))
 
