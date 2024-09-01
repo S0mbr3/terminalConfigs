@@ -1688,6 +1688,9 @@ because compile mode is too slow"
   :straight t
   :after org
   :config
+   (setq org-fc-directories '("~/syncthing/Sync/org-files"))
+   (with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
 
 (use-package org-roam

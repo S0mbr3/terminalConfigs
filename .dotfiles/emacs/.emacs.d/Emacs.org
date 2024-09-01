@@ -1956,6 +1956,9 @@ Allow to create flashcards for the Zettelkasten learning methods (space repetiti
   :straight t
   :after org
   :config
+   (setq org-fc-directories '("~/syncthing/Sync/org-files"))
+   (with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
 #+end_src
 * Org Roam
