@@ -1954,7 +1954,9 @@ Allow to create flashcards for the Zettelkasten learning methods (space repetiti
 #+begin_src emacs-lisp
 (use-package org-fc
   :straight t
-  :after org)
+  :after org
+  :config
+  (require 'org-fc-hydra))
 #+end_src
 * Org Roam
 #+begin_src emacs-lisp

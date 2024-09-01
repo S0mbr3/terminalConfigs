@@ -1686,7 +1686,9 @@ because compile mode is too slow"
 
 (use-package org-fc
   :straight t
-  :after org)
+  :after org
+  :config
+  (require 'org-fc-hydra))
 
 (use-package org-roam
   :straight t
