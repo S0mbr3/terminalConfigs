@@ -1687,11 +1687,21 @@ because compile mode is too slow"
 (use-package org-fc
   :straight t
   :after org
+  ;; :hook ((org-fc-review-flip-mode org-fc-review-rate-mode) . my-check-org-fc-and-set-evil-state )
   :config
-   (setq org-fc-directories '("~/syncthing/Sync/org-files"))
-   (with-eval-after-load 'org
-  (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
+  (setq org-fc-directories '("~/syncthing/Sync/org-files"))
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
+
+(defun my-check-org-fc-and-set-evil-state ()
+  "Switch to evil-emacs-state if flycheck-mode is active."
+  (if (or org-fc-review-flip-mode org-fc-review-rate-mode)
+      (evil-emacs-state)
+    (evil-normal-state)))
+
+(add-hook 'org-fc-review-flip-mode-hook 'my-check-org-fc-and-set-evil-state)
+(add-hook 'org-fc-review-rate-mode-hook 'my-check-org-fc-and-set-evil-state)
 
 (use-package org-roam
   :straight t
