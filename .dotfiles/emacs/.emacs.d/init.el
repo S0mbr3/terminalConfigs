@@ -1404,6 +1404,7 @@ because compile mode is too slow"
   (setq org-ellipsis " ↲"
 	org-hide-emphasis-markers t
 	org-pretty-entities t
+	org-startup-with-inline-images t
 	org-agenda-time-grid
 	'((daily today require-timed)
    (800 1000 1200 1400 1600 1800 2000)
