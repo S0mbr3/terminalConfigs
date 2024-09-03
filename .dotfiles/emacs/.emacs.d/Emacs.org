@@ -1951,7 +1951,7 @@ because compile mode is too slow"
 #+end_src
 
 ** Org-fc
-Allow to create flashcards for the space repetition learning method.
+Allow to create flashcards for the space repetition learning method (Leitner system).
 #+begin_src emacs-lisp
 (use-package org-fc
   :straight t
