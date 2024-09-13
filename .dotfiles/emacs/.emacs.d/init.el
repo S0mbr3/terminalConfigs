@@ -484,7 +484,7 @@
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
-    "fg" '(consult-ripgrep :which-key "Consult RipGrep")
+    "fg" '(consult-grep :which-key "consult-grep")
     "fr" '(consult-recent-file :which-key "Consult recent files")
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
@@ -709,6 +709,8 @@ folder, otherwise delete a word"
     ;; Customizing the find command to exclude git and node_modules folders
     (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
     (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+    ;; Add preview to consult-find
+    (consult-customize consult-find :state (consult--file-preview))
     (ox/leader-keys
       "t" '(:ignore t :which-key "toggles")
       "tt" '(consult-theme :which-key "Load themes"))
@@ -721,10 +723,27 @@ folder, otherwise delete a word"
 ;; A z like for consult
 (use-package consult-dir
   :straight t
-  :bind (("C-x C-d" . consult-dir)
-         :map minibuffer-local-completion-map
-         ("C-x C-d" . consult-dir)
-         ("C-x C-j" . consult-dir-jump-file)))
+  :bind (("C-x C-d" . consult-dir)))
+;; Force minibuffer to recognize the new bindings
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (define-key (current-local-map) (kbd "C-x C-j") 'consult-dir-jump-file)
+            (define-key (current-local-map) (kbd "C-x C-d") 'consult-dir)))
+
+;; An fzf like for consult (prefer to use consult-find/grep for the moment wait and see)
+(use-package affe
+  :straight t
+  :config
+  ;; Manual preview key for `affe-grep'
+  (consult-customize affe-grep :preview-key "M-.")
+  ;; add preview to and affe-find
+  (consult-customize affe-find :state (consult--file-preview)))
+
+;; The default regular expression transformation of Consult is limited. It is recommended to configure Orderless as affe-regexp-compiler in Consult.
+(defun affe-orderless-regexp-compiler (input _type _ignorecase)
+  (setq input (cdr (orderless-compile input)))
+  (cons input (apply-partially #'orderless--highlight input t)))
+(setq affe-regexp-compiler #'affe-orderless-regexp-compiler)
 
   (use-package all-the-icons-completion
     :straight t
