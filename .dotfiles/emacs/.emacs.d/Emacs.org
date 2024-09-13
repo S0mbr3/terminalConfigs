@@ -412,17 +412,23 @@ Using persp-mode to create different workspaces
 Search for known or opened projects and open it in it's own perspective for convenience
 Since at the start of emacs the project--list variable is unset we have to populate it ourselve
 with project-known-project-roots function
+
+It can also add projects on the fly with the Add project option
 #+begin_src emacs-lisp
 (defun my-switch-to-project ()
-  "Switch or open a project in it's own perspective."
+  "Switch or open a project in its own perspective, with an option to add a new project."
   (interactive)
   (project-known-project-roots)
-  (let ((project (consult--read
-		  project--list
-		  :prompt "choose a project: "
-		  :sort t)))
-    (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
-    (project-switch-project project)))
+  (let* ((projects (append (mapcar #'identity (project-known-project-roots)) '("Add Project...")))
+         (project (consult--read
+                   projects
+                   :prompt "Choose a project (or Add Project): "
+                   :sort t)))
+    (if (string-equal project "Add Project...")
+        (setq project (read-directory-name "Select project directory: "))
+          (message "Project added: %s" project))
+      (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
+      (project-switch-project project)))
 #+end_src
 
 * Font Configuration
