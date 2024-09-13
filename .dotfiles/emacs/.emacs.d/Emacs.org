@@ -2258,6 +2258,7 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 #+end_src
 * SSH
 #+begin_src emacs-lisp
+(require 'tramp)
 (use-package ssh-config-mode
   :straight t
   :mode (("~/.ssh/config\\'" . ssh-config-mode)
