@@ -562,6 +562,9 @@ with project-known-project-roots function
     "ft" '(treemacs-select-window :which-key "Open treemacs")
     "fc" '(consult-dir :which-key "consult-dir")
 
+    "p" '(:ignore t :which-key "projects")
+    "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
+
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
     "cd" '(ox/compile :which-key "ox/compile")
