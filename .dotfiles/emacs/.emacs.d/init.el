@@ -482,7 +482,7 @@
     "ff" '(find-file :which-key "find-file")
     "fc" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Habits.org")
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
-     "fp" '(project-find-file :which-key "project-find-file")
+     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(consult-recent-file :which-key "Consult recent files")
