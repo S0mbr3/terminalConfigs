@@ -535,14 +535,15 @@ Using persp-mode to create different workspaces
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-    "fc" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Habits.org")
+    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Habits.org")
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
-     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
+    "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-ripgrep :which-key "Consult RipGrep")
     "fr" '(consult-recent-file :which-key "Consult recent files")
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
+    "fc" '(consult-dir :which-key "consult-dir")
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
@@ -895,6 +896,14 @@ folder, otherwise delete a word"
   (use-package consult-lsp
     :straight t
     :after (lsp-mode consult))
+
+;; A z like for consult
+(use-package consult-dir
+  :straight t
+  :bind (("C-x C-d" . consult-dir)
+         :map minibuffer-local-completion-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)))
 
   (use-package all-the-icons-completion
     :straight t
