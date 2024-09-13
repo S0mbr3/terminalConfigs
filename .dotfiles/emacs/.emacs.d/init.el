@@ -1400,7 +1400,6 @@ because compile mode is too slow"
 	 (org-mode . (lambda () (org-superstar-mode 0))))
   :config
   (message "hi from org-mode")
-  ;;(setq org-ellipsis " ⮧"
   (setq org-ellipsis " ↲"
 	org-hide-emphasis-markers t
 	org-pretty-entities t
@@ -1703,6 +1702,15 @@ because compile mode is too slow"
 
 (add-hook 'org-fc-review-flip-mode-hook 'my-check-org-fc-and-set-evil-state)
 (add-hook 'org-fc-review-rate-mode-hook 'my-check-org-fc-and-set-evil-state)
+
+(use-package org-transclusion
+  :straight t
+  :after org
+  :config
+  (setq org-transclusion-add-all-on-activate t
+  org-transclusion-exclude-elements '(property-drawer keyword))
+  )
+(add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 
 (use-package org-roam
   :straight t
