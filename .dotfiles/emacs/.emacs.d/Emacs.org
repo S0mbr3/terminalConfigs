@@ -428,9 +428,6 @@ with project-known-project-roots function
 		  :sort t)))
     (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
     (project-switch-project project)))
-  (ox/leader-keys
-    "p" '(:ignore t :which-key "projects")
-    "pp" '(my-switch-to-project :which-key "Open/switch project in persp"))
 
 #+end_src
 
