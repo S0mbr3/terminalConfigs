@@ -359,15 +359,25 @@
   (with-eval-after-load 'persp-mode
   (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init)))
 
-  ;;(run-with-timer 5 nil 'my-update-dynamic-persps)
-  ;; (use-package perspective
-  ;;   :straight t
-  ;;   :bind
-  ;;   ("C-x C-b" . persp-list-buffers)         ; or use a nicer switcher, see below
-  ;;   :custom
-  ;;   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
-  ;;   :init
-  ;;   (persp-mode))
+(defun my-get-project-list ()
+  "Return the project list, populating it if necessary."
+  (unless project--list
+    (setq project--list (project-known-project-roots)))
+  project--list)
+
+(defun my-switch-to-project ()
+  "Switch or open a project in it's own perspective."
+  (interactive)
+  (let* ((projects (my-get-project-list))
+	(project (consult--read
+		  projects
+		  :prompt "choose a project: "
+		  :sort t)))
+    (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
+    (project-switch-project project)))
+  (ox/leader-keys
+    "p" '(:ignore t :which-key "projects")
+    "pp" '(my-switch-to-project :which-key "Open/switch project in persp"))
 
 ;; Set font
 (if (eq system-type 'gnu/linux)
