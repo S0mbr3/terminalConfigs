@@ -11,6 +11,9 @@ function_name (){
     # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
     export LIBGL_ALWAYS_INDIRECT=0
     # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
+    #Only for wsl to have a notify-send like
+    notify-send() { wsl-notify-send.exe --category $WSL_DISTRO_NAME "${@}"; }
   else
     echo "The system is running something strange O.O"
 
