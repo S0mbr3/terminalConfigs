@@ -359,25 +359,20 @@
   (with-eval-after-load 'persp-mode
   (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init)))
 
-(defun my-get-project-list ()
-  "Return the project list, populating it if necessary."
-  (unless project--list
-    (setq project--list (project-known-project-roots)))
-  project--list)
-
 (defun my-switch-to-project ()
-  "Switch or open a project in it's own perspective."
+  "Switch or open a project in its own perspective, with an option to add a new project."
   (interactive)
-  (let* ((projects (my-get-project-list))
-	(project (consult--read
-		  projects
-		  :prompt "choose a project: "
-		  :sort t)))
-    (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
-    (project-switch-project project)))
-  (ox/leader-keys
-    "p" '(:ignore t :which-key "projects")
-    "pp" '(my-switch-to-project :which-key "Open/switch project in persp"))
+  (project-known-project-roots)
+  (let* ((projects (append (mapcar #'identity (project-known-project-roots)) '("Add Project...")))
+         (project (consult--read
+                   projects
+                   :prompt "Choose a project (or Add Project): "
+                   :sort t)))
+    (if (string-equal project "Add Project...")
+        (setq project (read-directory-name "Select project directory: "))
+          (message "Project added: %s" project))
+      (my-switch-to-persp (file-name-nondirectory (directory-file-name project)))
+      (project-switch-project project)))
 
 ;; Set font
 (if (eq system-type 'gnu/linux)
@@ -499,6 +494,9 @@
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
     "fc" '(consult-dir :which-key "consult-dir")
+
+    "p" '(:ignore t :which-key "projects")
+    "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
@@ -1962,6 +1960,7 @@ because compile mode is too slow"
       (setq dired-open-extensions '(("png" . "feh")
 				    ("mkv" . "mpv"))))
 
+(require 'tramp)
 (use-package ssh-config-mode
   :straight t
   :mode (("~/.ssh/config\\'" . ssh-config-mode)
