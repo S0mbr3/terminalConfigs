@@ -1683,6 +1683,9 @@ because compile mode is too slow"
   (visual-line-mode 1))
 
 
+(defun ox/after-org-capture (&rest r)
+  (delete-other-windows))
+
 (use-package org
   :straight t
   ;;:ensure nil
@@ -1694,6 +1697,11 @@ because compile mode is too slow"
 		       (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
 	 (org-mode . (lambda () (org-superstar-mode 0))))
   :config
+  ;; This advice allow to open capture template in full window size instead of split
+  (advice-add #'org-capture-place-template :after 'ox/after-org-capture)
+  ;; same buf for editing src code blocks in org file
+  (advice-add #'org-edit-special :after 'ox/after-org-capture)
+
   (message "hi from org-mode")
   (setq org-ellipsis " ↲"
 	org-hide-emphasis-markers t
