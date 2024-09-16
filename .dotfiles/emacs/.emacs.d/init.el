@@ -1755,6 +1755,7 @@ because compile mode is too slow"
          ("C-c n i" . org-roam-node-insert))
   :config
    ;;(org-roam-db-autosync-mode)
+  (setq org-roam-directory (file-truename "~/syncthing/Sync/org-roam"))
    (org-roam-db-autosync-enable)
 )
 
