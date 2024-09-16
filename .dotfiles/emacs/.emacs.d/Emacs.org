@@ -2051,6 +2051,11 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 	 ("C-M-I" . completion-at-point))
   :config
    ;;(org-roam-db-autosync-mode)
+  ;; Allow to show the org-roam filetags in the minibuffer alongside the title
+  (setq org-roam-node-display-template 
+      (concat "${title:*} " 
+              (propertize "${tags:10}" 'face 'org-tag)))
+
   (setq org-roam-directory (file-truename "~/syncthing/Sync/org-roam"))
   (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
