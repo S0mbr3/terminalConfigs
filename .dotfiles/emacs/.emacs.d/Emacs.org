@@ -891,7 +891,7 @@ folder, otherwise delete a word"
     :demand t
     :bind (("C-s" . consult-line)
 	   ("C-M-l" . consult-imenu)
-	   ("C-M-j" . persp-switch-to-buffer*)
+	   ("C-M-j" . persp-switch-to-buffer)
 	   ([remap describe-key]      . helpful-key)
 	   ([remap describe-command]  . helpful-command)
 	   ([remap describe-variable] . helpful-variable)
