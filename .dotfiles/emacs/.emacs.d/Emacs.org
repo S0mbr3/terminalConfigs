@@ -1404,6 +1404,7 @@ because compile mode is too slow"
   :branc "main")
 )
 (use-package emmet-mode
+  :disabled
   :straight t
   :hook ((typescript-mode . emmet-mode))
   ;;(typescript-mode . emmet-preview-mode)))
@@ -1413,6 +1414,20 @@ because compile mode is too slow"
 ;; (add-to-list 'emmet-jsx-major-modes tsx-ts-mode)
 ;; (add-to-list 'emmet-jsx-major-modes js2-jsx-mode))
 
+(use-package deno-bridge
+  :disabled
+  :straight (:type git :host github :repo "manateelazycat/deno-bridge")
+  :init
+  (use-package websocket :disabled :straight t))
+
+(use-package emmet2-mode
+  :disabled
+  :straight (:type git :host github :repo "p233/emmet2-mode" :files (:defaults "*.ts" "src" "data"))
+  :after deno-bridge
+  :hook ((web-mode css-mode typescript-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
+  :config                                                       ;; OPTIONAL
+  (unbind-key "C-j" emmet2-mode-map)                            ;; Unbind the default expand key
+  (define-key emmet2-mode-map (kbd "C-c C-.") 'emmet2-expand))  ;; Bind custom expand key
 
 ;; Hide corfu suggestions and disable it when emmet-mode preview is working
 (defun my-emmet-input-watcher (symbol newval operation where)

@@ -550,7 +550,9 @@ folder, otherwise delete a word"
 	      ;;("M-TAB" . minibuffer-complete)
 	      ("M-TAB" . vertico-exit-input)
 	      :map minibuffer-local-map
-	      ("M-h" . ox/minibuffer-backward-kill))
+	      ;;("M-h" . ox/minibuffer-backward-kill)
+	      ("M-h" . vertico-directory-up)
+	      )
   :custom
   (vertico-cycle t)
   :custom-face
@@ -703,7 +705,7 @@ folder, otherwise delete a word"
     :demand t
     :bind (("C-s" . consult-line)
 	   ("C-M-l" . consult-imenu)
-	   ("C-M-j" . persp-switch-to-buffer*)
+	   ("C-M-j" . persp-switch-to-buffer)
 	   ([remap describe-key]      . helpful-key)
 	   ([remap describe-command]  . helpful-command)
 	   ([remap describe-variable] . helpful-variable)
@@ -1168,6 +1170,7 @@ because compile mode is too slow"
   :branc "main")
 )
 (use-package emmet-mode
+  :disabled
   :straight t
   :hook ((typescript-mode . emmet-mode))
   ;;(typescript-mode . emmet-preview-mode)))
@@ -1177,6 +1180,20 @@ because compile mode is too slow"
 ;; (add-to-list 'emmet-jsx-major-modes tsx-ts-mode)
 ;; (add-to-list 'emmet-jsx-major-modes js2-jsx-mode))
 
+(use-package deno-bridge
+  :disabled
+  :straight (:type git :host github :repo "manateelazycat/deno-bridge")
+  :init
+  (use-package websocket :disabled :straight t))
+
+(use-package emmet2-mode
+  :disabled
+  :straight (:type git :host github :repo "p233/emmet2-mode" :files (:defaults "*.ts" "src" "data"))
+  :after deno-bridge
+  :hook ((web-mode css-mode typescript-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
+  :config                                                       ;; OPTIONAL
+  (unbind-key "C-j" emmet2-mode-map)                            ;; Unbind the default expand key
+  (define-key emmet2-mode-map (kbd "C-c C-.") 'emmet2-expand))  ;; Bind custom expand key
 
 ;; Hide corfu suggestions and disable it when emmet-mode preview is working
 (defun my-emmet-input-watcher (symbol newval operation where)
@@ -1424,6 +1441,9 @@ because compile mode is too slow"
   (visual-line-mode 1))
 
 
+(defun ox/after-org-capture (&rest r)
+  (delete-other-windows))
+
 (use-package org
   :straight t
   ;;:ensure nil
@@ -1435,6 +1455,11 @@ because compile mode is too slow"
 		       (set-face-attribute 'org-table nil :inherit 'fixed-pitch)))
 	 (org-mode . (lambda () (org-superstar-mode 0))))
   :config
+  ;; This advice allow to open capture template in full window size instead of split
+  (advice-add #'org-capture-place-template :after 'ox/after-org-capture)
+  ;; same buf for editing src code blocks in org file
+  (advice-add #'org-edit-special :after 'ox/after-org-capture)
+
   (message "hi from org-mode")
   (setq org-ellipsis " ↲"
 	org-hide-emphasis-markers t
@@ -1752,10 +1777,18 @@ because compile mode is too slow"
   :straight t
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
+         ("C-c n i" . org-roam-node-insert)
+	 :map org-mode-map
+	 ("C-M-I" . completion-at-point))
   :config
    ;;(org-roam-db-autosync-mode)
+  ;; Allow to show the org-roam filetags in the minibuffer alongside the title
+  (setq org-roam-node-display-template 
+      (concat "${title:*} " 
+              (propertize "${tags:10}" 'face 'org-tag)))
+
   (setq org-roam-directory (file-truename "~/syncthing/Sync/org-roam"))
+  (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
 )
 
