@@ -616,6 +616,7 @@ folder, otherwise delete a word"
   :custom
   (corfu-auto t)
   (corfu-cycle t)
+  (corfu-auto-delay 0.0)
   ;;(corfu-auto-delay 0)
   (corfu-auto-prefix 1)
   :config
@@ -631,7 +632,9 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  :hook (lsp-after-initialize . ox/cape-test-hook) ;; Needed for cape capf to work 
+  ;;:hook (lsp-after-initialize . ox/cape-test-hook) ;; Needed for cape capf to work 
+
+  
   ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
   ;; :init
   ;; ;; NOTE: The order matters!
@@ -680,6 +683,20 @@ folder, otherwise delete a word"
     (message "lsp-completion-mode running")
     (add-to-list 'completion-at-point-functions
 		 (cape-capf-super  #'lsp-completion-at-point #'yasnippet-capf #'cape-file #'cape-dabbrev)))
+
+
+ ;; Define sources
+  (defun my/completion-at-point ()
+    (cape-capf-super
+     #'yasnippet-capf
+     #'lsp-completion-at-point ;; LSP completion
+     #'cape-dabbrev             ;; Dynamic abbreviations
+     #'cape-file                ;; File paths
+     #'cape-abbrev              ;; Abbreviations
+     ))         ;; Yasnippet
+
+(add-hook 'completion-at-point-functions #'my/completion-at-point)
+
 
   (use-package yasnippet-capf
     :straight '(yasnippet-capf :host github
