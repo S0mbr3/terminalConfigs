@@ -759,35 +759,6 @@ folder, otherwise delete a word"
   :straight t
   :after yasnippet)
 
-;; (defvar +corfu-global-capes
-;;   '(cape-yasnippet
-;;     :completion
-;;     cape-dict)
-;;   "A list of global capes to be available at all times.
-;; The key :completion is used to specify where completion candidates should be
-;; placed, otherwise they come first.")
-
-;; (defvar +corfu-capf-hosts
-;;   '(lsp-completion-at-point
-;;     eglot-completion-at-point
-;;     elisp-completion-at-point
-;;     tags-completion-at-point-function)
-;;   "A prioritised list of host capfs to create a super cape onto from
-;;   `+corfu-global-capes'.")
-
-;; (defun +corfu--load-capes ()
-;;   "Load all capes specified in `+corfu-global-capes'."
-;;   (interactive)
-;;   (when-let ((host (cl-intersection +corfu-capf-hosts completion-at-point-functions)))
-;;     (setq-local
-;;      completion-at-point-functions
-;;      (cl-substitute
-;;       (apply #'cape-capf-super (cl-substitute (car host) :completion (cl-pushnew :completion +corfu-global-capes)))
-;;       (car host)
-;;       completion-at-point-functions))))
-;; (add-hook 'lsp-mode-hook #'+corfu--load-capes)
-;; (add-hook 'change-major-mode-hook #'+corfu--load-capes)
-
 (use-package corfu
   ;; :straight '(corfu :host github
   ;; 		    :repo "minad/corfu")
@@ -822,59 +793,7 @@ folder, otherwise delete a word"
   :after corfu
   :hook ((lsp-after-initialize . +cape-capf-hook)
 	 (prog-mode . +cape-capf-hook));; Needed for cape capf to work 
-
-  
-  ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
-  ;; :init
-  ;; ;; NOTE: The order matters!
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; (add-to-list 'completion-at-point-functions #'cape-yasnippet)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-line)
-  ;; ;;(load-file "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/cape-yasnippet.el")
-
-  ;; ;; Silence the pcomplete capf, no errors or messages !
-  ;; ;; Important for corfu
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-  ;; ;; Ensure that pcomplete does not write to the buffer
-  ;; ;; and behaves as a pure 'completion-at-point-function'
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
-  ;; (add-hook 'eshell-mode-hook
-  ;; 	    (lambda () (setq-local corfu-quit-at-boundary t
-  ;; 				   corfu-quit-no-match t
-  ;; 				   corfu-auto nil)
-  ;; 	      (corfu-mode)))
   :init
-  ;; (use-package company
-  ;; :straight t)
-  (defun ox/cape-capf-setup-lsp ()
-    "Replace the default `lsp-completion-at-point' with its
-`cape-capf-buster' version. Also add `cape-file' and
-`company-yasnippet' backends."
-    (setf (elt (cl-member 'lsp-completion-at-point completion-at-point-functions) 0)
-	  (cape-capf-buster #'lsp-completion-at-point))
-    ;; TODO 2022-02-28: Maybe use `cape-wrap-predicate' to have candidates
-    ;; listed when I want?
-    ;;(add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
-    (add-to-list 'completion-at-point-functions #'yasnippet-capf)
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
-  )
-(defun ox/cape-test-hook ()
-  (lsp-completion-mode -1)
-  ;; (lambda () (lsp-completion-mode nil)
-    (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    )
-
 (defun +cape-capf-hook()
 (if (or (derived-mode-p 'lisp-interaction-mode)
         (derived-mode-p 'emacs-lisp-mode))
@@ -887,7 +806,7 @@ folder, otherwise delete a word"
     (message "lsp-completion-mode running")
     (add-to-list 'completion-at-point-functions
                  (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-        (add-to-list 'completion-at-point-functions #'cape-file))))
+        (add-to-list 'completion-at-point-functions #'cape-file)))))
 
   (use-package yasnippet-capf
     :straight '(yasnippet-capf :host github
