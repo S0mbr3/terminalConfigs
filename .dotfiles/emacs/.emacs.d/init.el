@@ -632,7 +632,8 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  ;;:hook (lsp-after-initialize . ox/cape-test-hook) ;; Needed for cape capf to work 
+  :hook ((lsp-after-initialize . +cape-capf-hook)
+	 (prog-mode . +cape-capf-hook));; Needed for cape capf to work 
 
   
   ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
@@ -682,21 +683,23 @@ folder, otherwise delete a word"
   ;; (lambda () (lsp-completion-mode nil)
     (message "lsp-completion-mode running")
     (add-to-list 'completion-at-point-functions
-		 (cape-capf-super  #'lsp-completion-at-point #'yasnippet-capf #'cape-file #'cape-dabbrev)))
+                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    )
 
-
- ;; Define sources
-  (defun my/completion-at-point ()
-    (cape-capf-super
-     #'yasnippet-capf
-     #'lsp-completion-at-point ;; LSP completion
-     #'cape-dabbrev             ;; Dynamic abbreviations
-     #'cape-file                ;; File paths
-     #'cape-abbrev              ;; Abbreviations
-     ))         ;; Yasnippet
-
-(add-hook 'completion-at-point-functions #'my/completion-at-point)
-
+(defun +cape-capf-hook()
+(if (or (derived-mode-p 'lisp-interaction-mode)
+        (derived-mode-p 'emacs-lisp-mode))
+    (progn
+        (add-to-list 'completion-at-point-functions
+                 (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
+	    (add-to-list 'completion-at-point-functions #'cape-file))
+  (progn
+  (lsp-completion-mode -1)
+    (message "lsp-completion-mode running")
+    (add-to-list 'completion-at-point-functions
+                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+        (add-to-list 'completion-at-point-functions #'cape-file))))
 
   (use-package yasnippet-capf
     :straight '(yasnippet-capf :host github
