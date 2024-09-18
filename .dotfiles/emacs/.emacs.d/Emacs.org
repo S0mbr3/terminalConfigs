@@ -992,6 +992,13 @@ Apheleia is an Emacs package which solves both of these problems comprehensively
         '("prettier" "--stdin-filepath" filepath))
   (apheleia-global-mode +1))
 #+end_src
+* Linters
+#+begin_src emacs-lisp
+(use-package lsp-eslint
+  :straight t
+  :demand t
+  :after lsp-mode)
+#+end_src
 * Searching
 #+begin_src emacs-lisp
 (use-package rg
