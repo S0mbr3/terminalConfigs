@@ -552,7 +552,7 @@ It can also add projects on the fly with the Add project option
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Habits.org")
+    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Emacs.org")
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
@@ -789,6 +789,7 @@ folder, otherwise delete a word"
   (global-corfu-mode)
   (corfu-popupinfo-mode))
 
+
 (use-package cape
   :straight t
   :after corfu
@@ -798,7 +799,7 @@ folder, otherwise delete a word"
 (defun +cape-capf-hook()
 (if (or (derived-mode-p 'lisp-interaction-mode)
         (derived-mode-p 'emacs-lisp-mode)
-	(derived-mode-p 'org-mode)))
+	(derived-mode-p 'org-mode))
     (progn
         (add-to-list 'completion-at-point-functions
                  (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))

@@ -1,4 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
+
+(setenv "LSP_USE_PLISTS" "true")
 (setq gc-cons-threshold (* 50 1000 000))
 (defun ox/display-startup-time()
 (message "Emacs loaded in %s with %d garbage collections."
@@ -485,7 +487,7 @@
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Habits.org")
+    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Emacs.org")
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
@@ -571,35 +573,6 @@ folder, otherwise delete a word"
   :straight t
   :after yasnippet)
 
-;; (defvar +corfu-global-capes
-;;   '(cape-yasnippet
-;;     :completion
-;;     cape-dict)
-;;   "A list of global capes to be available at all times.
-;; The key :completion is used to specify where completion candidates should be
-;; placed, otherwise they come first.")
-
-;; (defvar +corfu-capf-hosts
-;;   '(lsp-completion-at-point
-;;     eglot-completion-at-point
-;;     elisp-completion-at-point
-;;     tags-completion-at-point-function)
-;;   "A prioritised list of host capfs to create a super cape onto from
-;;   `+corfu-global-capes'.")
-
-;; (defun +corfu--load-capes ()
-;;   "Load all capes specified in `+corfu-global-capes'."
-;;   (interactive)
-;;   (when-let ((host (cl-intersection +corfu-capf-hosts completion-at-point-functions)))
-;;     (setq-local
-;;      completion-at-point-functions
-;;      (cl-substitute
-;;       (apply #'cape-capf-super (cl-substitute (car host) :completion (cl-pushnew :completion +corfu-global-capes)))
-;;       (car host)
-;;       completion-at-point-functions))))
-;; (add-hook 'lsp-mode-hook #'+corfu--load-capes)
-;; (add-hook 'change-major-mode-hook #'+corfu--load-capes)
-
 (use-package corfu
   ;; :straight '(corfu :host github
   ;; 		    :repo "minad/corfu")
@@ -633,63 +606,12 @@ folder, otherwise delete a word"
   :straight t
   :after corfu
   :hook ((lsp-after-initialize . +cape-capf-hook)
-	 (prog-mode . +cape-capf-hook));; Needed for cape capf to work 
-
-  
-  ;;:hook (lsp-after-open . ox/cape-test-hook) ;; Needed for cape capf to work 
-  ;; :init
-  ;; ;; NOTE: The order matters!
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; (add-to-list 'completion-at-point-functions #'cape-yasnippet)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-  ;; ;;(add-to-list 'completion-at-point-functions #'cape-line)
-  ;; ;;(load-file "~/Documents/builds/terminalConfigs/.dotfiles/emacs/.emacs.d/orgFiles/cape-yasnippet.el")
-
-  ;; ;; Silence the pcomplete capf, no errors or messages !
-  ;; ;; Important for corfu
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-  ;; ;; Ensure that pcomplete does not write to the buffer
-  ;; ;; and behaves as a pure 'completion-at-point-function'
-  ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
-  ;; (add-hook 'eshell-mode-hook
-  ;; 	    (lambda () (setq-local corfu-quit-at-boundary t
-  ;; 				   corfu-quit-no-match t
-  ;; 				   corfu-auto nil)
-  ;; 	      (corfu-mode)))
+	 (prog-mode . +cape-capf-hook))
   :init
-  ;; (use-package company
-  ;; :straight t)
-  (defun ox/cape-capf-setup-lsp ()
-    "Replace the default `lsp-completion-at-point' with its
-`cape-capf-buster' version. Also add `cape-file' and
-`company-yasnippet' backends."
-    (setf (elt (cl-member 'lsp-completion-at-point completion-at-point-functions) 0)
-	  (cape-capf-buster #'lsp-completion-at-point))
-    ;; TODO 2022-02-28: Maybe use `cape-wrap-predicate' to have candidates
-    ;; listed when I want?
-    ;;(add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-yasnippet))
-    (add-to-list 'completion-at-point-functions #'yasnippet-capf)
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
-  )
-(defun ox/cape-test-hook ()
-  (lsp-completion-mode -1)
-  ;; (lambda () (lsp-completion-mode nil)
-    (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    )
-
 (defun +cape-capf-hook()
 (if (or (derived-mode-p 'lisp-interaction-mode)
-        (derived-mode-p 'emacs-lisp-mode))
+        (derived-mode-p 'emacs-lisp-mode)
+	(derived-mode-p 'org-mode))
     (progn
         (add-to-list 'completion-at-point-functions
                  (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
@@ -699,7 +621,7 @@ folder, otherwise delete a word"
     (message "lsp-completion-mode running")
     (add-to-list 'completion-at-point-functions
                  (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-        (add-to-list 'completion-at-point-functions #'cape-file))))
+        (add-to-list 'completion-at-point-functions #'cape-file)))))
 
   (use-package yasnippet-capf
     :straight '(yasnippet-capf :host github
@@ -1293,6 +1215,38 @@ because compile mode is too slow"
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
   :straight t
+      :preface
+      (defun lsp-booster--advice-json-parse (old-fn &rest args)
+        "Try to parse bytecode instead of json."
+        (or
+         (when (equal (following-char) ?#)
+
+           (let ((bytecode (read (current-buffer))))
+             (when (byte-code-function-p bytecode)
+               (funcall bytecode))))
+         (apply old-fn args)))
+      (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+        "Prepend emacs-lsp-booster command to lsp CMD."
+        (let ((orig-result (funcall old-fn cmd test?)))
+          (if (and (not test?)                             ;; for check lsp-server-present?
+                   (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+                   lsp-use-plists
+                   (not (functionp 'json-rpc-connection))  ;; native json-rpc
+                   (executable-find "emacs-lsp-booster"))
+              (progn
+                (message "Using emacs-lsp-booster for %s!" orig-result)
+                (cons "emacs-lsp-booster" orig-result))
+            orig-result)))
+      :init
+      (setq lsp-use-plists t)
+      ;; Initiate https://github.com/blahgeek/emacs-lsp-booster for performance
+      (advice-add (if (progn (require 'json)
+                             (fboundp 'json-parse-buffer))
+                      'json-parse-buffer
+                    'json-read)
+                  :around
+                  #'lsp-booster--advice-json-parse)
+      (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
    (c-mode . lsp-deferred)
