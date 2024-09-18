@@ -995,7 +995,6 @@ Apheleia is an Emacs package which solves both of these problems comprehensively
 * Linters
 #+begin_src emacs-lisp
 (use-package lsp-eslint
-  :straight t
   :demand t
   :after lsp-mode)
 #+end_src
@@ -1527,7 +1526,7 @@ because compile mode is too slow"
    (js-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c C-l")
-  ;;(define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
+  (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
