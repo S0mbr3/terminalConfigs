@@ -973,6 +973,25 @@ folder, otherwise delete a word"
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 #+end_src
 
+* Formatting
+Apheleia is an Emacs package which solves both of these problems comprehensively for all languages, allowing you to say goodbye to language-specific packages such as Blacken and prettier-js.
+#+begin_src emacs-lisp
+;;; APHELEIA
+;; auto-format different source code files extremely intelligently
+;; https://github.com/radian-software/apheleia
+(use-package apheleia
+  :straight t
+  :diminish ""
+  :defines
+  apheleia-formatters
+  apheleia-mode-alist
+  :functions
+  apheleia-global-mode
+  :config
+  (setf (alist-get 'prettier-json apheleia-formatters)
+        '("prettier" "--stdin-filepath" filepath))
+  (apheleia-global-mode +1))
+#+end_src
 * Searching
 #+begin_src emacs-lisp
 (use-package rg
