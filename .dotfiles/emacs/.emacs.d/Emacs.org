@@ -585,7 +585,6 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
   (setq which-key-idle-delay 0.3))
 #+end_src
 
-
 ** Ivy/counsel/swiper/company
 #+begin_src emacs-lisp :tangle (if  ox/enable-ivy "./init.el" "no")
 (use-package ivy
@@ -790,16 +789,16 @@ folder, otherwise delete a word"
   (global-corfu-mode)
   (corfu-popupinfo-mode))
 
-
 (use-package cape
   :straight t
   :after corfu
   :hook ((lsp-after-initialize . +cape-capf-hook)
-	 (prog-mode . +cape-capf-hook));; Needed for cape capf to work 
+	 (prog-mode . +cape-capf-hook))
   :init
 (defun +cape-capf-hook()
 (if (or (derived-mode-p 'lisp-interaction-mode)
-        (derived-mode-p 'emacs-lisp-mode))
+        (derived-mode-p 'emacs-lisp-mode)
+	(derived-mode-p 'org-mode)))
     (progn
         (add-to-list 'completion-at-point-functions
                  (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
