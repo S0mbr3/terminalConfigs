@@ -1332,7 +1332,7 @@ As none have every buffers we just switch to the vterm buffer by it's number.
   "Make and Run a C program on a vterm buffer based on the makefile recipies
 because compile mode is too slow"
   (interactive)
-  (if (eq major-mode 'c-mode)
+  (if (eq major-mode 'c-ts-mode)
       (progn 
 	(save-buffer)
 	(let ((target (concat "make && time " "./" (file-name-nondirectory (directory-file-name (file-name-directory buffer-file-name))) "\n"))
@@ -1360,12 +1360,25 @@ because compile mode is too slow"
   :straight t
   :mode "\\.lua\\'")
 
-(use-package typescript-mode
-  :straight t
+;; (use-package typescript-mode
+;;   :straight t
+;;   :disabled
+;;   :mode "\\.ts\\'"
+;;   :config
+;;   ;;(setq typescript-indent-level 2)
+;;   )
+
+(use-package typescript-ts-mode
   :mode "\\.ts\\'"
   :config
   ;;(setq typescript-indent-level 2)
   )
+
+(use-package js-ts-mode
+  :mode "\\.js\\'")
+(use-package yaml-ts-mode
+  :mode "\\.yaml\\'")
+
 (use-package prisma-mode
   :straight (:host github
   :repo "pimeys/emacs-prisma-mode"
@@ -1374,7 +1387,7 @@ because compile mode is too slow"
 (use-package emmet-mode
   :disabled
   :straight t
-  :hook ((typescript-mode . emmet-mode))
+  :hook ((typescript-ts-mode . emmet-mode))
   ;;(typescript-mode . emmet-preview-mode)))
   :config
   (ox/leader-keys
@@ -1392,7 +1405,7 @@ because compile mode is too slow"
   :disabled
   :straight (:type git :host github :repo "p233/emmet2-mode" :files (:defaults "*.ts" "src" "data"))
   :after deno-bridge
-  :hook ((web-mode css-mode typescript-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
+  :hook ((web-mode css-mode typescript-ts-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
   :config                                                       ;; OPTIONAL
   (unbind-key "C-j" emmet2-mode-map)                            ;; Unbind the default expand key
   (define-key emmet2-mode-map (kbd "C-c C-.") 'emmet2-expand))  ;; Bind custom expand key
@@ -1415,10 +1428,12 @@ because compile mode is too slow"
 ;;   :config
 ;;   (apheleia-global-mode +1))
 
-(use-package rust-mode
-  :straight t
-  :mode "\\.rs\\'"
-  :init (setq rust-format-on-save t))
+;; (use-package rust-mode
+;;   :straight t
+;;   :mode "\\.rs\\'"
+;;   :init (setq rust-format-on-save t))
+(use-package rust-ts-mode
+  :mode "\\.rs\\'")
 
 (use-package cargo
   :straight t
@@ -1439,8 +1454,8 @@ because compile mode is too slow"
 
 (use-package auto-rename-tag
   :straight t
-  :hook ((typescript-mode . auto-rename-tag-mode)
-         (js-mode . auto-rename-tag-mode)
+  :hook ((typescript-ts-mode . auto-rename-tag-mode)
+         (js-ts-mode . auto-rename-tag-mode)
          (mhtml-mode . auto-rename-tag-mode)
          (web-mode . auto-rename-tag-mode)))
 
@@ -1462,7 +1477,7 @@ because compile mode is too slow"
   :config(require 'smartparens-config)
 ;; add a blank line when opening a {
   (sp-with-modes
-      '(c++-mode objc-mode c-mode typescript-mode lua-mode)
+      '(c++-mode objc-mode c-mode typescript-ts-mode typescript-mode lua-mode)
     (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 #+end_src
 * Syntax Checking
@@ -1520,14 +1535,15 @@ because compile mode is too slow"
       (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
-   (c-mode . lsp-deferred)
-   (python-mode . lsp-deferred)
+   (c-ts-mode . lsp-deferred)
+   (python-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
-   (typescript-mode . lsp-deferred)
-   (css-mode . lsp-deferred)
+   ;;(typescript-mode . lsp-deferred)
+   (typescript-ts-mode . lsp-deferred)
+   (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
-   (rust-mode . lsp-deferred)
-   (js-mode . lsp-deferred))
+   (rust-ts-mode . lsp-deferred)
+   (js-ts-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c C-l")
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
@@ -1558,7 +1574,7 @@ because compile mode is too slow"
   ;; Configure Emmet LSP
    (lsp-register-client
     (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
-                     :major-modes '(typescript-mode html-mode css-mode)
+                     :major-modes '(typescript-ts-mode js-ts-mode html-mode css-ts-mode)
                      :server-id 'emmet-ls))
    (setq lsp-emmet-show-expanded-abbreviation t) ;; Show the expanded abbreviation in completion.
    (setq lsp-emmet-show-abbreviation-as-suggestion t) ;; Show abbreviation as suggestion.
@@ -2082,37 +2098,36 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 * Treesitter
 
 #+begin_src emacs-lisp
-;;(require 'treesit)
-;;(setq treesit-extra-load-path '("/usr/local/lib"))
-;;
-;;  
-;;  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
-;;  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
-;;  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
-;;  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
-;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
-;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
-;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-(use-package tree-sitter-langs
-:straight nil
-:disabled t
-:after tree-sitter
-;;:defer 0
-)
-(use-package tree-sitter
-:straight t
-;;:after tree-sitter-langs
-:config
-;; Loading tree-sitter-modules from casouri/tree-sitter-module
-;; Preventing from manually installing tree-sitter grammars
-(setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"))
-;; Activate tree-sitter globally (minor mode registered on every buffer
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  ;;(require 'treesit)
+  ;;(setq treesit-extra-load-path '("/usr/local/lib"))
+  ;;
+  ;;  
+  ;;  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
+  ;;  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
+  ;;  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
+  ;;  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
+  ;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
+  ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
+  ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+  (use-package tree-sitter-langs
+  :straight nil
+  :disabled t
+  :after tree-sitter
+  ;;:defer 0
+  )
+  (use-package tree-sitter
+  :straight t
+  ;;:after tree-sitter-langs
+  :config
+  ;; Loading tree-sitter-modules from casouri/tree-sitter-module
+  ;; Preventing from manually installing tree-sitter grammars
+  (setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"))
+  ;; Activate tree-sitter globally (minor mode registered on every buffer
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 #+end_src
 
 ** Languages configuration
-*** C
 #+begin_src emacs-lisp
 (unless (package-installed-p 'posframe)
   (package-refresh-contents)
