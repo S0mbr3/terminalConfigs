@@ -731,7 +731,7 @@ folder, otherwise delete a word"
   :bind (:map vertico-map
 	      ("C-j" . vertico-next)
 	      ("C-k" . vertico-previous)
-	      ;("C-f" . vertico-exit)
+					;("C-f" . vertico-exit)
 	      ("C-f" . vertico-exit-input)
 	      ;;("C-f" . my-vertico-alt-done)
 	      ("TAB" . my-vertico-alt-done)
@@ -796,69 +796,70 @@ folder, otherwise delete a word"
   :hook ((lsp-after-initialize . +cape-capf-hook)
 	 (prog-mode . +cape-capf-hook))
   :init
-(defun +cape-capf-hook()
-(if (or (derived-mode-p 'lisp-interaction-mode)
-        (derived-mode-p 'emacs-lisp-mode)
-	(derived-mode-p 'org-mode))
-    (progn
-        (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
-	    (add-to-list 'completion-at-point-functions #'cape-file))
-  (progn
-  (lsp-completion-mode -1)
-    (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-        (add-to-list 'completion-at-point-functions #'cape-file)))))
+  (defun +cape-capf-hook()
+    (if (or (derived-mode-p 'lisp-interaction-mode)
+            (derived-mode-p 'emacs-lisp-mode)
+	    (derived-mode-p 'org-mode))
+	(progn
+          (add-to-list 'completion-at-point-functions
+                       (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
+	  (add-to-list 'completion-at-point-functions #'cape-file))
+      (progn
+	(add-to-list 'completion-at-point-functions
+                     (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+        (add-to-list 'completion-at-point-functions #'cape-file))))
+  ;; Disable lsp-completion-mode from being automatically enabled
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-configure-hook 'lsp-completion--disable)))
 
-  (use-package yasnippet-capf
-    :straight '(yasnippet-capf :host github
-			       :repo "elken/yasnippet-capf")
-    :after cape yasnippet)
+(use-package yasnippet-capf
+  :straight '(yasnippet-capf :host github
+			     :repo "elken/yasnippet-capf")
+  :after cape yasnippet)
 
 
 
-  (use-package orderless
-    :straight t
-    :init
-    (setq completion-styles '(orderless)
-	  completion-category-defaults nil
-	  completion-category-overrides '((file (styles . (partial-completion))))))
+(use-package orderless
+  :straight t
+  :init
+  (setq completion-styles '(orderless)
+	completion-category-defaults nil
+	completion-category-overrides '((file (styles . (partial-completion))))))
 
-  (defun ox/get-project-root ()
-    (when (fboundp 'projectile-project-root)
-      (projectile-project-root)))
+(defun ox/get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
 
-  (use-package consult
-    :straight t
-    :after which-key
-    :demand t
-    :bind (("C-s" . consult-line)
-	   ("C-M-l" . consult-imenu)
-	   ("C-M-j" . persp-switch-to-buffer)
-	   ([remap describe-key]      . helpful-key)
-	   ([remap describe-command]  . helpful-command)
-	   ([remap describe-variable] . helpful-variable)
-	   ([remap describe-function] . helpful-callable)
-	   :map minibuffer-local-map
-	   ("C-r" . consult-history))
-    :custom
-    (consult-project-root-function #'ox/get-project-root)
-    (completion-in-region-function #'consult-completion-in-region)
-    :config
-    ;; Customizing the find command to exclude git and node_modules folders
-    (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-    ;; Add preview to consult-find
-    (consult-customize consult-find :state (consult--file-preview))
-    (ox/leader-keys
-      "t" '(:ignore t :which-key "toggles")
-      "tt" '(consult-theme :which-key "Load themes"))
-    (consult-preview-at-point-mode))
+(use-package consult
+  :straight t
+  :after which-key
+  :demand t
+  :bind (("C-s" . consult-line)
+	 ("C-M-l" . consult-imenu)
+	 ("C-M-j" . persp-switch-to-buffer)
+	 ([remap describe-key]      . helpful-key)
+	 ([remap describe-command]  . helpful-command)
+	 ([remap describe-variable] . helpful-variable)
+	 ([remap describe-function] . helpful-callable)
+	 :map minibuffer-local-map
+	 ("C-r" . consult-history))
+  :custom
+  (consult-project-root-function #'ox/get-project-root)
+  (completion-in-region-function #'consult-completion-in-region)
+  :config
+  ;; Customizing the find command to exclude git and node_modules folders
+  (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+  ;; Add preview to consult-find
+  (consult-customize consult-find :state (consult--file-preview))
+  (ox/leader-keys
+    "t" '(:ignore t :which-key "toggles")
+    "tt" '(consult-theme :which-key "Load themes"))
+  (consult-preview-at-point-mode))
 
-  (use-package consult-lsp
-    :straight t
-    :after (lsp-mode consult))
+(use-package consult-lsp
+  :straight t
+  :after (lsp-mode consult))
 
 ;; A z like for consult
 (use-package consult-dir
@@ -885,45 +886,45 @@ folder, otherwise delete a word"
   (cons input (apply-partially #'orderless--highlight input t)))
 (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)
 
-  (use-package all-the-icons-completion
-    :straight t
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :config
-    ;;(all-the-icons-completion-mode)
-    )
+(use-package all-the-icons-completion
+  :straight t
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :config
+  ;;(all-the-icons-completion-mode)
+  )
 
-  (use-package marginalia
-    :after vertico
-    :straight t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :after vertico
+  :straight t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
 
 
-  (use-package embark
-    :straight t
-    :bind (("C-S-a" . embark-act)
-	   :map minibuffer-local-map
-	   ("C-d" . embark-act))
-    :config
+(use-package embark
+  :straight t
+  :bind (("C-S-a" . embark-act)
+	 :map minibuffer-local-map
+	 ("C-d" . embark-act))
+  :config
 
-    ;; Show Embark actions via which-key
-    (setq embark-action-indicator
-	  (lambda (map)
-	    (which-key--show-keymap "Embark" map nil nil 'no-paging)
-	    #'which-key--hide-popup-ignore-command)
-	  embark-become-indicator embark-action-indicator))
+  ;; Show Embark actions via which-key
+  (setq embark-action-indicator
+	(lambda (map)
+	  (which-key--show-keymap "Embark" map nil nil 'no-paging)
+	  #'which-key--hide-popup-ignore-command)
+	embark-become-indicator embark-action-indicator))
 
-  (use-package embark-consult
-    :straight '(embark-consult :host github
-			       :repo "oantolin/embark"
-			       :files ("embark-consult.el"))
-    :after (embark consult)
-    :demand t
-    :hook
-    (embark-collect-mode . embark-consult-preview-minor-mode))
+(use-package embark-consult
+  :straight '(embark-consult :host github
+			     :repo "oantolin/embark"
+			     :files ("embark-consult.el"))
+  :after (embark consult)
+  :demand t
+  :hook
+  (embark-collect-mode . embark-consult-preview-minor-mode))
 
 #+end_src
 
@@ -995,7 +996,7 @@ Apheleia is an Emacs package which solves both of these problems comprehensively
 * Linters
 #+begin_src emacs-lisp
 (use-package lsp-eslint
-  :demand t
+  :demand 
   :after lsp-mode)
 #+end_src
 * Searching
@@ -1472,7 +1473,10 @@ because compile mode is too slow"
   :init (global-flycheck-mode))
 #+end_src
 * Language Servers
-[[https://github.com/blahgeek/emacs-lsp-booster][emacs-lsp-booster]] increase performance by providing a wrapper-executable around lsp-programs
+[[https://github.com/blahgeek/emacs-lsp-booster][emacs-lsp-booster]] increase performance by providing a wrapper-executable around lsp-programs.
+
+[[(setq lsp-completion-enable nil][lsp-completion-enable]] is set to nil because lsp completions are added manually in a cape hook [[(defun +cape-capf-hook(][Here]]
+
 #+begin_src emacs-lisp
 (defun ox/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -1528,6 +1532,7 @@ because compile mode is too slow"
   (setq lsp-keymap-prefix "C-c C-l")
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
+  (setq lsp-completion-enable nil)
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1728,6 +1733,7 @@ because compile mode is too slow"
  org-agenda-current-time-string
  "◀── now ─────────────────────────────────────────────────")
 
+  (setq org-link-search-must-match-exact-headline nil) ;; Allow fuzzy search while using links
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
@@ -2493,6 +2499,3 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 ;; Make gc pauses faster by decreasubg tge threshold.
 (setq gc-cons-threshold (* 2 1000 000))
 #+end_src
-
-
-
