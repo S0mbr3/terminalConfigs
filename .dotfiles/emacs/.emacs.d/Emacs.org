@@ -1360,14 +1360,6 @@ because compile mode is too slow"
   :straight t
   :mode "\\.lua\\'")
 
-;; (use-package typescript-mode
-;;   :straight t
-;;   :disabled
-;;   :mode "\\.ts\\'"
-;;   :config
-;;   ;;(setq typescript-indent-level 2)
-;;   )
-
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
   :config
