@@ -1368,8 +1368,12 @@ because compile mode is too slow"
 
 (use-package js-ts-mode
   :mode "\\.js\\'")
+
 (use-package yaml-ts-mode
   :mode "\\.yaml\\'")
+
+(use-package dockerfile-ts-mode
+  :mode "docker-compose.yaml Dockerfile")
 
 (use-package prisma-mode
   :straight (:host github
@@ -1530,7 +1534,8 @@ because compile mode is too slow"
    (c-ts-mode . lsp-deferred)
    (python-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
-   ;;(typescript-mode . lsp-deferred)
+   (dockerfile-ts-mode . lsp-deferred)
+   (yaml-ts-mode . lsp-deferred)
    (typescript-ts-mode . lsp-deferred)
    (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
