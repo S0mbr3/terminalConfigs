@@ -19,7 +19,8 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 
 (setenv "LSP_USE_PLISTS" "true")
 (setq read-process-output-max (* 10 1024 1024)) ;; 10mb
-(setq gc-cons-threshold 200000000
+(setq gc-cons-threshold 200000000)
+
 ;;(setq gc-cons-threshold (* 50 1000 000))
 (defun ox/display-startup-time()
 (message "Emacs loaded in %s with %d garbage collections."
