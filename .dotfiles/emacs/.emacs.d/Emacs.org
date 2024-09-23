@@ -2265,9 +2265,18 @@ with treesit-auto you don't have to remap your self the major modes to point to 
   (global-aggressive-indent-mode 1))
 #+end_src
 * Dash Docs
+We are using consult-dash as an ui-front end to parse dash-docs
 #+begin_src emacs-lisp
 (use-package dash-docs
-  :straight t)
+  :straight t
+  :config
+  (setq dash-docs-browser-func 'eww-browse-url)
+  (use-package consult-dash
+    :straight t
+    :config
+    ;; Use the symbol at point as initial search term
+    (consult-customize consult-dash :initial (thing-at-point 'symbol)))
+  (setq dash-docs-common-docsets '("C" "TypeScript")))
 #+end_src
 * Dired
 #+begin_src emacs-lisp
