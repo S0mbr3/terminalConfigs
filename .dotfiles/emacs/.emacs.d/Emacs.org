@@ -2271,7 +2271,8 @@ We are using consult-dash as an ui-front end to parse dash-docs
 (use-package dash-docs
   :straight t
   :config
-  (setq dash-docs-browser-func 'eww-browse-url)
+  ;;(setq dash-docs-browser-func 'eww-browse-url)
+  (setq dash-docs-browser-func 'eaf-open-browser)
   (use-package consult-dash
     :straight t
     :config
