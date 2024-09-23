@@ -592,7 +592,6 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 #+end_src
 
 ** Ivy/counsel/swiper/company
-As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[(setq yasnippet-snippets-dir][the snippets dir]] is settled manually to a local directory
 #+begin_src emacs-lisp :tangle (if  ox/enable-ivy "./init.el" "no")
 (use-package ivy
   :straight t
@@ -703,13 +702,12 @@ As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasn
 
 (use-package yasnippet-snippets
   :straight t
-  :after yasnippet
-  :config
-  (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/"))
-
+  :after yasnippet)
 #+end_src
 
 ** Vertico/consult/orderless/marginalia/embark/corfu
+
+As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[(setq yasnippet-snippets-dir][the snippets dir]] is settled manually to a local directory
 
 #+begin_src emacs-lisp :tangle (if  ox/enable-vertico "./init.el" "no")
 (defun ox/minibuffer-backward-kill (arg)
