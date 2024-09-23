@@ -2245,6 +2245,11 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
   :config
   (global-aggressive-indent-mode 1))
 #+end_src
+* Dash Docs
+#+begin_src emacs-lisp
+(use-package dash-docs
+  :straight t)
+#+end_src
 * Dired
 #+begin_src emacs-lisp
   ;; This package allow single buffer navigation in Dired
