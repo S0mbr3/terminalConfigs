@@ -2127,6 +2127,15 @@ with treesit-auto you don't have to remap your self the major modes to point to 
   ;;:defer 0
   )
 
+(use-package treesit-auto
+  :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+
 (use-package tree-sitter
   :straight t
   :disabled
