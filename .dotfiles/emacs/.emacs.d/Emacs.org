@@ -768,7 +768,11 @@ folder, otherwise delete a word"
 
 (use-package yasnippet-snippets
   :straight t
-  :after yasnippet)
+  :after yasnippet
+  :config
+  (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/")
+  (yas-reload-all))
+
 
 (use-package corfu
   ;; :straight '(corfu :host github
