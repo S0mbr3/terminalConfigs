@@ -592,6 +592,7 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 #+end_src
 
 ** Ivy/counsel/swiper/company
+As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[(setq yasnippet-snippets-dir][the snippets dir]] is settled manually to a local directory
 #+begin_src emacs-lisp :tangle (if  ox/enable-ivy "./init.el" "no")
 (use-package ivy
   :straight t
@@ -702,7 +703,9 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 
 (use-package yasnippet-snippets
   :straight t
-  :after yasnippet)
+  :after yasnippet
+  :config
+  (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/"))
 
 #+end_src
 
@@ -2134,7 +2137,6 @@ with treesit-auto you don't have to remap your self the major modes to point to 
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-
 
 (use-package tree-sitter
   :straight t
