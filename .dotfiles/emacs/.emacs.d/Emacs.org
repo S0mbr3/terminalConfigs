@@ -207,29 +207,28 @@ We use the no-littering package to keep folders where we edit files and the Emac
 * EAF
 #+begin_src emacs-lisp
   (use-package eaf
-    :disabled t
-    :straight nil
+    :straight t
     :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
     :custom
 					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
     (eaf-browser-continue-where-left-off t)
     (eaf-browser-enable-adblocker t)
     (browse-url-browser-function 'eaf-open-browser)
-    (eaf-browser-auto-import-chrome-cookies t)
+    ;;(eaf-browser-auto-import-chrome-cookies t)
     :config
     (defalias 'browse-web #'eaf-open-browser)
-    ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
-    ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-  ;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
+    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  ;; (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0")
+    (require 'eaf-browser))
   ;;(global-unset-key (kbd "<f1>"))
   ;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
 
 
   ;;(require 'eaf-pyqterminal)
-  ;;(require 'eaf-browser)
   ;;(require 'eaf-pdf-viewer)
 
 #+end_src
