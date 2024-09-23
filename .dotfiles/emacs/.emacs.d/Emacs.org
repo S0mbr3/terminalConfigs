@@ -1371,8 +1371,8 @@ because compile mode is too slow"
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
-  ;;:config
   ;;:dash "TypeScript"
+  ;;:config
   ;;(setq typescript-indent-level 2)
   )
 
