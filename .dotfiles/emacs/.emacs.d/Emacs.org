@@ -1368,12 +1368,14 @@ because compile mode is too slow"
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
-  :config
+  ;;:config
+  ;;:dash "TypeScript"
   ;;(setq typescript-indent-level 2)
   )
 
 (use-package js-ts-mode
   :mode "\\.js\\'")
+
 
 (use-package yaml-ts-mode
   :mode "\\.yaml\\'")
