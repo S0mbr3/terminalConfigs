@@ -1,7 +1,10 @@
 ;;; -*- lexical-binding: t; -*-
 
 (setenv "LSP_USE_PLISTS" "true")
-(setq gc-cons-threshold (* 50 1000 000))
+(setq read-process-output-max (* 10 1024 1024)) ;; 10mb
+(setq gc-cons-threshold 200000000)
+
+;;(setq gc-cons-threshold (* 50 1000 000))
 (defun ox/display-startup-time()
 (message "Emacs loaded in %s with %d garbage collections."
     (format "%.2f seconds"
@@ -543,7 +546,7 @@ folder, otherwise delete a word"
   :bind (:map vertico-map
 	      ("C-j" . vertico-next)
 	      ("C-k" . vertico-previous)
-	      ;("C-f" . vertico-exit)
+					;("C-f" . vertico-exit)
 	      ("C-f" . vertico-exit-input)
 	      ;;("C-f" . my-vertico-alt-done)
 	      ("TAB" . my-vertico-alt-done)
@@ -608,69 +611,70 @@ folder, otherwise delete a word"
   :hook ((lsp-after-initialize . +cape-capf-hook)
 	 (prog-mode . +cape-capf-hook))
   :init
-(defun +cape-capf-hook()
-(if (or (derived-mode-p 'lisp-interaction-mode)
-        (derived-mode-p 'emacs-lisp-mode)
-	(derived-mode-p 'org-mode))
-    (progn
-        (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
-	    (add-to-list 'completion-at-point-functions #'cape-file))
-  (progn
-  (lsp-completion-mode -1)
-    (message "lsp-completion-mode running")
-    (add-to-list 'completion-at-point-functions
-                 (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
-        (add-to-list 'completion-at-point-functions #'cape-file)))))
+  (defun +cape-capf-hook()
+    (if (or (derived-mode-p 'lisp-interaction-mode)
+            (derived-mode-p 'emacs-lisp-mode)
+	    (derived-mode-p 'org-mode))
+	(progn
+          (add-to-list 'completion-at-point-functions
+                       (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
+	  (add-to-list 'completion-at-point-functions #'cape-file))
+      (progn
+	(add-to-list 'completion-at-point-functions
+                     (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+        (add-to-list 'completion-at-point-functions #'cape-file))))
+  ;; Disable lsp-completion-mode from being automatically enabled
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-configure-hook 'lsp-completion--disable)))
 
-  (use-package yasnippet-capf
-    :straight '(yasnippet-capf :host github
-			       :repo "elken/yasnippet-capf")
-    :after cape yasnippet)
+(use-package yasnippet-capf
+  :straight '(yasnippet-capf :host github
+			     :repo "elken/yasnippet-capf")
+  :after cape yasnippet)
 
 
 
-  (use-package orderless
-    :straight t
-    :init
-    (setq completion-styles '(orderless)
-	  completion-category-defaults nil
-	  completion-category-overrides '((file (styles . (partial-completion))))))
+(use-package orderless
+  :straight t
+  :init
+  (setq completion-styles '(orderless)
+	completion-category-defaults nil
+	completion-category-overrides '((file (styles . (partial-completion))))))
 
-  (defun ox/get-project-root ()
-    (when (fboundp 'projectile-project-root)
-      (projectile-project-root)))
+(defun ox/get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
 
-  (use-package consult
-    :straight t
-    :after which-key
-    :demand t
-    :bind (("C-s" . consult-line)
-	   ("C-M-l" . consult-imenu)
-	   ("C-M-j" . persp-switch-to-buffer)
-	   ([remap describe-key]      . helpful-key)
-	   ([remap describe-command]  . helpful-command)
-	   ([remap describe-variable] . helpful-variable)
-	   ([remap describe-function] . helpful-callable)
-	   :map minibuffer-local-map
-	   ("C-r" . consult-history))
-    :custom
-    (consult-project-root-function #'ox/get-project-root)
-    (completion-in-region-function #'consult-completion-in-region)
-    :config
-    ;; Customizing the find command to exclude git and node_modules folders
-    (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-    ;; Add preview to consult-find
-    (consult-customize consult-find :state (consult--file-preview))
-    (ox/leader-keys
-      "t" '(:ignore t :which-key "toggles")
-      "tt" '(consult-theme :which-key "Load themes"))
-    (consult-preview-at-point-mode))
+(use-package consult
+  :straight t
+  :after which-key
+  :demand t
+  :bind (("C-s" . consult-line)
+	 ("C-M-l" . consult-imenu)
+	 ("C-M-j" . persp-switch-to-buffer)
+	 ([remap describe-key]      . helpful-key)
+	 ([remap describe-command]  . helpful-command)
+	 ([remap describe-variable] . helpful-variable)
+	 ([remap describe-function] . helpful-callable)
+	 :map minibuffer-local-map
+	 ("C-r" . consult-history))
+  :custom
+  (consult-project-root-function #'ox/get-project-root)
+  (completion-in-region-function #'consult-completion-in-region)
+  :config
+  ;; Customizing the find command to exclude git and node_modules folders
+  (setq consult-find-args "find . -not ( -path */.git -path */node_modules -prune )")
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+  ;; Add preview to consult-find
+  (consult-customize consult-find :state (consult--file-preview))
+  (ox/leader-keys
+    "t" '(:ignore t :which-key "toggles")
+    "tt" '(consult-theme :which-key "Load themes"))
+  (consult-preview-at-point-mode))
 
-  (use-package consult-lsp
-    :straight t
-    :after (lsp-mode consult))
+(use-package consult-lsp
+  :straight t
+  :after (lsp-mode consult))
 
 ;; A z like for consult
 (use-package consult-dir
@@ -697,45 +701,45 @@ folder, otherwise delete a word"
   (cons input (apply-partially #'orderless--highlight input t)))
 (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)
 
-  (use-package all-the-icons-completion
-    :straight t
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :config
-    ;;(all-the-icons-completion-mode)
-    )
+(use-package all-the-icons-completion
+  :straight t
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :config
+  ;;(all-the-icons-completion-mode)
+  )
 
-  (use-package marginalia
-    :after vertico
-    :straight t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :after vertico
+  :straight t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
 
 
-  (use-package embark
-    :straight t
-    :bind (("C-S-a" . embark-act)
-	   :map minibuffer-local-map
-	   ("C-d" . embark-act))
-    :config
+(use-package embark
+  :straight t
+  :bind (("C-S-a" . embark-act)
+	 :map minibuffer-local-map
+	 ("C-d" . embark-act))
+  :config
 
-    ;; Show Embark actions via which-key
-    (setq embark-action-indicator
-	  (lambda (map)
-	    (which-key--show-keymap "Embark" map nil nil 'no-paging)
-	    #'which-key--hide-popup-ignore-command)
-	  embark-become-indicator embark-action-indicator))
+  ;; Show Embark actions via which-key
+  (setq embark-action-indicator
+	(lambda (map)
+	  (which-key--show-keymap "Embark" map nil nil 'no-paging)
+	  #'which-key--hide-popup-ignore-command)
+	embark-become-indicator embark-action-indicator))
 
-  (use-package embark-consult
-    :straight '(embark-consult :host github
-			       :repo "oantolin/embark"
-			       :files ("embark-consult.el"))
-    :after (embark consult)
-    :demand t
-    :hook
-    (embark-collect-mode . embark-consult-preview-minor-mode))
+(use-package embark-consult
+  :straight '(embark-consult :host github
+			     :repo "oantolin/embark"
+			     :files ("embark-consult.el"))
+  :after (embark consult)
+  :demand t
+  :hook
+  (embark-collect-mode . embark-consult-preview-minor-mode))
 
 (use-package wgrep
   :straight t) ;; edit grep searches
@@ -780,6 +784,26 @@ folder, otherwise delete a word"
 (defun switch-to-previous-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+;;; APHELEIA
+;; auto-format different source code files extremely intelligently
+;; https://github.com/radian-software/apheleia
+(use-package apheleia
+  :straight t
+  :diminish ""
+  :defines
+  apheleia-formatters
+  apheleia-mode-alist
+  :functions
+  apheleia-global-mode
+  :config
+  (setf (alist-get 'prettier-json apheleia-formatters)
+        '("prettier" "--stdin-filepath" filepath))
+  (apheleia-global-mode +1))
+
+(use-package lsp-eslint
+  :demand 
+  :after lsp-mode)
 
 (use-package rg
   :straight t
@@ -1072,7 +1096,7 @@ folder, otherwise delete a word"
   "Make and Run a C program on a vterm buffer based on the makefile recipies
 because compile mode is too slow"
   (interactive)
-  (if (eq major-mode 'c-mode)
+  (if (eq major-mode 'c-ts-mode)
       (progn 
 	(save-buffer)
 	(let ((target (concat "make && time " "./" (file-name-nondirectory (directory-file-name (file-name-directory buffer-file-name))) "\n"))
@@ -1100,12 +1124,23 @@ because compile mode is too slow"
   :straight t
   :mode "\\.lua\\'")
 
-(use-package typescript-mode
-  :straight t
+(use-package typescript-ts-mode
   :mode "\\.ts\\'"
-  :config
+  ;;:config
+  ;;:dash "TypeScript"
   ;;(setq typescript-indent-level 2)
   )
+
+(use-package js-ts-mode
+  :mode "\\.js\\'")
+
+
+(use-package yaml-ts-mode
+  :mode "\\.yaml\\'")
+
+(use-package dockerfile-ts-mode
+  :mode "docker-compose.yaml Dockerfile")
+
 (use-package prisma-mode
   :straight (:host github
   :repo "pimeys/emacs-prisma-mode"
@@ -1114,7 +1149,7 @@ because compile mode is too slow"
 (use-package emmet-mode
   :disabled
   :straight t
-  :hook ((typescript-mode . emmet-mode))
+  :hook ((typescript-ts-mode . emmet-mode))
   ;;(typescript-mode . emmet-preview-mode)))
   :config
   (ox/leader-keys
@@ -1132,7 +1167,7 @@ because compile mode is too slow"
   :disabled
   :straight (:type git :host github :repo "p233/emmet2-mode" :files (:defaults "*.ts" "src" "data"))
   :after deno-bridge
-  :hook ((web-mode css-mode typescript-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
+  :hook ((web-mode css-mode typescript-ts-mode) . emmet2-mode)                     ;; Enable emmet2-mode for web-mode and css-mode and other major modes based on them, such as the build-in scss-mode
   :config                                                       ;; OPTIONAL
   (unbind-key "C-j" emmet2-mode-map)                            ;; Unbind the default expand key
   (define-key emmet2-mode-map (kbd "C-c C-.") 'emmet2-expand))  ;; Bind custom expand key
@@ -1155,10 +1190,12 @@ because compile mode is too slow"
 ;;   :config
 ;;   (apheleia-global-mode +1))
 
-(use-package rust-mode
-  :straight t
-  :mode "\\.rs\\'"
-  :init (setq rust-format-on-save t))
+;; (use-package rust-mode
+;;   :straight t
+;;   :mode "\\.rs\\'"
+;;   :init (setq rust-format-on-save t))
+(use-package rust-ts-mode
+  :mode "\\.rs\\'")
 
 (use-package cargo
   :straight t
@@ -1179,8 +1216,8 @@ because compile mode is too slow"
 
 (use-package auto-rename-tag
   :straight t
-  :hook ((typescript-mode . auto-rename-tag-mode)
-         (js-mode . auto-rename-tag-mode)
+  :hook ((typescript-ts-mode . auto-rename-tag-mode)
+         (js-ts-mode . auto-rename-tag-mode)
          (mhtml-mode . auto-rename-tag-mode)
          (web-mode . auto-rename-tag-mode)))
 
@@ -1199,7 +1236,7 @@ because compile mode is too slow"
   :config(require 'smartparens-config)
 ;; add a blank line when opening a {
   (sp-with-modes
-      '(c++-mode objc-mode c-mode typescript-mode lua-mode)
+      '(c++-mode objc-mode c-mode typescript-ts-mode typescript-mode lua-mode)
     (sp-local-pair "{" nil :post-handlers '(:add ("||\n[i]" "RET")))))
 
 (use-package flycheck
@@ -1249,18 +1286,21 @@ because compile mode is too slow"
       (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
-   (c-mode . lsp-deferred)
-   (python-mode . lsp-deferred)
+   (c-ts-mode . lsp-deferred)
+   (python-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
-   (typescript-mode . lsp-deferred)
-   (css-mode . lsp-deferred)
+   (dockerfile-ts-mode . lsp-deferred)
+   (yaml-ts-mode . lsp-deferred)
+   (typescript-ts-mode . lsp-deferred)
+   (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
-   (rust-mode . lsp-deferred)
-   (js-mode . lsp-deferred))
+   (rust-ts-mode . lsp-deferred)
+   (js-ts-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c C-l")
-  ;;(define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
+  (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
+  (setq lsp-completion-enable nil)
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1286,7 +1326,7 @@ because compile mode is too slow"
   ;; Configure Emmet LSP
    (lsp-register-client
     (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
-                     :major-modes '(typescript-mode html-mode css-mode)
+                     :major-modes '(typescript-ts-mode js-ts-mode html-mode css-ts-mode)
                      :server-id 'emmet-ls))
    (setq lsp-emmet-show-expanded-abbreviation t) ;; Show the expanded abbreviation in completion.
    (setq lsp-emmet-show-abbreviation-as-suggestion t) ;; Show abbreviation as suggestion.
@@ -1446,6 +1486,7 @@ because compile mode is too slow"
  org-agenda-current-time-string
  "◀── now ─────────────────────────────────────────────────")
 
+  (setq org-link-search-must-match-exact-headline nil) ;; Allow fuzzy search while using links
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
@@ -1778,21 +1819,23 @@ because compile mode is too slow"
 ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
-:straight nil
-:disabled t
-:after tree-sitter
-;;:defer 0
-)
+  :straight nil
+  :disabled t
+  :after tree-sitter
+  ;;:defer 0
+  )
+
 (use-package tree-sitter
-:straight t
-;;:after tree-sitter-langs
-:config
-;; Loading tree-sitter-modules from casouri/tree-sitter-module
-;; Preventing from manually installing tree-sitter grammars
-(setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"))
-;; Activate tree-sitter globally (minor mode registered on every buffer
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  :straight t
+  :disabled
+  ;;:after tree-sitter-langs
+  :config
+  ;; Loading tree-sitter-modules from casouri/tree-sitter-module
+  ;; Preventing from manually installing tree-sitter grammars
+  (setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"))
+  ;; Activate tree-sitter globally (minor mode registered on every buffer
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (unless (package-installed-p 'posframe)
   (package-refresh-contents)
@@ -1902,6 +1945,9 @@ because compile mode is too slow"
   :hook((python-base-mode yaml-mode c-mode makefile-gmake-mode) . agressive-indent-mode)
   :config
   (global-aggressive-indent-mode 1))
+
+(use-package dash-docs
+  :straight t)
 
   ;; This package allow single buffer navigation in Dired
   ;; like (dired-kill-when-opening-new-dired-buffer t) does
@@ -2152,4 +2198,4 @@ because compile mode is too slow"
 ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
 
 ;; Make gc pauses faster by decreasubg tge threshold.
-(setq gc-cons-threshold (* 2 1000 000))
+;;(setq gc-cons-threshold (* 2 1000 000))

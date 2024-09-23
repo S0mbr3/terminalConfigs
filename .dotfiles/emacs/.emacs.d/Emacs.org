@@ -2102,26 +2102,34 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 #+end_src
 * Treesitter
 
+the [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][tree-sitter]] package is disabled to use the new builtin treesitter support of emacs 29+
+
+with treesit-auto it's no more needed to install a shared library and point treesitter to load it like [[(setq treesit-extra-load-path '("/home/oxhart/builds/tree-sitter-module/dist"][Here]]
+
+with treesit-auto you don't have to remap your self the major modes to point to their ts-mode version
+ 
 #+begin_src emacs-lisp
-  ;;(require 'treesit)
-  ;;(setq treesit-extra-load-path '("/usr/local/lib"))
-  ;;
-  ;;  
-  ;;  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
-  ;;  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
-  ;;  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
-  ;;  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
-  ;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
-  ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
-  ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
-  (use-package tree-sitter-langs
+;;(require 'treesit)
+;;(setq treesit-extra-load-path '("/usr/local/lib"))
+;;
+;;  
+;;  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
+;;  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
+;;  (push '(javascript-mode . js-ts-mode) major-mode-remap-alist)
+;;  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
+;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
+;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
+;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+(use-package tree-sitter-langs
   :straight nil
   :disabled t
   :after tree-sitter
   ;;:defer 0
   )
-  (use-package tree-sitter
+
+(use-package tree-sitter
   :straight t
+  :disabled
   ;;:after tree-sitter-langs
   :config
   ;; Loading tree-sitter-modules from casouri/tree-sitter-module
