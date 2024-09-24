@@ -768,11 +768,7 @@ folder, otherwise delete a word"
 		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
 		       :repo "S0mbr3/yasnippet-snippets"
 		       :branch "js/ts-treesitter")
-  :after yasnippet
-  :config
-  ;; (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/")
-  ;; (yas-reload-all)
-  )
+  :after yasnippet)
 
 
 (use-package corfu
