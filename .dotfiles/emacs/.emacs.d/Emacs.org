@@ -1395,6 +1395,8 @@ because compile mode is too slow"
 
 (use-package js-ts-mode
   :mode "\\.js\\'")
+(use-package html-mode
+  :mode "\\.html\\'")
 
 
 (use-package yaml-ts-mode
