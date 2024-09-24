@@ -1174,6 +1174,8 @@ As none have every buffers we just switch to the vterm buffer by it's number.
 #+end_src
 * Evil Mode
 
+Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader map instead of evil-execute-in-emacs-state
+
 #+begin_src emacs-lisp
 ;; Dependencies for evil mode undo features
 ;; (use-package undo-tree
@@ -1205,6 +1207,7 @@ As none have every buffers we just switch to the vterm buffer by it's number.
   ;; Unbind RET key so emacs can use it instead of evil useful to make
   ;; org-return-follows-link working in evil-mode
   (define-key evil-motion-state-map (kbd "RET") nil) 
+
   (dolist (mode '(Custom-mode
 		    eshell-mode
 		    git-rebase-mode
@@ -1316,6 +1319,19 @@ As none have every buffers we just switch to the vterm buffer by it's number.
       (move-to-column (evil-mc-column-number (if (> end beg)
                                                  beg
                                                end)))))
+
+;; Create a new keymap for the backslash leader
+(define-prefix-command 'my-evil-leader-map)
+(define-key evil-motion-state-map (kbd "\\") 'my-evil-leader-map)
+
+;; Bind commands under the new leader key
+(define-key my-evil-leader-map (kbd "w") 'evil-write)   ;; Save
+(define-key my-evil-leader-map (kbd "b") 'evil-delete-buffer)  ;; Kill buffer
+(define-key my-evil-leader-map (kbd "c") 'evil-window-delete)  ;; Close window
+(define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
+(define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
+(define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
+
 #+end_src
 
 * Project Management
