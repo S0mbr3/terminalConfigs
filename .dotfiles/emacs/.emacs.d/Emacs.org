@@ -706,7 +706,7 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 
 ** Vertico/consult/orderless/marginalia/embark/corfu
 
-As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[(setq yasnippet-snippets-dir][the snippets dir]] is settled manually to a local directory
+As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[:straight '(yasnippet-snippets :host github][I am using the fork]]
 
 #+begin_src emacs-lisp :tangle (if  ox/enable-vertico "./init.el" "no")
 (defun ox/minibuffer-backward-kill (arg)
@@ -764,11 +764,15 @@ folder, otherwise delete a word"
   (yas-reload-all))
 
 (use-package yasnippet-snippets
-  :straight t
+    :straight '(yasnippet-snippets :host github
+		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
+		       :repo "S0mbr3/yasnippet-snippets"
+		       :branch "js/ts-treesitter")
   :after yasnippet
   :config
-  (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/")
-  (yas-reload-all))
+  ;; (setq yasnippet-snippets-dir "/home/oxhart/.emacs.d/snippets/")
+  ;; (yas-reload-all)
+  )
 
 
 (use-package corfu
