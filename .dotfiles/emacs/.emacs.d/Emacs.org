@@ -2325,15 +2325,15 @@ We are using consult-dash as an ui-front end to parse dash-docs
 #+end_src
 * eww
 #+begin_src emacs-lisp
-(use-package eww-lnum
-  :straight t
-  :config
-  (with-eval-after-load 'eww
-    (define-key eww-mode-map (kbd "f") 'eww-lnum-follow))
-    (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
+;; (use-package eww-lnum
+;;   :straight t
+;;   :config
+;;   (with-eval-after-load 'eww
+;;     (define-key eww-mode-map (kbd "f") 'eww-lnum-follow))
+;;     (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
 
-(use-package org-web-tools
-  :straight t)
+;; (use-package org-web-tools
+;;   :straight t)
 #+end_src
 * Dired
 #+begin_src emacs-lisp
