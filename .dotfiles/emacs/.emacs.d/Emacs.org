@@ -2271,13 +2271,51 @@ We are using consult-dash as an ui-front end to parse dash-docs
 (use-package dash-docs
   :straight t
   :config
-  (setq dash-docs-browser-func 'eww-browse-url)
+  (setq dash-docs-browser-func 'ox/read-dash-files)
   (use-package consult-dash
     :straight t
     :config
+    (defun ox/read-dash-files(dash-docs-result-url &optional docset-name filename anchor)
+      "Make dash files readable inside eww."
+      ;;(eww-browse-url url)
+      ;;(print dash-docs-result-url)
+      (process-file-uri dash-docs-result-url)
+      ;;(eww dash-docs-result-url)
+      ;;(org-web-tools-read-url-as-org url)
+      )
     ;; Use the symbol at point as initial search term
     (consult-customize consult-dash :initial (thing-at-point 'symbol)))
   (setq dash-docs-common-docsets '("C" "TypeScript")))
+;;(org-web-tools-read-url-as-org "https://en.cppreference.com/w/c/keyword/for")
+;;(eaf-open-browser "file:///home/oxhart/.docsets/C.docset/Contents/Resources/Documents/en.cppreference.com/w/c/keyword/for.html")
+
+(defun extract-file-uri (input)
+  "Extract the file URI with the 'file://' scheme from the input string."
+  (let ((string-part (substring-no-properties input)))
+    (if (string-match "^\\(file://.*\\)$" string-part)
+        (match-string 1 string-part))))
+
+;; Example function usage
+(defun process-file-uri (input)
+  "Example function that processes the file URI part."
+  (let ((file-uri (extract-file-uri input)))
+    (when file-uri
+      (eaf-open-browser file-uri))))
+
+
+
+#+end_src
+* eww
+#+begin_src emacs-lisp
+(use-package eww-lnum
+  :straight t
+  :config
+  (with-eval-after-load 'eww
+    (define-key eww-mode-map (kbd "f") 'eww-lnum-follow))
+    (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
+
+(use-package org-web-tools
+  :straight t)
 #+end_src
 * Dired
 #+begin_src emacs-lisp
