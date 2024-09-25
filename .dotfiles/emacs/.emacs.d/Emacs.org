@@ -1526,7 +1526,6 @@ because compile mode is too slow"
 ;; (use-package lsp-tailwindcss
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
-  :straight t
       :preface
       (defun lsp-booster--advice-json-parse (old-fn &rest args)
         "Try to parse bytecode instead of json."
