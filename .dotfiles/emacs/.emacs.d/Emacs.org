@@ -759,7 +759,7 @@ folder, otherwise delete a word"
 
 (use-package yasnippet
   :straight t
-  :hook (prog-mode . yas-minor-mode)
+  :hook ((prog-mode html-mode) . yas-minor-mode)
   :config
   (yas-reload-all))
 
