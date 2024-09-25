@@ -1269,38 +1269,38 @@ because compile mode is too slow"
 ;; (use-package lsp-tailwindcss
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
-      :preface
-      (defun lsp-booster--advice-json-parse (old-fn &rest args)
-        "Try to parse bytecode instead of json."
-        (or
-         (when (equal (following-char) ?#)
+  :preface
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
 
-           (let ((bytecode (read (current-buffer))))
-             (when (byte-code-function-p bytecode)
-               (funcall bytecode))))
-         (apply old-fn args)))
-      (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-        "Prepend emacs-lsp-booster command to lsp CMD."
-        (let ((orig-result (funcall old-fn cmd test?)))
-          (if (and (not test?)                             ;; for check lsp-server-present?
-                   (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-                   lsp-use-plists
-                   (not (functionp 'json-rpc-connection))  ;; native json-rpc
-                   (executable-find "emacs-lsp-booster"))
-              (progn
-                (message "Using emacs-lsp-booster for %s!" orig-result)
-                (cons "emacs-lsp-booster" orig-result))
-            orig-result)))
-      :init
-      (setq lsp-use-plists t)
-      ;; Initiate https://github.com/blahgeek/emacs-lsp-booster for performance
-      (advice-add (if (progn (require 'json)
-                             (fboundp 'json-parse-buffer))
-                      'json-parse-buffer
-                    'json-read)
-                  :around
-                  #'lsp-booster--advice-json-parse)
-      (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+  :init
+  (setq lsp-use-plists t)
+  ;; Initiate https://github.com/blahgeek/emacs-lsp-booster for performance
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around
+              #'lsp-booster--advice-json-parse)
+  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
@@ -1332,21 +1332,23 @@ because compile mode is too slow"
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (setq lsp-clients-angular-language-server-command
-  '("node"
-    "/usr/local/lib/node_modules/@angular/language-server"
-    "--ngProbeLocations"
-    "/usr/local/lib/node_modules"
-    "--tsProbeLocations"
-    "/usr/local/lib/node_modules"
-    "--stdio"))
+	'("node"
+	  "/usr/local/lib/node_modules/@angular/language-server"
+	  "--ngProbeLocations"
+	  "/usr/local/lib/node_modules"
+	  "--tsProbeLocations"
+	  "/usr/local/lib/node_modules"
+	  "--stdio"))
 
   ;; Configure Emmet LSP
-   (lsp-register-client
-    (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
-                     :major-modes '(typescript-ts-mode js-ts-mode html-mode css-ts-mode)
-                     :server-id 'emmet-ls))
-   (setq lsp-emmet-show-expanded-abbreviation t) ;; Show the expanded abbreviation in completion.
-   (setq lsp-emmet-show-abbreviation-as-suggestion t) ;; Show abbreviation as suggestion.
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection "emmet-ls" "--stdio")
+                    :major-modes '(typescript-ts-mode js-ts-mode html-mode css-ts-mode)
+                    :server-id 'emmet-ls))
+
+  (setq lsp-emmet-show-expanded-abbreviation t) ;; Show the expanded abbreviation in completion.
+  (setq lsp-emmet-show-abbreviation-as-suggestion t) ;; Show abbreviation as suggestion.
+
   ;; Configure TailwindCSS Intellisense
   ;; (lsp-register-client
   ;;  (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-intellisense" "--stdio")
@@ -1381,7 +1383,7 @@ because compile mode is too slow"
   "lf" '(:ignore t :which-key "format")
   "l==" 'lsp-format-buffer
   "l=r" 'lsp-format-region
-   )
+  )
 (use-package lsp-ui
   :straight t
   :after lsp-mode
