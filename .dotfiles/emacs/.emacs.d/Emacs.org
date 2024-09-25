@@ -1517,6 +1517,10 @@ because compile mode is too slow"
 
 [[(setq lsp-completion-enable nil][lsp-completion-enable]] is set to nil because lsp completions are added manually in a cape hook [[(defun +cape-capf-hook(][Here]]
 
+[[https://github.com/aca/emmet-ls][emmet-ls]] server did not disabled ResolveProvider as suggested in this [[https://github.com/aca/emmet-ls/pull/67/files][PR]] I did it my self on my local installation of emmet-ls in the [[file:/usr/local/lib/node_modules/emmet-ls/out/server.js][server.js]] to solve:
+
+*Error processing message (error "Unhandled method completionItem/resolve")*
+
 #+begin_src emacs-lisp
 (defun ox/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
