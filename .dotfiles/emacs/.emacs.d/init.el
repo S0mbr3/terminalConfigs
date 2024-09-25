@@ -163,29 +163,28 @@
   (global-ligature-mode t))
 
   (use-package eaf
-    :disabled t
-    :straight nil
+    :straight t
     :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
     :custom
 					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
     (eaf-browser-continue-where-left-off t)
     (eaf-browser-enable-adblocker t)
     (browse-url-browser-function 'eaf-open-browser)
-    (eaf-browser-auto-import-chrome-cookies t)
+    ;;(eaf-browser-auto-import-chrome-cookies t)
     :config
     (defalias 'browse-web #'eaf-open-browser)
-    ;;(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    ;;(eaf-bind-key take_photo "p" eaf-camera-keybinding)
-    ;;(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-  ;;(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0"))
+    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  ;; (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0")
+    (require 'eaf-browser))
   ;;(global-unset-key (kbd "<f1>"))
   ;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
 
 
   ;;(require 'eaf-pyqterminal)
-  ;;(require 'eaf-browser)
   ;;(require 'eaf-pdf-viewer)
 
 (use-package chatgpt
@@ -568,13 +567,17 @@ folder, otherwise delete a word"
 
 (use-package yasnippet
   :straight t
-  :hook (prog-mode . yas-minor-mode)
+  :hook ((prog-mode html-mode) . yas-minor-mode)
   :config
   (yas-reload-all))
 
 (use-package yasnippet-snippets
-  :straight t
+    :straight '(yasnippet-snippets :host github
+		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
+		       :repo "S0mbr3/yasnippet-snippets"
+		       :branch "js/ts-treesitter")
   :after yasnippet)
+
 
 (use-package corfu
   ;; :straight '(corfu :host github
@@ -637,8 +640,8 @@ folder, otherwise delete a word"
 (use-package orderless
   :straight t
   :init
-  (setq completion-styles '(orderless)
-	completion-category-defaults nil
+  (setq completion-styles '(orderless basic)
+	;;completion-category-defaults nil
 	completion-category-overrides '((file (styles . (partial-completion))))))
 
 (defun ox/get-project-root ()
@@ -968,6 +971,7 @@ folder, otherwise delete a word"
   ;; Unbind RET key so emacs can use it instead of evil useful to make
   ;; org-return-follows-link working in evil-mode
   (define-key evil-motion-state-map (kbd "RET") nil) 
+
   (dolist (mode '(Custom-mode
 		    eshell-mode
 		    git-rebase-mode
@@ -1080,6 +1084,18 @@ folder, otherwise delete a word"
                                                  beg
                                                end)))))
 
+;; Create a new keymap for the backslash leader
+(define-prefix-command 'my-evil-leader-map)
+(define-key evil-motion-state-map (kbd "\\") 'my-evil-leader-map)
+
+;; Bind commands under the new leader key
+(define-key my-evil-leader-map (kbd "w") 'evil-write)   ;; Save
+(define-key my-evil-leader-map (kbd "b") 'evil-delete-buffer)  ;; Kill buffer
+(define-key my-evil-leader-map (kbd "c") 'evil-window-delete)  ;; Close window
+(define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
+(define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
+(define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
+
 (use-package projectile
   :straight t
   :diminish projectile-mode
@@ -1126,13 +1142,15 @@ because compile mode is too slow"
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
-  ;;:config
   ;;:dash "TypeScript"
+  ;;:config
   ;;(setq typescript-indent-level 2)
   )
 
 (use-package js-ts-mode
   :mode "\\.js\\'")
+(use-package html-mode
+  :mode "\\.html\\'")
 
 
 (use-package yaml-ts-mode
@@ -1251,7 +1269,6 @@ because compile mode is too slow"
 ;; (use-package lsp-tailwindcss
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
-  :straight t
       :preface
       (defun lsp-booster--advice-json-parse (old-fn &rest args)
         "Try to parse bytecode instead of json."
@@ -1825,6 +1842,14 @@ because compile mode is too slow"
   ;;:defer 0
   )
 
+(use-package treesit-auto
+  :straight t
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 (use-package tree-sitter
   :straight t
   :disabled
@@ -1947,7 +1972,48 @@ because compile mode is too slow"
   (global-aggressive-indent-mode 1))
 
 (use-package dash-docs
-  :straight t)
+  :straight t
+  :config
+  (setq dash-docs-browser-func 'ox/read-dash-files)
+  (use-package consult-dash
+    :straight t
+    :config
+    (defun ox/read-dash-files(dash-docs-result-url &optional docset-name filename anchor)
+      "Make dash files readable inside eww."
+      ;;(eww-browse-url url)
+      ;;(print dash-docs-result-url)
+      (process-file-uri dash-docs-result-url)
+      ;;(eww dash-docs-result-url)
+      ;;(org-web-tools-read-url-as-org url)
+      )
+    ;; Use the symbol at point as initial search term
+    (consult-customize consult-dash :initial (thing-at-point 'symbol)))
+  (setq dash-docs-common-docsets '("C" "TypeScript")))
+;;(org-web-tools-read-url-as-org "https://en.cppreference.com/w/c/keyword/for")
+;;(eaf-open-browser "file:///home/oxhart/.docsets/C.docset/Contents/Resources/Documents/en.cppreference.com/w/c/keyword/for.html")
+
+(defun extract-file-uri (input)
+  "Extract the file URI with the 'file://' scheme from the input string."
+  (let ((string-part (substring-no-properties input)))
+    (if (string-match "^\\(file://.*\\)$" string-part)
+        (match-string 1 string-part))))
+
+;; Example function usage
+(defun process-file-uri (input)
+  "Example function that processes the file URI part."
+  (let ((file-uri (extract-file-uri input)))
+    (when file-uri
+      (eaf-open-browser file-uri))))
+
+;; (use-package eww-lnum
+;;   :straight t
+;;   :config
+;;   (with-eval-after-load 'eww
+;;     (define-key eww-mode-map (kbd "f") 'eww-lnum-follow))
+;;     (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
+
+;; (use-package org-web-tools
+;;   :straight t)
 
   ;; This package allow single buffer navigation in Dired
   ;; like (dired-kill-when-opening-new-dired-buffer t) does
