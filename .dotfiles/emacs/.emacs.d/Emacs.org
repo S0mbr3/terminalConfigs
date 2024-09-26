@@ -705,7 +705,7 @@ A side note you can change between both stack by changing ox/enable-ivy ox/enabl
 
 ** Vertico/consult/orderless/marginalia/embark/corfu
 
-As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[:straight '(yasnippet-snippets :host github][I am using the fork]]
+As of temporary situation waiting for the [[https://github.com/AndreaCrotti/yasnippet-snippets/pull/504][PR]] to yasnippet-snippets [[:straight '(yasnippet-snippets :host github][I am using my fork]]
 
 #+begin_src emacs-lisp :tangle (if  ox/enable-vertico "./init.el" "no")
 (defun ox/minibuffer-backward-kill (arg)
