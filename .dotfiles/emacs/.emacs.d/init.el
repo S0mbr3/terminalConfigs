@@ -494,6 +494,7 @@
     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
     "fg" '(consult-grep :which-key "consult-grep")
+    "fa" '(consult-org-agenda :which-key "consult-org-agenda")
     "fr" '(consult-recent-file :which-key "Consult recent files")
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
