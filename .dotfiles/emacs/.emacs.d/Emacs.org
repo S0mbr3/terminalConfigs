@@ -9,6 +9,7 @@
 - [[https://github.com/ema2159/centaur-tabs][Centaur tabs]] for modern tabs management
 - [[https://github.com/for-GET/know-your-http-well][know-your-http-well]] HTTP headers, media-types, methods, relations and status codes, all summarized and linking to their specification. 
 - Set lexical binding for *scratch* buffer with (setq lexical-binding t)
+- Check for [[https://github.com/alphapapa/org-bookmark-heading][org-bookmark-heading]]
 * Startup Performance
 
 [[(setenv "LSP_USE_PLISTS" "true"][LSP_USE_PLISTS]] settled to true make lsp use plists needed for [[https://github.com/blahgeek/emacs-lsp-booster][emacs-lsp-booster]]
