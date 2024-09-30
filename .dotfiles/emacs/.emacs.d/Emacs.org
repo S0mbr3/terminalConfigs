@@ -2333,10 +2333,12 @@ We are using consult-dash as an ui-front end to parse dash-docs
 #+begin_src emacs-lisp
 (use-package devdocs
   :straight t
+  :hook ((python-ts-mode . (lambda () (setq-local devdocs-current-docs '("python~3.12")))))
   :config
   (defun ox/after-devdocs-lookup (&rest r)
   (delete-window))
   (advice-add #'devdocs-lookup :after 'ox/after-devdocs-lookup))
+
 
 #+end_src
 * eww
