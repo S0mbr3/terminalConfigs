@@ -2329,6 +2329,16 @@ We are using consult-dash as an ui-front end to parse dash-docs
 
 
 #+end_src
+* Devdocs
+#+begin_src emacs-lisp
+(use-package devdocs
+  :straight t
+  :config
+  (defun ox/after-devdocs-lookup (&rest r)
+  (delete-window))
+  (advice-add #'devdocs-lookup :after 'ox/after-devdocs-lookup))
+
+#+end_src
 * eww
 #+begin_src emacs-lisp
 ;; (use-package eww-lnum
