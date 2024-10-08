@@ -804,8 +804,7 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  :hook ((lsp-after-initialize . +cape-capf-hook)
-	 (prog-mode . +cape-capf-hook))
+  :hook ((lsp-after-initialize  prog-mode org-mode) . +cape-capf-hook)
   :init
   (defun +cape-capf-hook()
     (if (or (derived-mode-p 'lisp-interaction-mode)
