@@ -804,12 +804,13 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  :hook ((lsp-after-initialize  prog-mode org-mode) . +cape-capf-hook)
+  :hook ((lsp-after-initialize  prog-mode org-mode text-mode) . +cape-capf-hook)
   :init
   (defun +cape-capf-hook()
     (if (or (derived-mode-p 'lisp-interaction-mode)
             (derived-mode-p 'emacs-lisp-mode)
-	    (derived-mode-p 'org-mode))
+	    (derived-mode-p 'org-mode)
+	    (derived-mode-p 'text-mode))
 	(progn
           (add-to-list 'completion-at-point-functions
                        (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
