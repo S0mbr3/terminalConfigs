@@ -812,8 +812,8 @@ folder, otherwise delete a word"
 	    (derived-mode-p 'org-mode)
 	    (derived-mode-p 'text-mode))
 	(progn
-          (add-to-list 'completion-at-point-functions
-                       (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
+	  (setq completion-at-point-functions
+      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
