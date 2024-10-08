@@ -970,9 +970,16 @@ folder, otherwise delete a word"
     ("j" text-scale-increase "in")
     ("k" text-scale-decrease "out")
     ("f" nil "finished" :exit t))
+  (defhydra hydra-fireball-and-earthquake (:timeout 4)
+    "calculate fireball damages"
+    ("j" fireball-and-earthquake-calculator "fireball and earthquake")
+    ("k" fireball-hp-building-left  "hp left after fireball")
+    ("l" earthquake-hp-building-left "hp left after earthquakes")
+    ("f" nil "finished" :exit t))
   (ox/leader-keys
     "h" '(:ignore t :which-key "hydra")
-    "hs" '(hydra-text-scale/body :which-key "scale text")))
+    "hs" '(hydra-text-scale/body :which-key "scale text")
+    "hf" '(hydra-fireball-and-earthquake/body :which-key "fireball damages")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -1566,7 +1573,6 @@ because compile mode is too slow"
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
-   (python-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred)
    (yaml-ts-mode . lsp-deferred)
@@ -1592,7 +1598,12 @@ because compile mode is too slow"
   ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
   ;;   "--stdio"))									   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+  (use-package lsp-pyright
+    :straight t
+    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    :hook (python-ts-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp-deferred))))
   (setq lsp-clients-angular-language-server-command
 	'("node"
 	  "/usr/local/lib/node_modules/@angular/language-server"
@@ -2019,9 +2030,11 @@ because compile mode is too slow"
   (require 'org-tempo)
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("cc" . "src C")))
+  (add-to-list 'org-structure-template-alist '("cc" . "src C"))
+  )
 #+end_src
 
 ** Auto-tangle Configuration Files
