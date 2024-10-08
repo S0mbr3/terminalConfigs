@@ -948,7 +948,6 @@ folder, otherwise delete a word"
   :after (general which-key)
   :config
   (ox/leader-keys
-    ;;"h" '(:ignore t :which-key "Org")
     "0" '(harpoon-add-file :whick-key "Add file to Harpoon")
     "1" '(harpoon-go-to-1 :which-key "harpoon file 1")
     "2" '(harpoon-go-to-2 :which-key "harpoon file 2")
