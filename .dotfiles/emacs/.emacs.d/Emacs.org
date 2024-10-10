@@ -464,6 +464,8 @@ It can also add projects on the fly with the Add project option
 (setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
+(desktop-save-mode 1)
+
 (display-time-mode 1) ;;Display the time
 (pixel-scroll-precision-mode 1)
 (setq display-time-day-and-date 1)
@@ -814,8 +816,8 @@ folder, otherwise delete a word"
 	    (derived-mode-p 'org-mode)
 	    (derived-mode-p 'text-mode))
 	(progn
-	  (add-to-list 'completion-at-point-functions
-      (cape-capf-super #'yasnippet-capf #'cape-dabbrev))
+	  (setq completion-at-point-functions
+      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
@@ -824,12 +826,6 @@ folder, otherwise delete a word"
   ;; Disable lsp-completion-mode from being automatically enabled
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-configure-hook 'lsp-completion--disable)))
-
-(defun my-org-mode-remove-pcomplete ()
-  (setq completion-at-point-functions
-        (remove 'pcomplete-completions-at-point completion-at-point-functions)))
-
-(add-hook 'org-mode-hook #'my-org-mode-remove-pcomplete)
 
 (use-package yasnippet-capf
   :straight '(yasnippet-capf :host github
