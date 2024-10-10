@@ -465,6 +465,7 @@ It can also add projects on the fly with the Add project option
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
 (desktop-save-mode 1)
+(add-to-list 'desktop-locals-to-save 'evil-markers-alist) ;; Make evil marks saved accross working sessions
 
 (display-time-mode 1) ;;Display the time
 (pixel-scroll-precision-mode 1)
