@@ -1345,7 +1345,6 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 (define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
 (define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
-
 #+end_src
 
 * Project Management
