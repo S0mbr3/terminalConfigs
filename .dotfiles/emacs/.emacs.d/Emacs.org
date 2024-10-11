@@ -1525,6 +1525,11 @@ because compile mode is too slow"
   :straight t
   :after lsp-mode
   :init (global-flycheck-mode))
+(use-package consult-flycheck
+  :straight t
+  :general (:states '(normal visual)
+		    :keymaps 'prog-mode-map
+		    "SPC fl" 'consult-flycheck))
 #+end_src
 * Language Servers
 [[https://github.com/blahgeek/emacs-lsp-booster][emacs-lsp-booster]] increase performance by providing a wrapper-executable around lsp-programs.
@@ -2145,6 +2150,12 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
   (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
 )
+#+end_src
+* orgnote
+#+begin_src emacs-lisp
+(use-package orgnote
+  :straight t
+  :hook (org-mode . orgnote-sync-mode))
 #+end_src
 * Treesitter
 
