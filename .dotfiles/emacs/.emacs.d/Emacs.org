@@ -578,6 +578,12 @@ It can also add projects on the fly with the Add project option
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
 
+    "w" '(:ignore t :which-key "ace")
+    "ww" '(ace-window :which-key "ace-window")
+    "ws" '(ace-swap :which-key "ace-swap")
+    "wd" '(ace-delete-window :which-key "ace-delete-window")
+    "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows")
+
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
     "cd" '(ox/compile :which-key "ox/compile")
@@ -2655,6 +2661,8 @@ We are using consult-dash as an ui-front end to parse dash-docs
 ;; 			       (setq-local avy-background nil))
 ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
 #+end_src
+* Window management
+
 * Runtime Performance
 #+begin_src emacs-lisp
 ;; Make gc pauses faster by decreasubg tge threshold.
