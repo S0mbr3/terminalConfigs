@@ -2306,6 +2306,21 @@ with treesit-auto you don't have to remap your self the major modes to point to 
 
 ;; kill current buffer without the annoying confirmation message
 #+end_src
+* Combobulate
+Actually to make work combobulate I have to download the git repo manually and use [[:load-path ("~/builds/combobulate/"][:load-path]]
+so use-package can load it. By using straight it does not work. Waiting for this [[https://github.com/mickeynp/combobulate/issues/119][issue]] to be solved.
+#+begin_src emacs-lisp
+(use-package combobulate
+  ;; :straight (combobulate :type git :host github :repo "mickeynp/combobulate")
+  :custom
+  ;; You can customize Combobulate's key prefix here.
+  ;; Note that you may have to restart Emacs for this to take effect!
+  (combobulate-key-prefix "C-c o")
+  :hook ((prog-mode . combobulate-mode))
+  ;; Amend this to the directory where you keep Combobulate's source
+  ;; code.
+  :load-path ("~/builds/combobulate/"))
+#+end_src
 * Indent
 #+begin_src emacs-lisp
 (use-package indent-bars
