@@ -578,12 +578,6 @@ It can also add projects on the fly with the Add project option
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
 
-    "w" '(:ignore t :which-key "ace")
-    "ww" '(ace-window :which-key "ace-window")
-    "ws" '(ace-swap :which-key "ace-swap")
-    "wd" '(ace-delete-window :which-key "ace-delete-window")
-    "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows")
-
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
     "cd" '(ox/compile :which-key "ox/compile")
@@ -992,9 +986,17 @@ folder, otherwise delete a word"
     ("k" fireball-hp-building-left  "hp left after fireball")
     ("l" earthquake-hp-building-left "hp left after earthquakes")
     ("f" nil "finished" :exit t))
+    (defhydra hydra-split-size (:timeout 4)
+    "change splits size"
+    ("h" evil-window-decrease-width "decrease-width")
+    ("j" evil-window-decrease-height "decrease-height")
+    ("l" evil-window-increase-width "increase-width")
+    ("k" evil-window-increase-height "increase-width")
+    ("f" nil "finished" :exit t))
   (ox/leader-keys
     "h" '(:ignore t :which-key "hydra")
     "hs" '(hydra-text-scale/body :which-key "scale text")
+    "hb" '(hydra-split-size/body :which-key "split sizes")
     "hf" '(hydra-fireball-and-earthquake/body :which-key "fireball damages")))
 
 (defun kill-current-buffer-without-confirm ()
@@ -2662,7 +2664,14 @@ We are using consult-dash as an ui-front end to parse dash-docs
 ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
 #+end_src
 * Window management
-
+#+begin_src emacs-lisp
+(ox/leader-keys
+    "w" '(:ignore t :which-key "ace")
+    "ww" '(ace-window :which-key "ace-window")
+    "ws" '(ace-swap :which-key "ace-swap")
+    "wd" '(ace-delete-window :which-key "ace-delete-window")
+    "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows"))
+#+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
 ;; Make gc pauses faster by decreasubg tge threshold.
