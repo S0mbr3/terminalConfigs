@@ -136,7 +136,11 @@ We use the no-littering package to keep folders where we edit files and the Emac
 (use-package doom-modeline
   :straight t
   :init (doom-modeline-mode 1)
-  :custom(doom-modeline-height 8))
+  :custom
+  (doom-modeline-height 1)
+  :config
+  (set-face-attribute 'mode-line nil :height 150)
+  (setq doom-modeline-time-analogue-clock nil))
 #+end_src
 
 * Basic UI Configuration
