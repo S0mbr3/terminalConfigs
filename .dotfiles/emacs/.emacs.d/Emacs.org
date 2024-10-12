@@ -992,7 +992,7 @@ folder, otherwise delete a word"
     "hs" '(hydra-text-scale/body :which-key "scale text")
     "hb" '(hydra-split-size/body :which-key "split sizes")
     "hh" '(harpoon-quick-menu-hydra :which-key "harpoon-quick-menu-hyra")
-    "hf" '(hydra-coc-dc-menu :which-key "coc-damage-calculator")))
+    "hf" '(coc-damage-calculator-menu-hydra :which-key "coc-damage-calculator")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -2690,6 +2690,16 @@ We are using consult-dash as an ui-front end to parse dash-docs
                                     :repo "S0mbr3/coc-damage-calculator")
   :init
   (require 'hydra))
+#+end_src
+* package creation
+#+begin_src emacs-lisp
+(use-package package-lint
+  :straight t)
+
+(use-package flycheck-package
+  :straight t
+  :config
+  :after flycheck)
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
