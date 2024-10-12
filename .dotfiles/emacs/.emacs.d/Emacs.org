@@ -980,12 +980,6 @@ folder, otherwise delete a word"
     ("j" text-scale-increase "in")
     ("k" text-scale-decrease "out")
     ("f" nil "finished" :exit t))
-  (defhydra hydra-fireball-and-earthquake (:timeout 4)
-    "calculate fireball damages"
-    ("j" fireball-and-earthquake-calculator "fireball and earthquake")
-    ("k" fireball-hp-building-left  "hp left after fireball")
-    ("l" earthquake-hp-building-left "hp left after earthquakes")
-    ("f" nil "finished" :exit t))
     (defhydra hydra-split-size (:timeout 4)
     "change splits size"
     ("h" evil-window-decrease-width "decrease-width")
