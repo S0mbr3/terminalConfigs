@@ -101,7 +101,11 @@
 (use-package doom-modeline
   :straight t
   :init (doom-modeline-mode 1)
-  :custom(doom-modeline-height 8))
+  :custom
+  (doom-modeline-height 1)
+  :config
+  (set-face-attribute 'mode-line nil :height 150)
+  (setq doom-modeline-time-analogue-clock nil))
 
 (setq inhibit-startup-message t ; Don't show the spalsh screen
       ring-bell-function 'ignore
@@ -399,6 +403,9 @@
 (setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
+(desktop-save-mode 1)
+(add-to-list 'desktop-locals-to-save 'evil-markers-alist) ;; Make evil marks saved accross working sessions
+
 (display-time-mode 1) ;;Display the time
 (pixel-scroll-precision-mode 1)
 (setq display-time-day-and-date 1)
@@ -612,16 +619,16 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  :hook ((lsp-after-initialize . +cape-capf-hook)
-	 (prog-mode . +cape-capf-hook))
+  :hook ((lsp-after-initialize  prog-mode org-mode text-mode) . +cape-capf-hook)
   :init
   (defun +cape-capf-hook()
     (if (or (derived-mode-p 'lisp-interaction-mode)
             (derived-mode-p 'emacs-lisp-mode)
-	    (derived-mode-p 'org-mode))
+	    (derived-mode-p 'org-mode)
+	    (derived-mode-p 'text-mode))
 	(progn
-          (add-to-list 'completion-at-point-functions
-                       (cape-capf-super  #'yasnippet-capf  #'cape-dabbrev))
+	  (setq completion-at-point-functions
+      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
@@ -643,7 +650,9 @@ folder, otherwise delete a word"
   :init
   (setq completion-styles '(orderless basic)
 	;;completion-category-defaults nil
-	completion-category-overrides '((file (styles . (partial-completion))))))
+	completion-category-overrides '((file (styles . (partial-completion)))))
+  :config
+  (setq orderless-matching-styles '(orderless-flex)))
 
 (defun ox/get-project-root ()
   (when (fboundp 'projectile-project-root)
@@ -753,7 +762,6 @@ folder, otherwise delete a word"
   :after (general which-key)
   :config
   (ox/leader-keys
-    ;;"h" '(:ignore t :which-key "Org")
     "0" '(harpoon-add-file :whick-key "Add file to Harpoon")
     "1" '(harpoon-go-to-1 :which-key "harpoon file 1")
     "2" '(harpoon-go-to-2 :which-key "harpoon file 2")
@@ -775,9 +783,19 @@ folder, otherwise delete a word"
     ("j" text-scale-increase "in")
     ("k" text-scale-decrease "out")
     ("f" nil "finished" :exit t))
+    (defhydra hydra-split-size (:timeout 4)
+    "change splits size"
+    ("h" evil-window-decrease-width "decrease-width")
+    ("j" evil-window-decrease-height "decrease-height")
+    ("l" evil-window-increase-width "increase-width")
+    ("k" evil-window-increase-height "increase-width")
+    ("f" nil "finished" :exit t))
   (ox/leader-keys
     "h" '(:ignore t :which-key "hydra")
-    "hs" '(hydra-text-scale/body :which-key "scale text")))
+    "hs" '(hydra-text-scale/body :which-key "scale text")
+    "hb" '(hydra-split-size/body :which-key "split sizes")
+    "hh" '(harpoon-quick-menu-hydra :which-key "harpoon-quick-menu-hyra")
+    "hf" '(hydra-coc-dc-menu :which-key "coc-damage-calculator")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -1262,6 +1280,11 @@ because compile mode is too slow"
   :straight t
   :after lsp-mode
   :init (global-flycheck-mode))
+(use-package consult-flycheck
+  :straight t
+  :general (:states '(normal visual)
+		    :keymaps 'prog-mode-map
+		    "SPC fl" 'consult-flycheck))
 
 (defun ox/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -1305,7 +1328,6 @@ because compile mode is too slow"
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
-   (python-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred)
    (yaml-ts-mode . lsp-deferred)
@@ -1331,7 +1353,12 @@ because compile mode is too slow"
   ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
   ;;   "--stdio"))									   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+  (use-package lsp-pyright
+    :straight t
+    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    :hook (python-ts-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp-deferred))))
   (setq lsp-clients-angular-language-server-command
 	'("node"
 	  "/usr/local/lib/node_modules/@angular/language-server"
@@ -1731,9 +1758,11 @@ because compile mode is too slow"
   (require 'org-tempo)
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("cc" . "src C")))
+  (add-to-list 'org-structure-template-alist '("cc" . "src C"))
+  )
 
 ;; Automatically tangle our Emacs.org config file when we save it
 ;; (defun ox/org-babel-tangle-config ()
@@ -1826,6 +1855,10 @@ because compile mode is too slow"
   (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
 )
+
+(use-package orgnote
+  :straight t
+  :hook (org-mode . orgnote-sync-mode))
 
 ;;(require 'treesit)
 ;;(setq treesit-extra-load-path '("/usr/local/lib"))
@@ -1952,6 +1985,156 @@ because compile mode is too slow"
 
 ;; kill current buffer without the annoying confirmation message
 
+(use-package combobulate
+  ;; :straight (combobulate :type git :host github :repo "mickeynp/combobulate")
+  :custom
+  ;; You can customize Combobulate's key prefix here.
+  ;; Note that you may have to restart Emacs for this to take effect!
+  (combobulate-key-prefix "C-c o")
+  :hook ((prog-mode . combobulate-mode))
+  ;; Amend this to the directory where you keep Combobulate's source
+  ;; code.
+  :load-path ("~/builds/combobulate/"))
+
+(use-package indent-bars
+  :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  ;; Add other languages as needed
+  (indent-bars-treesit-scope '((python function_definition class_definition for_statement
+	  if_statement with_statement while_statement)))
+  ;; wrap may not be needed if no-descend-list is enough
+  ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
+  ;;				      list list_comprehension
+  ;;				      dictionary dictionary_comprehension
+  ;;				      parenthesized_expression subscript)))
+  :hook ((python-base-mode yaml-mode c-mode makefile-gmake-mode) . indent-bars-mode))
+
+(use-package aggressive-indent
+  :straight nil
+  :disabled t
+  :hook((python-base-mode yaml-mode c-mode makefile-gmake-mode) . agressive-indent-mode)
+  :config
+  (global-aggressive-indent-mode 1))
+
+(use-package dash-docs
+  :straight t
+  :config
+  (setq dash-docs-browser-func 'ox/read-dash-files)
+  (use-package consult-dash
+    :straight t
+    :config
+    (defun ox/read-dash-files(dash-docs-result-url &optional docset-name filename anchor)
+      "Make dash files readable inside eww."
+      ;;(eww-browse-url url)
+      ;;(print dash-docs-result-url)
+      (process-file-uri dash-docs-result-url)
+      ;;(eww dash-docs-result-url)
+      ;;(org-web-tools-read-url-as-org url)
+      )
+    ;; Use the symbol at point as initial search term
+    (consult-customize consult-dash :initial (thing-at-point 'symbol)))
+  (setq dash-docs-common-docsets '("C" "TypeScript")))
+;;(org-web-tools-read-url-as-org "https://en.cppreference.com/w/c/keyword/for")
+;;(eaf-open-browser "file:///home/oxhart/.docsets/C.docset/Contents/Resources/Documents/en.cppreference.com/w/c/keyword/for.html")
+
+(defun extract-file-uri (input)
+  "Extract the file URI with the 'file://' scheme from the input string."
+  (let ((string-part (substring-no-properties input)))
+    (if (string-match "^\\(file://.*\\)$" string-part)
+        (match-string 1 string-part))))
+
+;; Example function usage
+(defun process-file-uri (input)
+  "Example function that processes the file URI part."
+  (let ((file-uri (extract-file-uri input)))
+    (when file-uri
+      (eaf-open-browser file-uri))))
+
+(use-package devdocs
+  :straight t
+  :hook ((python-ts-mode . (lambda () (setq-local devdocs-current-docs '("python~3.12")))))
+  :config
+  (defun ox/after-devdocs-lookup (&rest r)
+  (delete-window))
+  (advice-add #'devdocs-lookup :after 'ox/after-devdocs-lookup))
+
+;; (use-package eww-lnum
+;;   :straight t
+;;   :config
+;;   (with-eval-after-load 'eww
+;;     (define-key eww-mode-map (kbd "f") 'eww-lnum-follow))
+;;     (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
+
+;; (use-package org-web-tools
+;;   :straight t)
+
+  ;; This package allow single buffer navigation in Dired
+  ;; like (dired-kill-when-opening-new-dired-buffer t) does
+  ;; (use-package dired-single
+  ;;   :config
+  ;;   (evil-collection-define-key 'normal 'dired-mode-map
+  ;;     "h" 'dired-single-up-directory
+  ;;     "l" 'dired-single-buffer))
+  (use-package dired
+    :ensure nil
+    :commands (dired dired-jump)
+    :custom ((dired-listing-switches "-agho --group-directories-first"))
+    :config
+    (setq dired-kill-when-opening-new-dired-buffer t)
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-up-directory
+      "l" 'dired-find-file))
+
+  (use-package all-the-icons-dired
+    :straight t
+    :hook (dired-mode . all-the-icons-dired-mode))
+
+
+  (use-package ranger
+    ;;:straight t
+    :straight '(ranger :host github
+		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
+		       :repo "S0mbr3/ranger.el"
+		       :branch "ranger-setup-image-preview")
+    :config
+    (global-set-key (kbd "C-c d") 'ranger)
+    (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
+
+    ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
+    (defun my/ranger-clear-header-line ()
+      "Clear the header line."
+      (setq header-line-format nil))
+
+    (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
+
+    (use-package dired-hide-dotfiles
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-hide-dotfiles-mode)
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+	"H" 'dired-hide-dotfiles-mode))
+
+    (use-package dired-preview
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-preview-mode)
+      :config
+      (dired-preview-global-mode 1))
+
+    (use-package dired-open
+      :unless (featurep 'ranger)
+      :straight t
+      :after dired
+      ;;:commands (dired dired-jump)
+      :config
+      ;; Strange behaviors not picking always the good program automatically
+      ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+      (setq dired-open-extensions '(("png" . "feh")
+				    ("mkv" . "mpv"))))
+
 (require 'tramp)
 (use-package ssh-config-mode
   :straight t
@@ -1977,6 +2160,15 @@ because compile mode is too slow"
   "Open dired in ledeb server"
   (interactive)
     (dired "/ssh:ledeb:"))
+
+(use-package gnuplot
+  :straight t)
+(use-package gnuplot-mode
+  :straight t
+  :config
+  ;; automatically open files ending with .gp or .gnuplot in gnuplot mode
+(setq auto-mode-alist 
+      (append '(("\\.\\(gp\\|gnuplot\\)$" . gnuplot-mode)) auto-mode-alist)))
 
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
@@ -2125,6 +2317,20 @@ because compile mode is too slow"
 ;; (defun my/frog-menu-hook () (
 ;; 			       (setq-local avy-background nil))
 ;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
+
+(ox/leader-keys
+    "w" '(:ignore t :which-key "ace")
+    "ww" '(ace-window :which-key "ace-window")
+    "ws" '(ace-swap :which-key "ace-swap")
+    "wd" '(ace-delete-window :which-key "ace-delete-window")
+    "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows"))
+
+(use-package coc-damage-calculator
+  :straight '(coc-damage-calculator :host github
+		       ;;:local-repo "/home/oxhart/dev/elisp/coc-damage-calculator/"
+                                    :repo "S0mbr3/coc-damage-calculator")
+  :init
+  (require 'hydra))
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 ;;(setq gc-cons-threshold (* 2 1000 000))
