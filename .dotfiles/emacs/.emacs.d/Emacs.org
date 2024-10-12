@@ -2687,6 +2687,15 @@ We are using consult-dash as an ui-front end to parse dash-docs
     "wd" '(ace-delete-window :which-key "ace-delete-window")
     "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows"))
 #+end_src
+* coc-damage-calculator
+#+begin_src emacs-lisp
+(use-package coc-damage-calculator
+  :straight '(coc-damage-calculator :host github
+		       ;;:local-repo "/home/oxhart/dev/elisp/coc-damage-calculator/"
+                                    :repo "S0mbr3/coc-damage-calculator")
+  :init
+  (require 'hydra))
+#+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
 ;; Make gc pauses faster by decreasubg tge threshold.
