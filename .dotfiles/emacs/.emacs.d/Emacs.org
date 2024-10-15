@@ -400,7 +400,7 @@ Using persp-mode to create different workspaces
 
     ;; Keybindings for Alt+numbers
     (dotimes (i 10)  ;; Loop from 0 to 9
-      (let ((key (format "C-c %d" i)))
+      (let ((key (format "M-%d" i)))
 	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
   ;; (eval-after-load 'persp-mode
   ;;   '(my-update-dynamic-persps))
