@@ -2692,8 +2692,19 @@ We are using consult-dash as an ui-front end to parse dash-docs
   :init
   (require 'hydra))
 #+end_src
+* drawing
+#+begin_src emacs-lisp
+(use-package edraw-org
+  :after org
+  :straight '(edraw-org :host github :repo "misohena/el-easydraw" :branch "master")
+  :config
+  (edraw-org-setup-default))
+#+end_src
 * package creation
 #+begin_src emacs-lisp
+(use-package package-build
+  :straight t)
+
 (use-package package-lint
   :straight t)
 
