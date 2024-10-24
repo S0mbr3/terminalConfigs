@@ -2034,6 +2034,7 @@ because compile mode is too slow"
      (C . t)
      (makefile . t)
      (shell . t)
+     (latex . t)
      (typescript . t)
      (gnuplot .t )
      (python . t)))
