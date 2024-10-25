@@ -1822,6 +1822,7 @@ because compile mode is too slow"
   (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
   (setq org-latex-create-formula-image-program 'dvisvgm) ;; using svg instead of dvipng for formula and graphics
+  (setq org-latex-compiler "lualatex") ;; Compile pdfwith lualatex instead of pdflatex
   (setq org-return-follows-link t) ;; Allow to follow links using RET key
   (setq org-link-frame-setup
         '((vm . vm-visit-folder-other-frame)
