@@ -120,7 +120,6 @@
 
 ;;(set-frame-parameter nil 'alpha-background 70) ; For current frame
 ;;(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
-
 (column-number-mode)
 (global-display-line-numbers-mode 1) ;Show line numbers
 (setq display-line-numbers-type 'relative)
@@ -349,7 +348,7 @@
 
     ;; Keybindings for Alt+numbers
     (dotimes (i 10)  ;; Loop from 0 to 9
-      (let ((key (format "C-c %d" i)))
+      (let ((key (format "M-%d" i)))
 	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
   ;; (eval-after-load 'persp-mode
   ;;   '(my-update-dynamic-persps))
@@ -619,13 +618,14 @@ folder, otherwise delete a word"
 (use-package cape
   :straight t
   :after corfu
-  :hook ((lsp-after-initialize  prog-mode org-mode text-mode) . +cape-capf-hook)
+  :hook ((lsp-after-initialize  prog-mode org-mode text-mode makefile-mode) . +cape-capf-hook)
   :init
   (defun +cape-capf-hook()
     (if (or (derived-mode-p 'lisp-interaction-mode)
             (derived-mode-p 'emacs-lisp-mode)
 	    (derived-mode-p 'org-mode)
-	    (derived-mode-p 'text-mode))
+	    (derived-mode-p 'text-mode)
+	    (derived-mode-p 'makefile-mode))
 	(progn
 	  (setq completion-at-point-functions
       (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
@@ -795,7 +795,7 @@ folder, otherwise delete a word"
     "hs" '(hydra-text-scale/body :which-key "scale text")
     "hb" '(hydra-split-size/body :which-key "split sizes")
     "hh" '(harpoon-quick-menu-hydra :which-key "harpoon-quick-menu-hyra")
-    "hf" '(hydra-coc-dc-menu :which-key "coc-damage-calculator")))
+    "hf" '(coc-damage-calculator-menu-hydra :which-key "coc-damage-calculator")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -1543,6 +1543,8 @@ because compile mode is too slow"
   (setq org-edit-src-content-indentation 0)
   (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
+  (setq org-latex-create-formula-image-program 'dvisvgm) ;; using svg instead of dvipng for formula and graphics
+  (setq org-latex-compiler "lualatex") ;; Compile pdfwith lualatex instead of pdflatex
   (setq org-return-follows-link t) ;; Allow to follow links using RET key
   (setq org-link-frame-setup
         '((vm . vm-visit-folder-other-frame)
@@ -1748,6 +1750,7 @@ because compile mode is too slow"
      (C . t)
      (makefile . t)
      (shell . t)
+     (latex . t)
      (typescript . t)
      (gnuplot .t )
      (python . t)))
@@ -2331,6 +2334,23 @@ because compile mode is too slow"
                                     :repo "S0mbr3/coc-damage-calculator")
   :init
   (require 'hydra))
+
+(use-package edraw-org
+  :after org
+  :straight '(edraw-org :host github :repo "misohena/el-easydraw" :branch "master")
+  :config
+  (edraw-org-setup-default))
+
+(use-package package-build
+  :straight t)
+
+(use-package package-lint
+  :straight t)
+
+(use-package flycheck-package
+  :straight t
+  :config
+  :after flycheck)
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 ;;(setq gc-cons-threshold (* 2 1000 000))

@@ -9,7 +9,7 @@ local Gio = lgi.require('Gio')
 local M = {}
 
 local unseen_notifications = {}
- M.notification_icon = wibox.widget.textbox()
+M.notification_icon = wibox.widget.textbox()
 M.notification_icon.text=""
 M.notification_icon.font = "FiraCode Nerd 20"
 --🔔
@@ -27,7 +27,7 @@ local notification_widget = wibox.widget {
 }
 
 local populate_notification_widget = function()
-   --naughty.notification { title = "Claimed fullscreen ?", message="clicked"}
+  --naughty.notification { title = "Claimed fullscreen ?", message="clicked"}
   notification_widget:reset()
   for _, notif in ipairs(unseen_notifications) do
     notification_widget:add(wibox.widget.textbox(notif.title))
@@ -77,12 +77,12 @@ M.notification_popup = awful.popup {
 
 -- Listen for custom D-Bus signal
 awesome.connect_signal("dbus_notification", function(summary, body)
-    naughty.notification { title = summary, message = body }
+  naughty.notification { title = summary, message = body }
 end)
 
 naughty.connect_signal("added", function(notification)
-			  add_notification(notification.title, notification.text)  -- or M.add_notification(summary, body) if in a module
-			  print(notification.text)
-    end)
+  add_notification(notification.title, notification.text)  -- or M.add_notification(summary, body) if in a module
+  print(notification.text)
+end)
 
 return M

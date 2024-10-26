@@ -158,7 +158,6 @@ We use the no-littering package to keep folders where we edit files and the Emac
 
 ;;(set-frame-parameter nil 'alpha-background 70) ; For current frame
 ;;(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
-
 (column-number-mode)
 (global-display-line-numbers-mode 1) ;Show line numbers
 (setq display-line-numbers-type 'relative)

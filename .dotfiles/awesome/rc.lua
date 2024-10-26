@@ -7,7 +7,6 @@ pcall(require, "luarocks.loader")
 local volume_widget = require('awesome-wm-widgets.pactl-widget.volume')
 local bluetooth = require("gobo.awesome.bluetooth") -- bluetooth widget for awesomeWM from this github repo:     https://github.com/gobolinux/gobo-awesome-bluetooth
 local toggle_all_tags = require("my_modules.toggle_all_tags")
-local my_notifications = require("my_modules.notifications")
 local statusbar = require('my_modules.statusbar')
 local net_widgets = require("net_widgets")
 local gears = require("gears")
@@ -19,6 +18,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
+local my_notifications = require("my_modules.notifications")
 -- Declarative object management
 local ruled = require("ruled")
 local menubar = require("menubar")
