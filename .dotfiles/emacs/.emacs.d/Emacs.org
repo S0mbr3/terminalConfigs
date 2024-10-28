@@ -1544,6 +1544,8 @@ because compile mode is too slow"
 (use-package flycheck
   :straight t
   :after lsp-mode
+  :config
+  (setq flycheck-emacs-lisp-load-path "inherit")
   :init (global-flycheck-mode))
 (use-package consult-flycheck
   :straight t
