@@ -1,6 +1,0 @@
-#!/bin/bash
-
-path=$HOME/scripts/fete
-
-url="$(printf 'https://fetedujour.fr/api/v2/hWTeWBPpqsDadjhb/json-normal\?api_key\=hWTeWBPpqsDadjhb\&f\=json\&t\=normal')"
-curl -s "$url" --output "$path/day.json"

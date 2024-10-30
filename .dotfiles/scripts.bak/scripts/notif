@@ -1,7 +1,0 @@
-#!/bin/bash
-last_command="$(tail -n 2 ~/.zsh_history | head -n 1 | cut -d';' -f2)"
-printf "%s\n" "$last_command"
-printf '\x1b]99;i=1:d=0;command: %s\x1b\\' "$last_command"
-printf '\x1b]99;i=1:d=1:p=body;DONE\x1b\\'
-
-
