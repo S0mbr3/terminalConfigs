@@ -133,8 +133,21 @@
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+;; When on WSL change frame title name to help autohotkey script
+;; If we are not on WSL we can undecorate Emacs for a better integration with TWMs
+(if (string-match-p "Microsoft" (shell-command-to-string "uname -a"))
+    (setq frame-title-format "EmacsWSL")
+  (progn
+    (set-frame-parameter nil 'undecorated t)
+    (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
+    (add-to-list 'default-frame-alist '(internal-border-width . 9)) ;; helpful to see full letters at bottom
+    (add-to-list 'default-frame-alist '(undecorated . t)))) ;; Remove title bar, and every decorations
+
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
+
+;;(set-frame-parameter nil 'internal-border-width 0)
+
 
 ;;(load-theme 'deeper-blue t)
 
@@ -365,6 +378,33 @@
 
   (with-eval-after-load 'persp-mode
   (setq my-persp-init-timer (run-with-timer 0 1 'my-check-persp-init)))
+
+(defvar my-last-visited-persp "none") ;; Variable holding last visited persp
+
+(defun ox/switch-to-last-persp ()
+  "Switch to the last known perspective"
+  (interactive)
+ (persp-switch my-last-visited-persp))
+
+;; Hook to track last known perspective for ox/switch-to-last-persp function
+(add-hook 'persp-before-switch-functions
+          (lambda (new-persp old-persp)
+            ;; If old-persp or new-persp is a frame, get the associated perspective
+            (let* ((old-persp (if (framep old-persp)
+                                  (get-frame-persp old-persp)
+                                old-persp))
+                   (new-persp (if (framep new-persp)
+                                  (get-frame-persp new-persp)
+                                new-persp))
+                   (old-name (if (perspective-p old-persp)
+                                 (persp-name old-persp)
+                               (format "%s" old-persp)))  ;; Ensure old-persp is a string
+                   (new-name (if (perspective-p new-persp)
+                                 (persp-name new-persp)
+                               (format "%s" new-persp)))) ;; Ensure new-persp is a string
+              ;; Switch the names here to display the correct old to new perspective
+              ;;(print (format "Switching from %s to %s" new-name old-name))
+	      (setq my-last-visited-persp old-name))))
 
 (defun my-switch-to-project ()
   "Switch or open a project in its own perspective, with an option to add a new project."
@@ -1114,6 +1154,8 @@ folder, otherwise delete a word"
 (define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
 (define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
+(define-key my-evil-leader-map (kbd "l") 'ox/switch-to-last-persp)
+;; Split buffer horizontally
 
 (use-package projectile
   :straight t
@@ -1279,6 +1321,8 @@ because compile mode is too slow"
 (use-package flycheck
   :straight t
   :after lsp-mode
+  :config
+  (setq flycheck-emacs-lisp-load-path "inherit")
   :init (global-flycheck-mode))
 (use-package consult-flycheck
   :straight t
@@ -2329,6 +2373,7 @@ because compile mode is too slow"
     "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows"))
 
 (use-package coc-damage-calculator
+  :disabled
   :straight '(coc-damage-calculator :host github
 		       ;;:local-repo "/home/oxhart/dev/elisp/coc-damage-calculator/"
                                     :repo "S0mbr3/coc-damage-calculator")
