@@ -11,7 +11,7 @@
 	path = scripts/fz
 	url = git@github.com:S0mbr3/fz.git
 [submodule "scripts/finder"]
-	path = scripts/finder
+	path = .dotfiles/scripts/scripts/finder
 	url = git@github.com:S0mbr3/finder.git
 [submodule ".dotfiles/awesome/net_widgets"]
     path = .dotfiles/awesome/net_widgets
