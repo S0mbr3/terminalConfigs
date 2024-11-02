@@ -21,5 +21,8 @@ return {
     "nvim-lua/plenary.nvim",
     "folke/trouble.nvim",
     "nvim-telescope/telescope.nvim"
+  },
+  {
+  'Exafunction/codeium.vim',
   }
 }
