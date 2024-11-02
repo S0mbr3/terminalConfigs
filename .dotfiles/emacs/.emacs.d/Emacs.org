@@ -1772,6 +1772,12 @@ because compile mode is too slow"
   ;; Now 'token' contains your GitHub token, and you can use it in your code.
   )
 
+;; (require 'epg)
+;; (require 'auth-source-pass)
+;; (auth-source-pass-enable)
+
+;; (setq epg-pinentry-mode 'loopback) ;;Getting prompted the gpg password in minibuffer instead of external
+;; (pinentry-start)
 #+end_src
 * Magit
 #+begin_src emacs-lisp
