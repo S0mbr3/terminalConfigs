@@ -41,7 +41,6 @@ function_name (){
   rm fortune
 }
 function_name
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -296,3 +295,6 @@ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 export SDKMAN_DIR="/home/oxhart/.sdkman"
 [[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
+
+# To customize prompt, run `p10k configure` or edit ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
+[[ ! -f ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh
