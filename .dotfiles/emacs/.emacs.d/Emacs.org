@@ -1761,6 +1761,7 @@ because compile mode is too slow"
   ;; Now 'token' contains your GitHub token, and you can use it in your code.
   )
 
+(setenv "GPG_TTY" (format "%d" (string-to-number (shell-command-to-string "tty --file=/dev/tty"))))
 ;; (require 'epg)
 ;; (require 'auth-source-pass)
 ;; (auth-source-pass-enable)
