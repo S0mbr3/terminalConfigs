@@ -206,6 +206,10 @@ alias deb='ssh ledeb'
 alias ts='tmux-sessionizer'
 alias tt='tmux-attacher'
 export PATH="/home/oxhart/scripts:$PATH"
+
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye >/dev/null
+
 #bindkey -s '^o' 'tmux-sessionizer^M'
 
 functin zz(){
