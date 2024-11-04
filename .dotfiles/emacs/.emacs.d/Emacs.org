@@ -2758,6 +2758,65 @@ We are using consult-dash as an ui-front end to parse dash-docs
   :config
   (edraw-org-setup-default))
 #+end_src
+
+* ChatGpt
+#+begin_src emacs-lisp
+(use-package chatgpt
+  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :bind ("C-c q" . chatgpt-query))
+#+end_src
+* Codeium
+We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* keep showing codeium completions while accepting completions.
+#+begin_src emacs-lisp
+(use-package codeium
+  :straight '(codeium :host github :repo "Exafunction/codeium.el")
+  :config
+(dolist (element '(completion-at-point corfu-expand corfu-insert))
+  (add-to-list 'corfu-auto-commands element)))
+#+end_src
+* gptel
+#+begin_src emacs-lisp
+(use-package gptel
+  :straight t
+  :config
+  (defun my-groq-api-key ()
+    (let ((auth-info (auth-source-search
+		      :host "api.groq.com"
+		      :user "apikey"
+		      :require '(:secret))))
+      (if auth-info
+	  (funcall (plist-get (car auth-info) :secret))
+	(error "Groq API key not found in .authinfo"))))
+
+  
+  (defun my-openai-api-key ()
+    (let ((auth-info (auth-source-search
+		      :host "api.openai.com"
+		      :user "apikey"
+		      :require '(:secret))))
+      (if auth-info
+	  (funcall (plist-get (car auth-info) :secret))
+	(error "OpenAI API key not found in .authinfo"))))
+(defun my-openai-setup ()
+  (setq gptel-model 'gpt-4o-mini)
+  (setq gptel-api-key #'my-openai-api-key))
+  ;; Groq offers an OpenAI compatible API
+  (defun my-groq-setup ()
+    (setq gptel-model   'llama-3.1-70b-versatile
+      gptel-backend
+      (gptel-make-openai "Groq"               ;Any name you want
+	:host "api.groq.com"
+	:endpoint "/openai/v1/chat/completions"
+	:stream t
+	:key #'my-groq-api-key                   ;can be a function that returns the key
+	:models '(llama-3.1-70b-versatile
+		  llama-3.1-8b-instant
+		  llama3-70b-8192
+		  llama3-8b-8192
+		  mixtral-8x7b-32768
+		  gemma-7b-it))))
+  (my-groq-setup))
+#+end_src
 * package creation
 #+begin_src emacs-lisp
 (use-package package-build
