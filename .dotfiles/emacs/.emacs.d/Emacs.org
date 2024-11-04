@@ -1056,6 +1056,7 @@ Apheleia is an Emacs package which solves both of these problems comprehensively
   :config
   (setf (alist-get 'prettier-json apheleia-formatters)
         '("prettier" "--stdin-filepath" filepath))
+  (add-to-list 'apheleia-mode-alist '(emacs-lisp-mode . lisp-indent))
   (apheleia-global-mode +1))
 #+end_src
 * Linters
