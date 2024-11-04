@@ -1,3 +1,12 @@
+is_socket_x0() {
+if [ -x "/tmp/.X11-unix/X0" ]; then
+    echo "Socket X0 running."
+else
+    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 &
+    Echo "Socket starting."
+fi
+}
+
 function_name (){
   toilet "Hello Ox"
   if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
