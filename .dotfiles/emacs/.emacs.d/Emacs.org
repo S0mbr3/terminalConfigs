@@ -1041,6 +1041,8 @@ folder, otherwise delete a word"
 
 * Formatting
 Apheleia is an Emacs package which solves both of these problems comprehensively for all languages, allowing you to say goodbye to language-specific packages such as Blacken and prettier-js.
+
+To help keeping in the 80 character long for elisp we wrap the code using auto-fill-mode in a hook.
 #+begin_src emacs-lisp
 ;;; APHELEIA
 ;; auto-format different source code files extremely intelligently
@@ -1048,6 +1050,9 @@ Apheleia is an Emacs package which solves both of these problems comprehensively
 (use-package apheleia
   :straight t
   :diminish ""
+  :hook
+  ((emacs-lisp-mode . (lambda () (set-fill-column 80)))
+   (emacs-lisp-mode . auto-fill-mode))
   :defines
   apheleia-formatters
   apheleia-mode-alist
