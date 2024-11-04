@@ -18,7 +18,13 @@ function_name (){
     # then i am not using vcxsrv and no need to export the DISPLAY var 
     #export DISPLAY=$(ip route|awk '/^default/{print $3}'):0.0
     #export DISPLAY=$(ip route|awk '/^default/{print $3}'):0.0
+
+    #For X410 with socket connection "VSOCK"
     export DISPLAY=:0.0
+    is_socket_x0
+    export HOST_IP="$(ip route |awk '/^default/{print $3}')"
+    export PULSE_SERVER="tcp:$HOST_IP"
+
     # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
     #export LIBGL_ALWAYS_INDIRECT=0
     # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
