@@ -75,6 +75,7 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;;(setq use-package-always-defer t)
 ;;(setq use-package-always-ensure nil)
