@@ -2739,11 +2739,8 @@ We are using consult-dash as an ui-front end to parse dash-docs
 #+end_src
 * coc-damage-calculator
 #+begin_src emacs-lisp
-(use-package coc-damage-calculator
-  :disabled
-  :straight '(coc-damage-calculator :host github
-		       ;;:local-repo "/home/oxhart/dev/elisp/coc-damage-calculator/"
-                                    :repo "S0mbr3/coc-damage-calculator")
+(use-package coc-dc
+  :straight t
   :init
   (require 'hydra))
 #+end_src
