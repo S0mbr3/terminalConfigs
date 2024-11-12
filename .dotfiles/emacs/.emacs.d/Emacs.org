@@ -2080,6 +2080,9 @@ because compile mode is too slow"
 (use-package ob-typescript
   :straight t)
 
+(use-package ob-yaml
+  :straight (ob-yaml :type git :host github :repo "llhotka/ob-yaml"))
+
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -2089,6 +2092,7 @@ because compile mode is too slow"
      (shell . t)
      (latex . t)
      (typescript . t)
+     (yaml . t)
      (gnuplot .t )
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
