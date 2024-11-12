@@ -2107,9 +2107,11 @@ because compile mode is too slow"
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("cc" . "src C"))
+  (add-to-list 'org-src-lang-modes '("yaml" . yaml-ts)) ;; Changing mode for org-edit-special C-c '
   )
 #+end_src
 
@@ -2243,6 +2245,7 @@ with treesit-auto you don't have to remap your self the major modes to point to 
 ;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
 ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+ (push '(yaml-mode . yaml-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
   :straight nil
   :disabled t
