@@ -779,8 +779,8 @@ folder, otherwise delete a word"
 		      :repo "minad/vertico"
 		      :branch "main")
   :bind (:map vertico-map
-	      ("C-j" . vertico-next)
-	      ("C-k" . vertico-previous)
+	      ;; ("C-j" . vertico-next)
+	      ;; ("C-k" . vertico-previous)
 					;("C-f" . vertico-exit)
 	      ("C-f" . vertico-exit-input)
 	      ;;("C-f" . my-vertico-alt-done)
