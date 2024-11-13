@@ -2231,6 +2231,7 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 * orgnote
 #+begin_src emacs-lisp
 (use-package orgnote
+  :disabled t
   :straight t
   :hook (org-mode . orgnote-sync-mode))
 #+end_src
