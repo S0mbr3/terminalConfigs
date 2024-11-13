@@ -195,7 +195,7 @@ alias la='ls -a --hyperlink=auto'
 alias lla='ls -la --hyperlink=auto'
 alias lt='ls --tree --hyperlink=auto'
 alias c='cht.sh'
-alias e='emacsclient -n'
+alias ecn='emacsclient -n'
 #alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
 alias kdeb='kitty +kitten ssh debian'
