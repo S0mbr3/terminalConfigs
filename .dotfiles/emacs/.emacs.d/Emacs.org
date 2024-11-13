@@ -2087,6 +2087,9 @@ because compile mode is too slow"
 (use-package ob-yaml
   :straight (ob-yaml :type git :host github :repo "llhotka/ob-yaml"))
 
+(use-package ob-php
+  :straight (ob-php :type git :host github :repo "twlz0ne/ob-php"))
+
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -2097,6 +2100,7 @@ because compile mode is too slow"
      (latex . t)
      (typescript . t)
      (yaml . t)
+     (php . t)
      (gnuplot .t )
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
@@ -2111,7 +2115,8 @@ because compile mode is too slow"
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml-ts"))
+  (add-to-list 'org-structure-template-alist '("php" . "src php-ts"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("cc" . "src C"))
@@ -2249,7 +2254,8 @@ with treesit-auto you don't have to remap your self the major modes to point to 
 ;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
 ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
- (push '(yaml-mode . yaml-ts-mode) major-mode-remap-alist)
+(push '(yaml-mode . yaml-ts-mode) major-mode-remap-alist)
+(push '(php-mode . php-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
   :straight nil
   :disabled t
@@ -2278,82 +2284,82 @@ with treesit-auto you don't have to remap your self the major modes to point to 
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 #+end_src
 
-** Languages configuration
+* Languages configuration
 #+begin_src emacs-lisp
 (unless (package-installed-p 'posframe)
-  (package-refresh-contents)
-  (package-install 'posframe))
+(package-refresh-contents)
+(package-install 'posframe))
 
 
 (defvar c-popup-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [t] 'quit-c-posframe)
-    map)
-  "Keymap for `c-popup-mode'.")
+(let ((map (make-sparse-keymap)))
+(define-key map [t] 'quit-c-posframe)
+map)
+"Keymap for `c-popup-mode'.")
 
 (define-minor-mode c-popup-mode
-  "Minor mode to quit the c popup"
-  :init-value nil
-  :lighter " C-Popup"
-  :keymap c-popup-mode-map
-  :global t
-  (if c-popup-mode
-      (message "C popup mode enabled")
-    (message "C popup mode disabled")))
+"Minor mode to quit the c popup"
+:init-value nil
+:lighter " C-Popup"
+:keymap c-popup-mode-map
+:global t
+(if c-popup-mode
+    (message "C popup mode enabled")
+(message "C popup mode disabled")))
 
 (defun compile-and-execute-c-code ()
-  "Save, compile, and execute C code, showing the result in a posframe."
-  (interactive)
-  ;; Check if c-popup-mode is already on.
-  (when c-popup-mode
-    ;; If it is, turn it off.
-    (c-popup-mode -1))
-  (let* ((temp-file "/tmp/input.c"))
-    (write-buffer-to-file (current-buffer) temp-file)
-    (let* ((result (execute-c-code temp-file))
-           (output-buffer (get-buffer-create "*c-output*")))
-      (with-current-buffer output-buffer
-        (erase-buffer)
-        (insert result))
-      (let ((frame (posframe-show output-buffer
-                                  :position (point)
-                                  :font (face-attribute 'default :font)
-                                  :string nil
-                                  :background-color (face-attribute 'default :background nil t)
-                                  :foreground-color (face-attribute 'default :foreground nil t)
-                                  :internal-border-color "black"
-                                  :left-fringe 0
-                                  :right-fringe 0
-                                  :min-width 40
-                                  :min-height 10
-                                  :internal-border-width 1
-                                  :border-width 1
-                                  :override-parameters '((cursor-type . nil)))))
-        ;; Manually set focus to the posframe.
-        (select-frame-set-input-focus frame)
-        (c-popup-mode 1)))))
+"Save, compile, and execute C code, showing the result in a posframe."
+(interactive)
+;; Check if c-popup-mode is already on.
+(when c-popup-mode
+;; If it is, turn it off.
+(c-popup-mode -1))
+(let* ((temp-file "/tmp/input.c"))
+(write-buffer-to-file (current-buffer) temp-file)
+(let* ((result (execute-c-code temp-file))
+        (output-buffer (get-buffer-create "*c-output*")))
+    (with-current-buffer output-buffer
+    (erase-buffer)
+    (insert result))
+    (let ((frame (posframe-show output-buffer
+                                :position (point)
+                                :font (face-attribute 'default :font)
+                                :string nil
+                                :background-color (face-attribute 'default :background nil t)
+                                :foreground-color (face-attribute 'default :foreground nil t)
+                                :internal-border-color "black"
+                                :left-fringe 0
+                                :right-fringe 0
+                                :min-width 40
+                                :min-height 10
+                                :internal-border-width 1
+                                :border-width 1
+                                :override-parameters '((cursor-type . nil)))))
+    ;; Manually set focus to the posframe.
+    (select-frame-set-input-focus frame)
+    (c-popup-mode 1)))))
 
 (defun quit-c-posframe ()
-  "Delete all posframes and exit the c-popup-mode."
-  (interactive)
-  (posframe-delete-all)
-  (c-popup-mode -1))
+"Delete all posframes and exit the c-popup-mode."
+(interactive)
+(posframe-delete-all)
+(c-popup-mode -1))
 
 (defun execute-c-code (temp-file)
-  "Compile and execute the C code in temp-file, and return the output as a string."
-  (with-temp-buffer
-    (call-process-shell-command (concat "gcc -o /tmp/output " temp-file " && /tmp/output") nil t)
-    (buffer-string)))
+"Compile and execute the C code in temp-file, and return the output as a string."
+(with-temp-buffer
+(call-process-shell-command (concat "gcc -o /tmp/output " temp-file " && /tmp/output") nil t)
+(buffer-string)))
 
 ;;(global-set-key (kbd "C-c C-v") 'compile-and-execute-c-code)
 
 
 ;;(global-set-key (kbd "C-c b") 'switch-to-previous-buffer)
 (defun compile-or-recompile ()
-  (interactive)
-  (if (get-buffer "*compilation*")
-      (recompile)
-    (call-interactively 'compile)))
+(interactive)
+(if (get-buffer "*compilation*")
+    (recompile)
+(call-interactively 'compile)))
 
 ;;(global-set-key (kbd "C-c m") 'compile-or-recompile)
 ;;Change the size of the compilation height window to be 30%
@@ -2361,7 +2367,7 @@ with treesit-auto you don't have to remap your self the major modes to point to 
 ;; add a hook to adjust the height of the compilation window when the window change size
 
 ;;(defun adjust-compilation-window-height ()
-  ;;(setq compilation-window-height (round (* 0.3 (frame-height)))))
+;;(setq compilation-window-height (round (* 0.3 (frame-height)))))
 
 ;;(add-hook 'window-size-change-functions 'adjust-compilation-window-height)
 
