@@ -1431,8 +1431,8 @@ because compile mode is too slow"
 	    (multi-vterm))
 	  (vterm-send-string target)))
     (print "Not in c-mode")))
-  (ox/leader-keys
-    "cv" '(my/crunner :which-key "Run C code in VTerm"))
+(ox/leader-keys
+  "cv" '(my/crunner :which-key "Run C code in VTerm"))
 
 ;;(add-hook 'after-save-hook 'my/crunner)
 
@@ -1448,6 +1448,10 @@ because compile mode is too slow"
 (use-package lua-mode
   :straight t
   :mode "\\.lua\\'")
+
+(use-package php-ts-mode
+  :straight (:host github
+                   :repo "emacs-php/php-ts-mode"))
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
@@ -1470,9 +1474,9 @@ because compile mode is too slow"
 
 (use-package prisma-mode
   :straight (:host github
-  :repo "pimeys/emacs-prisma-mode"
-  :branc "main")
-)
+		   :repo "pimeys/emacs-prisma-mode"
+		   :branc "main")
+  )
 (use-package emmet-mode
   :disabled
   :straight t
