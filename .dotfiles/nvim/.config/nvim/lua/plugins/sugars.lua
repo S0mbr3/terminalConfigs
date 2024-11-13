@@ -124,31 +124,31 @@ return {
   },
 
   {'ThePrimeagen/harpoon',
+
+    dependencies = {'nvim-lua/plenary.nvim'},
     keys = {
       {"<Leader>p", function() require'harpoon.mark'.add_file() end, desc = "[H]arpoon a [File]"},
       {"<Leader>H", function() require'harpoon.ui'.toggle_quick_menu() end, desc = "[T]oggle [H]arpoon [M]enu"},
-      {"<Leader>1", function() require'harpoon.ui'.nav_file(1)() end, desc = "[G]oto [H]arpooned [F]ile 1"},
-      {"<Leader>2", function() require'harpoon.ui'.nav_file(2)() end, desc = "[G]oto [H]arpooned [F]ile 2"},
-      {"<Leader>3", function() require'harpoon.ui'.nav_file(3)() end, desc = "[G]oto [H]arpooned [F]ile 3"},
-      {"<Leader>4", function() require'harpoon.ui'.nav_file(4)() end, desc = "[G]oto [H]arpooned [F]ile 4"},
-      {"<Leader>5", function() require'harpoon.ui'.nav_file(5)() end, desc = "[G]oto [H]arpooned [F]ile 5"},
-      {"<Leader>6", function() require'harpoon.ui'.nav_file(6)() end, desc = "[G]oto [H]arpooned [F]ile 6"},
-      {"<Leader>7", function() require'harpoon.ui'.nav_file(7)() end, desc = "[G]oto [H]arpooned [F]ile 7"},
-      {"<Leader>8", function() require'harpoon.ui'.nav_file(8)() end, desc = "[G]oto [H]arpooned [F]ile 8"}
+      {"<Leader>1", function() require'harpoon.ui'.nav_file(1) end, desc = "[G]oto [H]arpooned [F]ile 1"},
+      {"<Leader>2", function() require'harpoon.ui'.nav_file(2) end, desc = "[G]oto [H]arpooned [F]ile 2"},
+      {"<Leader>3", function() require'harpoon.ui'.nav_file(3) end, desc = "[G]oto [H]arpooned [F]ile 3"},
+      {"<Leader>4", function() require'harpoon.ui'.nav_file(4) end, desc = "[G]oto [H]arpooned [F]ile 4"},
+      {"<Leader>5", function() require'harpoon.ui'.nav_file(5) end, desc = "[G]oto [H]arpooned [F]ile 5"},
+      {"<Leader>6", function() require'harpoon.ui'.nav_file(6) end, desc = "[G]oto [H]arpooned [F]ile 6"},
+      {"<Leader>7", function() require'harpoon.ui'.nav_file(7) end, desc = "[G]oto [H]arpooned [F]ile 7"},
+      {"<Leader>8", function() require'harpoon.ui'.nav_file(8) end, desc = "[G]oto [H]arpooned [F]ile 8"}
 
     },
-    {
-      "leath-dub/snipe.nvim",
-      config = function()
-        local snipe = require("snipe")
-        snipe.setup({
-          ui = {
-            position="center"
-          }
-        })
-        vim.keymap.set("n", "<Leader>t", snipe.create_buffer_menu_toggler())
-      end
+    opts = {
+
+    }
+  },
+  {
+    "leath-dub/snipe.nvim",
+    keys = {
+      {"<Leader>t", function () require("snipe").open_buffer_menu() end, desc = "Open Snipe buffer menu"}
     },
+    opts = {}
   },
   {'nvim-pack/nvim-spectre',
     dependencies = {'nvim-lua/plenary.nvim'},
