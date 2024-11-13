@@ -273,5 +273,8 @@ return {
     config = function()
       require 'colorizer'.setup()
     end
+  },
+  {
+    'isobit/vim-caddyfile',
   }
 }
