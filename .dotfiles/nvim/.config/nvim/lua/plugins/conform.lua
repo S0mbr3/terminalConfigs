@@ -21,8 +21,10 @@ return {
         },
         formatters = {
           caddyfile = {
-            command = "caddy",
-            args = { "fmt" },
+            command = "caddy_wrap_conform_nvim",
+            args={},
+            --command = "caddy",
+            --args = { "fmt"},
             stdin = true,
             cwd = require("conform.util").root_file({ "Caddyfile" }),
             require_cwd = true,
