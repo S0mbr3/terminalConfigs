@@ -1537,6 +1537,19 @@ because compile mode is too slow"
   :straight t
   :defer t)
 
+(use-package rustic
+  :ensure t
+  :after rust-ts-mode
+  :hook (rustic-popup-mode . my-set-evil-state-in-rustic-popup-mode)
+  :config
+  (setq rustic-format-on-save nil)
+  (defun my-set-evil-state-in-rustic-popup-mode ()
+  "Switch to evil-emacs-state in rustic-popu-mode."
+      (evil-emacs-state))
+  :custom
+  (rustic-cargo-use-last-stored-arguments t))
+;; (add-hook 'rustic-popup-mode-hook 'my-set-evil-state-in-rustic-popup-mode)
+
 (use-package flycheck-rust
   :straight t
   :hook (flycheck-mode . flycheck-rust-setup))
@@ -1650,7 +1663,7 @@ because compile mode is too slow"
    (typescript-ts-mode . lsp-deferred)
    (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
-   (rust-ts-mode . lsp-deferred)
+   ;; (rust-ts-mode . lsp-deferred)
    (js-ts-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c C-l")
@@ -2262,6 +2275,7 @@ with treesit-auto you don't have to remap your self the major modes to point to 
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
 (push '(yaml-mode . yaml-ts-mode) major-mode-remap-alist)
 (push '(php-mode . php-ts-mode) major-mode-remap-alist)
+(push '(rust-mode . rust-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
   :straight nil
   :disabled t
