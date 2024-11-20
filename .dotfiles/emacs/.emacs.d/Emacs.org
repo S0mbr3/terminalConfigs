@@ -2204,7 +2204,7 @@ Allow to create flashcards for the space repetition learning method (Leitner sys
   (require 'org-fc-hydra))
 
 (defun my-check-org-fc-and-set-evil-state ()
-  "Switch to evil-emacs-state if flycheck-mode is active."
+  "Switch to evil-emacs-state if org-fc-mode is active."
   (if (or org-fc-review-flip-mode org-fc-review-rate-mode)
       (evil-emacs-state)
     (evil-normal-state)))
