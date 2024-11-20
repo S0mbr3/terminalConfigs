@@ -2592,6 +2592,12 @@ We are using consult-dash as an ui-front end to parse dash-docs
 #+end_src
 * Compilation Mode
 #+begin_src emacs-lisp
+(require 'ansi-color)
+(add-hook 'compilation-filter-hook
+          (lambda ()
+            (ansi-color-apply-on-region (point-min) (point-max))))
+;; (setq compilation-environment '("TERM=xterm-256color"))
+
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
 
@@ -2611,12 +2617,12 @@ We are using consult-dash as an ui-front end to parse dash-docs
 ;;   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
 ;; Builtin since emacs 28
-(use-package ansi-color
-:ensure nil
-:hook (compilation-filter . ansi-color-compilation-filter)
-:config
-;;(setq ansi-color-for-comint-mode t)
-(setq compilation-environment '("TERM=xterm-256color")))
+;; (use-package ansi-color
+;; :ensure nil
+;; :hook (compilation-filter . ansi-color-compilation-filter)
+;; :config
+;; ;;(setq ansi-color-for-comint-mode t)
+;; (setq compilation-environment '("TERM=xterm-256color")))
 ;;(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter))
 
 ;; (defun colorize-compilation-buffer ()
