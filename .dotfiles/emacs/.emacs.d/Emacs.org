@@ -1531,6 +1531,8 @@ because compile mode is too slow"
 ;;   :mode "\\.rs\\'"
 ;;   :init (setq rust-format-on-save t))
 (use-package rust-ts-mode
+  :init
+  (setq rust-mode-treesitter-derive t) ;; Needed for rustic
   :mode "\\.rs\\'")
 
 (use-package cargo
