@@ -562,12 +562,12 @@ It can also add projects on the fly with the Add project option
   (delete-other-windows))
 
 (defun ox/recompile()
-(interactive)
-(save-buffer)
-(ignore-errors (kill-compilation)) ;; interrupt old compilation
-(recompile)
-;;(switch-to-buffer "*compilation*")
-)
+  (interactive)
+  (save-buffer)
+  (ignore-errors (kill-compilation)) ;; interrupt old compilation
+  (recompile)
+  (switch-to-buffer "*compilation*")
+  (delete-other-windows))
 
 
 ;; Better keybinding management 
