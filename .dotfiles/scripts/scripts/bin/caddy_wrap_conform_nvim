@@ -1,2 +1,6 @@
 #!/bin/bash
+#"$@": Passes all arguments received by the script to caddy fmt.
+#2>&1: Redirects standard error to standard output, allowing grep to process all output.
+#grep -v '^Error:': Filters out lines that start with "Error:".
+
 caddy fmt "$@" 2>&1 | grep -v '^Error:'
