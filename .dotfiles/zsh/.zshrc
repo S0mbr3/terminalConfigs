@@ -205,6 +205,7 @@ alias deb='ssh ledeb'
 alias ts='tmux-sessionizer'
 alias tt='tmux-attacher'
 export PATH="/home/oxhart/scripts:$PATH"
+export PATH="$PATH:/opt/nvim-linux64/bin"
 
 export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
