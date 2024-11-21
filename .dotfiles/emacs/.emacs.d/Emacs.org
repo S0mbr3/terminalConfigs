@@ -581,7 +581,7 @@ It can also add projects on the fly with the Add project option
    "C-c C-b" 'switch-to-previous-buffer
    "M-o" 'multi-vterm-dedicated-toggle
    "<escape>" 'keyboard-escape-quit)	; Make escape key quit prompts
-;;(defconst my-leader "C-SPC")
+  ;;(defconst my-leader "C-SPC")
   ;; Creating a leader key
   (defconst my-global-leader "C-SPC")
   (defconst my-leader "SPC")
