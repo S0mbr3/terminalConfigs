@@ -51,6 +51,7 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;;(setq use-package-always-defer t)
 ;;(setq use-package-always-ensure nil)
@@ -202,10 +203,6 @@
 
   ;;(require 'eaf-pyqterminal)
   ;;(require 'eaf-pdf-viewer)
-
-(use-package chatgpt
-  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
-  :bind ("C-c q" . chatgpt-query))
 
   (use-package persp-mode
     :straight t
@@ -590,8 +587,8 @@ folder, otherwise delete a word"
 		      :repo "minad/vertico"
 		      :branch "main")
   :bind (:map vertico-map
-	      ("C-j" . vertico-next)
-	      ("C-k" . vertico-previous)
+	      ;; ("C-j" . vertico-next)
+	      ;; ("C-k" . vertico-previous)
 					;("C-f" . vertico-exit)
 	      ("C-f" . vertico-exit-input)
 	      ;;("C-f" . my-vertico-alt-done)
@@ -668,11 +665,11 @@ folder, otherwise delete a word"
 	    (derived-mode-p 'makefile-mode))
 	(progn
 	  (setq completion-at-point-functions
-      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
+      (list (cape-capf-super #'codeium-completion-at-point #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
-                     (cape-capf-super  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+                     (cape-capf-super #'codeium-completion-at-point  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
         (add-to-list 'completion-at-point-functions #'cape-file))))
   ;; Disable lsp-completion-mode from being automatically enabled
 (with-eval-after-load 'lsp-mode
@@ -835,7 +832,7 @@ folder, otherwise delete a word"
     "hs" '(hydra-text-scale/body :which-key "scale text")
     "hb" '(hydra-split-size/body :which-key "split sizes")
     "hh" '(harpoon-quick-menu-hydra :which-key "harpoon-quick-menu-hyra")
-    "hf" '(coc-damage-calculator-menu-hydra :which-key "coc-damage-calculator")))
+    "hf" '(coc-dc-menu :which-key "coc-damage-calculator")))
 
 (defun kill-current-buffer-without-confirm ()
   "Kill the current buffer without confirmation."
@@ -853,6 +850,9 @@ folder, otherwise delete a word"
 (use-package apheleia
   :straight t
   :diminish ""
+  :hook
+  ((emacs-lisp-mode . (lambda () (set-fill-column 80)))
+   (emacs-lisp-mode . auto-fill-mode))
   :defines
   apheleia-formatters
   apheleia-mode-alist
@@ -861,6 +861,7 @@ folder, otherwise delete a word"
   :config
   (setf (alist-get 'prettier-json apheleia-formatters)
         '("prettier" "--stdin-filepath" filepath))
+  (add-to-list 'apheleia-mode-alist '(emacs-lisp-mode . lisp-indent))
   (apheleia-global-mode +1))
 
 (use-package lsp-eslint
@@ -1183,8 +1184,8 @@ because compile mode is too slow"
 	    (multi-vterm))
 	  (vterm-send-string target)))
     (print "Not in c-mode")))
-  (ox/leader-keys
-    "cv" '(my/crunner :which-key "Run C code in VTerm"))
+(ox/leader-keys
+  "cv" '(my/crunner :which-key "Run C code in VTerm"))
 
 ;;(add-hook 'after-save-hook 'my/crunner)
 
@@ -1197,9 +1198,18 @@ because compile mode is too slow"
   :straight t
   :defer t)
 
+(use-package caddyfile-mode
+  :straight t
+  :mode (("Caddyfile\\'" . caddyfile-mode)
+         ("caddy\\.conf\\'" . caddyfile-mode)))
+
 (use-package lua-mode
   :straight t
   :mode "\\.lua\\'")
+
+(use-package php-ts-mode
+  :straight (:host github
+                   :repo "emacs-php/php-ts-mode"))
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
@@ -1222,9 +1232,9 @@ because compile mode is too slow"
 
 (use-package prisma-mode
   :straight (:host github
-  :repo "pimeys/emacs-prisma-mode"
-  :branc "main")
-)
+		   :repo "pimeys/emacs-prisma-mode"
+		   :branc "main")
+  )
 (use-package emmet-mode
   :disabled
   :straight t
@@ -1274,11 +1284,31 @@ because compile mode is too slow"
 ;;   :mode "\\.rs\\'"
 ;;   :init (setq rust-format-on-save t))
 (use-package rust-ts-mode
+  :init
+  (setq rust-mode-treesitter-derive t) ;; Needed for rustic
   :mode "\\.rs\\'")
 
 (use-package cargo
   :straight t
   :defer t)
+
+(use-package rustic
+  :ensure t
+  :after rust-ts-mode
+  :hook ((rustic-popup-mode . my-set-evil-state-in-rustic-popup-mode)
+         (rustic-mode . rustic-mode-auto-save-hook))
+  :config
+  (setq rustic-format-on-save nil)
+  (defun my-set-evil-state-in-rustic-popup-mode ()
+  "Switch to evil-emacs-state in rustic-popu-mode."
+      (evil-emacs-state))
+  (defun rustic-mode-auto-save-hook ()
+  "Enable auto-saving in rustic-mode buffers."
+  (when buffer-file-name
+    (setq-local compilation-ask-about-save nil)))
+  :custom
+  (rustic-cargo-use-last-stored-arguments t))
+;; (add-hook 'rustic-popup-mode-hook 'my-set-evil-state-in-rustic-popup-mode)
 
 (use-package flycheck-rust
   :straight t
@@ -1320,9 +1350,9 @@ because compile mode is too slow"
 
 (use-package flycheck
   :straight t
-  :after lsp-mode
+  ;; :after lsp-mode
   :config
-  (setq flycheck-emacs-lisp-load-path "inherit")
+  (setq flycheck-emacs-lisp-load-path 'inherit)
   :init (global-flycheck-mode))
 (use-package consult-flycheck
   :straight t
@@ -1378,7 +1408,7 @@ because compile mode is too slow"
    (typescript-ts-mode . lsp-deferred)
    (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
-   (rust-ts-mode . lsp-deferred)
+   ;; (rust-ts-mode . lsp-deferred)
    (js-ts-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c C-l")
@@ -1498,6 +1528,14 @@ because compile mode is too slow"
        (token (funcall (plist-get (car auth) :secret))))
   ;; Now 'token' contains your GitHub token, and you can use it in your code.
   )
+
+(setenv "GPG_TTY" (format "%d" (string-to-number (shell-command-to-string "tty --file=/dev/tty"))))
+;; (require 'epg)
+;; (require 'auth-source-pass)
+;; (auth-source-pass-enable)
+
+;; (setq epg-pinentry-mode 'loopback) ;;Getting prompted the gpg password in minibuffer instead of external
+;; (pinentry-start)
 
 ;; We are making magit getting the full buffer size
 (use-package magit
@@ -1787,6 +1825,12 @@ because compile mode is too slow"
 (use-package ob-typescript
   :straight t)
 
+(use-package ob-yaml
+  :straight (ob-yaml :type git :host github :repo "llhotka/ob-yaml"))
+
+(use-package ob-php
+  :straight (ob-php :type git :host github :repo "twlz0ne/ob-php"))
+
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -1796,6 +1840,8 @@ because compile mode is too slow"
      (shell . t)
      (latex . t)
      (typescript . t)
+     (yaml . t)
+     (php . t)
      (gnuplot .t )
      (python . t)))
   (setq org-confirm-babel-evaluate nil)
@@ -1806,9 +1852,12 @@ because compile mode is too slow"
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml-ts"))
+  (add-to-list 'org-structure-template-alist '("php" . "src php-ts"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("cc" . "src C"))
+  (add-to-list 'org-src-lang-modes '("yaml" . yaml-ts)) ;; Changing mode for org-edit-special C-c '
   )
 
 ;; Automatically tangle our Emacs.org config file when we save it
@@ -1867,7 +1916,7 @@ because compile mode is too slow"
   (require 'org-fc-hydra))
 
 (defun my-check-org-fc-and-set-evil-state ()
-  "Switch to evil-emacs-state if flycheck-mode is active."
+  "Switch to evil-emacs-state if org-fc-mode is active."
   (if (or org-fc-review-flip-mode org-fc-review-rate-mode)
       (evil-emacs-state)
     (evil-normal-state)))
@@ -1904,6 +1953,7 @@ because compile mode is too slow"
 )
 
 (use-package orgnote
+  :disabled t
   :straight t
   :hook (org-mode . orgnote-sync-mode))
 
@@ -1918,6 +1968,9 @@ because compile mode is too slow"
 ;;  (push '(typescript-mode . typescript-ts-mode) major-mode-remap-alist)
 ;;  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
 ;;  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+(push '(yaml-mode . yaml-ts-mode) major-mode-remap-alist)
+(push '(php-mode . php-ts-mode) major-mode-remap-alist)
+(push '(rust-mode . rust-ts-mode) major-mode-remap-alist)
 (use-package tree-sitter-langs
   :straight nil
   :disabled t
@@ -1946,79 +1999,79 @@ because compile mode is too slow"
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (unless (package-installed-p 'posframe)
-  (package-refresh-contents)
-  (package-install 'posframe))
+(package-refresh-contents)
+(package-install 'posframe))
 
 
 (defvar c-popup-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [t] 'quit-c-posframe)
-    map)
-  "Keymap for `c-popup-mode'.")
+(let ((map (make-sparse-keymap)))
+(define-key map [t] 'quit-c-posframe)
+map)
+"Keymap for `c-popup-mode'.")
 
 (define-minor-mode c-popup-mode
-  "Minor mode to quit the c popup"
-  :init-value nil
-  :lighter " C-Popup"
-  :keymap c-popup-mode-map
-  :global t
-  (if c-popup-mode
-      (message "C popup mode enabled")
-    (message "C popup mode disabled")))
+"Minor mode to quit the c popup"
+:init-value nil
+:lighter " C-Popup"
+:keymap c-popup-mode-map
+:global t
+(if c-popup-mode
+    (message "C popup mode enabled")
+(message "C popup mode disabled")))
 
 (defun compile-and-execute-c-code ()
-  "Save, compile, and execute C code, showing the result in a posframe."
-  (interactive)
-  ;; Check if c-popup-mode is already on.
-  (when c-popup-mode
-    ;; If it is, turn it off.
-    (c-popup-mode -1))
-  (let* ((temp-file "/tmp/input.c"))
-    (write-buffer-to-file (current-buffer) temp-file)
-    (let* ((result (execute-c-code temp-file))
-           (output-buffer (get-buffer-create "*c-output*")))
-      (with-current-buffer output-buffer
-        (erase-buffer)
-        (insert result))
-      (let ((frame (posframe-show output-buffer
-                                  :position (point)
-                                  :font (face-attribute 'default :font)
-                                  :string nil
-                                  :background-color (face-attribute 'default :background nil t)
-                                  :foreground-color (face-attribute 'default :foreground nil t)
-                                  :internal-border-color "black"
-                                  :left-fringe 0
-                                  :right-fringe 0
-                                  :min-width 40
-                                  :min-height 10
-                                  :internal-border-width 1
-                                  :border-width 1
-                                  :override-parameters '((cursor-type . nil)))))
-        ;; Manually set focus to the posframe.
-        (select-frame-set-input-focus frame)
-        (c-popup-mode 1)))))
+"Save, compile, and execute C code, showing the result in a posframe."
+(interactive)
+;; Check if c-popup-mode is already on.
+(when c-popup-mode
+;; If it is, turn it off.
+(c-popup-mode -1))
+(let* ((temp-file "/tmp/input.c"))
+(write-buffer-to-file (current-buffer) temp-file)
+(let* ((result (execute-c-code temp-file))
+        (output-buffer (get-buffer-create "*c-output*")))
+    (with-current-buffer output-buffer
+    (erase-buffer)
+    (insert result))
+    (let ((frame (posframe-show output-buffer
+                                :position (point)
+                                :font (face-attribute 'default :font)
+                                :string nil
+                                :background-color (face-attribute 'default :background nil t)
+                                :foreground-color (face-attribute 'default :foreground nil t)
+                                :internal-border-color "black"
+                                :left-fringe 0
+                                :right-fringe 0
+                                :min-width 40
+                                :min-height 10
+                                :internal-border-width 1
+                                :border-width 1
+                                :override-parameters '((cursor-type . nil)))))
+    ;; Manually set focus to the posframe.
+    (select-frame-set-input-focus frame)
+    (c-popup-mode 1)))))
 
 (defun quit-c-posframe ()
-  "Delete all posframes and exit the c-popup-mode."
-  (interactive)
-  (posframe-delete-all)
-  (c-popup-mode -1))
+"Delete all posframes and exit the c-popup-mode."
+(interactive)
+(posframe-delete-all)
+(c-popup-mode -1))
 
 (defun execute-c-code (temp-file)
-  "Compile and execute the C code in temp-file, and return the output as a string."
-  (with-temp-buffer
-    (call-process-shell-command (concat "gcc -o /tmp/output " temp-file " && /tmp/output") nil t)
-    (buffer-string)))
+"Compile and execute the C code in temp-file, and return the output as a string."
+(with-temp-buffer
+(call-process-shell-command (concat "gcc -o /tmp/output " temp-file " && /tmp/output") nil t)
+(buffer-string)))
 
 ;;(global-set-key (kbd "C-c C-v") 'compile-and-execute-c-code)
 
 
 ;;(global-set-key (kbd "C-c b") 'switch-to-previous-buffer)
 (defun compile-or-recompile ()
-  (interactive)
-  (if (get-buffer "*compilation*")
-      (recompile)
-    (call-interactively 'compile)))
+(interactive)
+(if (get-buffer "*compilation*")
+    (recompile)
+(call-interactively 'compile)))
 
 ;;(global-set-key (kbd "C-c m") 'compile-or-recompile)
 ;;Change the size of the compilation height window to be 30%
@@ -2026,7 +2079,7 @@ because compile mode is too slow"
 ;; add a hook to adjust the height of the compilation window when the window change size
 
 ;;(defun adjust-compilation-window-height ()
-  ;;(setq compilation-window-height (round (* 0.3 (frame-height)))))
+;;(setq compilation-window-height (round (* 0.3 (frame-height)))))
 
 ;;(add-hook 'window-size-change-functions 'adjust-compilation-window-height)
 
@@ -2188,6 +2241,7 @@ because compile mode is too slow"
   :mode (("~/.ssh/config\\'" . ssh-config-mode)
          ("sshd?_config\\'" . ssh-config-mode)))
 (setq tramp-shell-prompt-pattern "\\(?:^\\|\\)[^]\n#-%>❯]*#?[]#-%>❯][[:blank:]]*")
+(setq tramp-histfile-override nil) ;; Don't override zsh history in ssh
 (add-to-list 'tramp-connection-properties
              (list (regexp-quote "/sshx:ledeb:")
                    "remote-shell" "/usr/bin/zsh"))
@@ -2217,6 +2271,12 @@ because compile mode is too slow"
 (setq auto-mode-alist 
       (append '(("\\.\\(gp\\|gnuplot\\)$" . gnuplot-mode)) auto-mode-alist)))
 
+(require 'ansi-color)
+(add-hook 'compilation-filter-hook
+          (lambda ()
+            (ansi-color-apply-on-region (point-min) (point-max))))
+;; (setq compilation-environment '("TERM=xterm-256color"))
+
 ;; When using compile or recompile command if there is some colord characters
 ;; it does not format well I had to use ansi-color with a hook in compilation mode
 
@@ -2236,12 +2296,12 @@ because compile mode is too slow"
 ;;   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
 ;; Builtin since emacs 28
-(use-package ansi-color
-:ensure nil
-:hook (compilation-filter . ansi-color-compilation-filter)
-:config
-;;(setq ansi-color-for-comint-mode t)
-(setq compilation-environment '("TERM=xterm-256color")))
+;; (use-package ansi-color
+;; :ensure nil
+;; :hook (compilation-filter . ansi-color-compilation-filter)
+;; :config
+;; ;;(setq ansi-color-for-comint-mode t)
+;; (setq compilation-environment '("TERM=xterm-256color")))
 ;;(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter))
 
 ;; (defun colorize-compilation-buffer ()
@@ -2372,11 +2432,8 @@ because compile mode is too slow"
     "wd" '(ace-delete-window :which-key "ace-delete-window")
     "wo" '(ace-delete-other-windows : which-key "ace-delete-other-windows"))
 
-(use-package coc-damage-calculator
-  :disabled
-  :straight '(coc-damage-calculator :host github
-		       ;;:local-repo "/home/oxhart/dev/elisp/coc-damage-calculator/"
-                                    :repo "S0mbr3/coc-damage-calculator")
+(use-package coc-dc
+  :straight t
   :init
   (require 'hydra))
 
@@ -2385,6 +2442,57 @@ because compile mode is too slow"
   :straight '(edraw-org :host github :repo "misohena/el-easydraw" :branch "master")
   :config
   (edraw-org-setup-default))
+
+(use-package chatgpt
+  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :bind ("C-c q" . chatgpt-query))
+
+(use-package codeium
+  :straight '(codeium :host github :repo "Exafunction/codeium.el")
+  :config
+(dolist (element '(completion-at-point corfu-expand corfu-insert))
+  (add-to-list 'corfu-auto-commands element)))
+
+(use-package gptel
+  :straight t
+  :config
+  (defun my-groq-api-key ()
+    (let ((auth-info (auth-source-search
+		      :host "api.groq.com"
+		      :user "apikey"
+		      :require '(:secret))))
+      (if auth-info
+	  (funcall (plist-get (car auth-info) :secret))
+	(error "Groq API key not found in .authinfo"))))
+
+  
+  (defun my-openai-api-key ()
+    (let ((auth-info (auth-source-search
+		      :host "api.openai.com"
+		      :user "apikey"
+		      :require '(:secret))))
+      (if auth-info
+	  (funcall (plist-get (car auth-info) :secret))
+	(error "OpenAI API key not found in .authinfo"))))
+(defun my-openai-setup ()
+  (setq gptel-model 'gpt-4o-mini)
+  (setq gptel-api-key #'my-openai-api-key))
+  ;; Groq offers an OpenAI compatible API
+  (defun my-groq-setup ()
+    (setq gptel-model   'llama-3.1-70b-versatile
+      gptel-backend
+      (gptel-make-openai "Groq"               ;Any name you want
+	:host "api.groq.com"
+	:endpoint "/openai/v1/chat/completions"
+	:stream t
+	:key #'my-groq-api-key                   ;can be a function that returns the key
+	:models '(llama-3.1-70b-versatile
+		  llama-3.1-8b-instant
+		  llama3-70b-8192
+		  llama3-8b-8192
+		  mixtral-8x7b-32768
+		  gemma-7b-it))))
+  (my-groq-setup))
 
 (use-package package-build
   :straight t)
