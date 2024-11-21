@@ -1542,12 +1542,17 @@ because compile mode is too slow"
 (use-package rustic
   :ensure t
   :after rust-ts-mode
-  :hook (rustic-popup-mode . my-set-evil-state-in-rustic-popup-mode)
+  :hook ((rustic-popup-mode . my-set-evil-state-in-rustic-popup-mode)
+         (rustic-mode . rustic-mode-auto-save-hook))
   :config
   (setq rustic-format-on-save nil)
   (defun my-set-evil-state-in-rustic-popup-mode ()
   "Switch to evil-emacs-state in rustic-popu-mode."
       (evil-emacs-state))
+  (defun rustic-mode-auto-save-hook ()
+  "Enable auto-saving in rustic-mode buffers."
+  (when buffer-file-name
+    (setq-local compilation-ask-about-save nil)))
   :custom
   (rustic-cargo-use-last-stored-arguments t))
 ;; (add-hook 'rustic-popup-mode-hook 'my-set-evil-state-in-rustic-popup-mode)
