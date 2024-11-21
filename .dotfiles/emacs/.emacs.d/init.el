@@ -492,16 +492,16 @@
   ;;(setq-local buffer-save-without-query nil)
   (save-buffer)
   (compile (format "%s" ox/command))
-;;(switch-to-buffer "*compilation*")
-)
+  (switch-to-buffer "*compilation*")
+  (delete-other-windows))
 
 (defun ox/recompile()
-(interactive)
-(save-buffer)
-(ignore-errors (kill-compilation)) ;; interrupt old compilation
-(recompile)
-;;(switch-to-buffer "*compilation*")
-)
+  (interactive)
+  (save-buffer)
+  (ignore-errors (kill-compilation)) ;; interrupt old compilation
+  (recompile)
+  (switch-to-buffer "*compilation*")
+  (delete-other-windows))
 
 
 ;; Better keybinding management 
@@ -515,7 +515,7 @@
    "C-c C-b" 'switch-to-previous-buffer
    "M-o" 'multi-vterm-dedicated-toggle
    "<escape>" 'keyboard-escape-quit)	; Make escape key quit prompts
-;;(defconst my-leader "C-SPC")
+  ;;(defconst my-leader "C-SPC")
   ;; Creating a leader key
   (defconst my-global-leader "C-SPC")
   (defconst my-leader "SPC")
