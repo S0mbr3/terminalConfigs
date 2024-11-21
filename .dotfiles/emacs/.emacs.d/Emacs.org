@@ -558,8 +558,8 @@ It can also add projects on the fly with the Add project option
   ;;(setq-local buffer-save-without-query nil)
   (save-buffer)
   (compile (format "%s" ox/command))
-;;(switch-to-buffer "*compilation*")
-)
+  (switch-to-buffer "*compilation*")
+  (delete-other-windows))
 
 (defun ox/recompile()
 (interactive)
