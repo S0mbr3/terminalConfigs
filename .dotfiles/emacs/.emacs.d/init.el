@@ -439,8 +439,11 @@
 (setq recentf-max-saved-items 50)
 (save-place-mode 1) ;; set cursor at last location known when visiting a file
 (savehist-mode 1)
+(setq desktop-dirname "~/.cache/emacs/var/desktop") ; Set directory for saving/restoring
+(setq desktop-path (list desktop-dirname)) ; Ensure Emacs looks in this path
 (desktop-save-mode 1)
-(add-to-list 'desktop-locals-to-save 'evil-markers-alist) ;; Make evil marks saved accross working sessions
+;; (add-to-list 'desktop-locals-to-save 'evil-markers-alist) ;; Make evil marks saved accross working sessions
+;; (add-to-list 'desktop-globals-to-save 'evil-markers-alist) ;; Make evil marks saved accross working sessions
 
 (display-time-mode 1) ;;Display the time
 (pixel-scroll-precision-mode 1)
@@ -1033,23 +1036,23 @@ folder, otherwise delete a word"
   (define-key evil-motion-state-map (kbd "RET") nil) 
 
   (dolist (mode '(Custom-mode
-		    eshell-mode
-		    git-rebase-mode
-		    erc-mode
-		    circe-server-mode
-		    circe-chat-mode
-		    circe-query-mode
-		    sauron-mode
-		    vterm-mode
-		    term-mode
-		    ))
+		  eshell-mode
+		  git-rebase-mode
+		  erc-mode
+		  circe-server-mode
+		  circe-chat-mode
+		  circe-query-mode
+		  sauron-mode
+		  vterm-mode
+		  term-mode
+		  ))
     (add-to-list 'evil-emacs-state-modes mode)))
 ;;(evil-set-initial-state mode 'emacs)))
 (use-package evil
   ;;:straight t
   :straight '(evil :host github
-		       :repo "emacs-evil/evil"
-		       :branch "master")
+		   :repo "emacs-evil/evil"
+		   :branch "master")
 
   :init
   (setq evil-want-integration t)
@@ -1069,23 +1072,23 @@ folder, otherwise delete a word"
   ;;(evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'dashboard-mode 'normal)
 
-(defun print-evil-state ()
-  "Print the value of evil-emacs-state-modes."
-  (interactive)
-  (prin1 evil-emacs-state-modes))
-(ox/leader-keys
-"e" '(:ignore t :which-key "Evil")
-"eu" '(evil-collection-unimpaired-move-text-up :which-key "Evil")
-  "ep" '(print-evil-state :which-key "print evil state")
-"ed" '(evil-collection-unimpaired-move-text-down :which-key "Evil"))
-(defhydra hydra-move-text (:timeout 4)
-  "scale text"
-  ("j" evil-collection-unimpaired-move-text-up "Move up")
-  ("k" evil-collection-unimpaired-move-text-down "Move down")
-  ("f" nil "finished" :exit t))
-(ox/leader-keys
-  "h" '(:ignore t :which-key "hydra")
-  "hm" '(hydra-move-text/body :which-key "Move text")))
+  (defun print-evil-state ()
+    "Print the value of evil-emacs-state-modes."
+    (interactive)
+    (prin1 evil-emacs-state-modes))
+  (ox/leader-keys
+    "e" '(:ignore t :which-key "Evil")
+    "eu" '(evil-collection-unimpaired-move-text-up :which-key "Evil")
+    "ep" '(print-evil-state :which-key "print evil state")
+    "ed" '(evil-collection-unimpaired-move-text-down :which-key "Evil"))
+  (defhydra hydra-move-text (:timeout 4)
+    "scale text"
+    ("j" evil-collection-unimpaired-move-text-up "Move up")
+    ("k" evil-collection-unimpaired-move-text-down "Move down")
+    ("f" nil "finished" :exit t))
+  (ox/leader-keys
+    "h" '(:ignore t :which-key "hydra")
+    "hm" '(hydra-move-text/body :which-key "Move text")))
 
 (evil-mode 1)
 
@@ -1109,40 +1112,44 @@ folder, otherwise delete a word"
     "ix" '(evil-numbers/dec-at-pt :which-key "Decrement")))
 
 (use-package evil-mc
-    :straight t
-    :config
-    (global-evil-mc-mode  1)
+  :straight t
+  :config
+  (global-evil-mc-mode  1)
 
-    (defun evil--mc-make-cursor-at-col (_startcol endcol orig-line)
-      (move-to-column endcol)
-      (unless (= (line-number-at-pos) orig-line)
-        (evil-mc-make-cursor-here))
-      )
+  (use-package evil-surround
+    :straight t)
+
+
+  (defun evil--mc-make-cursor-at-col (_startcol endcol orig-line)
+    (move-to-column endcol)
+    (unless (= (line-number-at-pos) orig-line)
+      (evil-mc-make-cursor-here))
+    )
     ;;; During visual selection point has +1 value
-    (defun my-evil-mc-make-vertical-cursors (beg end)
-      (interactive (list (region-beginning) (- (region-end) 1)))
-      (evil-exit-visual-state)
-      (evil-mc-pause-cursors)
+  (defun my-evil-mc-make-vertical-cursors (beg end)
+    (interactive (list (region-beginning) (- (region-end) 1)))
+    (evil-exit-visual-state)
+    (evil-mc-pause-cursors)
       ;;; Because `evil-mc-resume-cursors` produces a cursor,
       ;;; we have to skip a current line here to avoid having +1 cursor
-      (apply-on-rectangle #'evil--mc-make-cursor-at-col
-                          beg end (line-number-at-pos))
-      (evil-mc-resume-cursors)
+    (apply-on-rectangle #'evil--mc-make-cursor-at-col
+                        beg end (line-number-at-pos))
+    (evil-mc-resume-cursors)
       ;;; Because `evil-mc-resume-cursors` produces a cursor, we need to place it on on the
       ;;; same column as the others
-      (move-to-column (evil-mc-column-number end))
-      )
+    (move-to-column (evil-mc-column-number end))
+    )
 
- (defun evil-mc-make-vertical-cursors (beg end)
-      (interactive (list (region-beginning) (region-end)))
-      (evil-mc-pause-cursors)
-      (apply-on-rectangle #'evil--mc-make-cursor-at-col
-                          beg end (line-number-at-pos (point)))
-      (evil-mc-resume-cursors)
-      (evil-normal-state)
-      (move-to-column (evil-mc-column-number (if (> end beg)
-                                                 beg
-                                               end)))))
+  (defun evil-mc-make-vertical-cursors (beg end)
+    (interactive (list (region-beginning) (region-end)))
+    (evil-mc-pause-cursors)
+    (apply-on-rectangle #'evil--mc-make-cursor-at-col
+                        beg end (line-number-at-pos (point)))
+    (evil-mc-resume-cursors)
+    (evil-normal-state)
+    (move-to-column (evil-mc-column-number (if (> end beg)
+                                               beg
+                                             end)))))
 
 ;; Create a new keymap for the backslash leader
 (define-prefix-command 'my-evil-leader-map)
@@ -1367,6 +1374,7 @@ because compile mode is too slow"
 ;; (use-package lsp-tailwindcss
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
+  :straight t
   :preface
   (defun lsp-booster--advice-json-parse (old-fn &rest args)
     "Try to parse bytecode instead of json."
@@ -1426,7 +1434,8 @@ because compile mode is too slow"
   ;;   "--tsProbeLocations"								   ;;
   ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
   ;;   "--stdio"))									   ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package lsp-pyright
     :straight t
     :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
