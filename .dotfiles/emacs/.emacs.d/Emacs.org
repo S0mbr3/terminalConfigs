@@ -1274,23 +1274,23 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
   (define-key evil-motion-state-map (kbd "RET") nil) 
 
   (dolist (mode '(Custom-mode
-		    eshell-mode
-		    git-rebase-mode
-		    erc-mode
-		    circe-server-mode
-		    circe-chat-mode
-		    circe-query-mode
-		    sauron-mode
-		    vterm-mode
-		    term-mode
-		    ))
+		  eshell-mode
+		  git-rebase-mode
+		  erc-mode
+		  circe-server-mode
+		  circe-chat-mode
+		  circe-query-mode
+		  sauron-mode
+		  vterm-mode
+		  term-mode
+		  ))
     (add-to-list 'evil-emacs-state-modes mode)))
 ;;(evil-set-initial-state mode 'emacs)))
 (use-package evil
   ;;:straight t
   :straight '(evil :host github
-		       :repo "emacs-evil/evil"
-		       :branch "master")
+		   :repo "emacs-evil/evil"
+		   :branch "master")
 
   :init
   (setq evil-want-integration t)
@@ -1636,6 +1636,7 @@ because compile mode is too slow"
 ;; (use-package lsp-tailwindcss
 ;;  :straight '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package lsp-mode
+  :straight t
   :preface
   (defun lsp-booster--advice-json-parse (old-fn &rest args)
     "Try to parse bytecode instead of json."
@@ -1695,7 +1696,8 @@ because compile mode is too slow"
   ;;   "--tsProbeLocations"								   ;;
   ;;   "/home/oxhart/.nvm/versions/node/v22.0.0/lib/node_modules"			   ;;
   ;;   "--stdio"))									   ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package lsp-pyright
     :straight t
     :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
