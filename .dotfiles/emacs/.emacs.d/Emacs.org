@@ -2851,6 +2851,20 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
       (if auth-info
 	  (funcall (plist-get (car auth-info) :secret))
 	(error "OpenAI API key not found in .authinfo"))))
+
+  (defun my-mistral-api-key ()
+    (let ((auth-info (auth-source-search
+		      :host "api.mistral.ai"
+		      :user "apikey"
+		      :require '(:secret))))
+      (if auth-info
+	  (funcall (plist-get (car auth-info) :secret))
+	(error "Mistral API key not found in .authinfo"))))
+
+  (defun my-mistral-setup ()
+    (setq gptel-model 'gpt-3.5-turbo)
+    (setq gptel-api-key #'my-mistral-api-key))
+  
 (defun my-openai-setup ()
   (setq gptel-model 'gpt-4o-mini)
   (setq gptel-api-key #'my-openai-api-key))
