@@ -2828,6 +2828,19 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
 (dolist (element '(completion-at-point corfu-expand corfu-insert))
   (add-to-list 'corfu-auto-commands element)))
 #+end_src
+* Codestral
+#+begin_src emacs-lisp
+(use-package codestral
+  :straight (t :type git :host github :repo "BrachystochroneSD/codestral.el")
+  :custom
+  (codestral-api-key "17FqVZfhIrHCuN2Q8xQt1k3ebi8mvcSp")
+  (codestral-api-url "https://codestral.mistral.ai")
+  :bind (("C-M-:" . global-codestral-mode)
+         :map codestral-mode-map
+         ("C-:" . codestral-accept-completion)
+         ("C-=" . codestral-next-completion)
+         ("C-;" . codestral-previous-completion)))
+#+end_src
 * gptel
 #+begin_src emacs-lisp
 (use-package gptel
