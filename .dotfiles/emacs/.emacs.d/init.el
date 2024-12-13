@@ -1942,6 +1942,18 @@ because compile mode is too slow"
   )
 (add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 
+(use-package toc-org
+  :straight t
+  :init
+  (if (require 'toc-org nil t)
+    (progn
+      (add-hook 'org-mode-hook 'toc-org-mode)
+
+      ;; enable in markdown, too
+      (add-hook 'markdown-mode-hook 'toc-org-mode)
+      (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
+  (warn "toc-org not found")))
+
 (use-package org-roam
   :straight t
   :bind (("C-c n l" . org-roam-buffer-toggle)
@@ -2462,6 +2474,18 @@ map)
 (dolist (element '(completion-at-point corfu-expand corfu-insert))
   (add-to-list 'corfu-auto-commands element)))
 
+(use-package codestral
+  :straight (t :type git :host github :repo "BrachystochroneSD/codestral.el")
+  ;;:init (global-codestral-mode)
+  :custom
+  (codestral-api-key "17FqVZfhIrHCuN2Q8xQt1k3ebi8mvcSp")
+  (codestral-api-url "https://codestral.mistral.ai")
+  :bind (("C-M-:" . global-codestral-mode)
+         :map codestral-mode-map
+         ("C-:" . codestral-accept-completion)
+         ("C-=" . codestral-next-completion)
+         ("C-;" . codestral-previous-completion)))
+
 (use-package gptel
   :straight t
   :config
@@ -2483,6 +2507,20 @@ map)
       (if auth-info
 	  (funcall (plist-get (car auth-info) :secret))
 	(error "OpenAI API key not found in .authinfo"))))
+
+  ;; (defun my-mistral-api-key ()
+  ;;   (let ((auth-info (auth-source-search
+  ;; 		      :host "api.mistral.ai"
+  ;; 		      :user "apikey"
+  ;; 		      :require '(:secret))))
+  ;;     (if auth-info
+  ;; 	  (funcall (plist-get (car auth-info) :secret))
+  ;; 	(error "Mistral API key not found in .authinfo"))))
+
+  ;; (defun my-mistral-setup ()
+  ;;   (setq gptel-model 'gpt-3.5-turbo)
+  ;;   (setq gptel-api-key #'my-mistral-api-key))
+  
 (defun my-openai-setup ()
   (setq gptel-model 'gpt-4o-mini)
   (setq gptel-api-key #'my-openai-api-key))
