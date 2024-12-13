@@ -2253,7 +2253,9 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
       ;; enable in markdown, too
       (add-hook 'markdown-mode-hook 'toc-org-mode)
       (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
-  (warn "toc-org not found")))
+  (warn "toc-org not found"))
+  :config
+(add-to-list 'org-tag-alist '("TOC" . ?T)))
 #+end_src
 * Org Roam
 #+begin_src emacs-lisp
