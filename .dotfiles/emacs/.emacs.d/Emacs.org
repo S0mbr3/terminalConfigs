@@ -2241,6 +2241,20 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
   )
 (add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 #+end_src
+** org-toc
+#+begin_src emacs-lisp
+(use-package toc-org
+  :straight t
+  :init
+  (if (require 'toc-org nil t)
+    (progn
+      (add-hook 'org-mode-hook 'toc-org-mode)
+
+      ;; enable in markdown, too
+      (add-hook 'markdown-mode-hook 'toc-org-mode)
+      (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
+  (warn "toc-org not found")))
+#+end_src
 * Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
