@@ -2846,6 +2846,7 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
 #+begin_src emacs-lisp
 (use-package codestral
   :straight (t :type git :host github :repo "BrachystochroneSD/codestral.el")
+  ;;:init (global-codestral-mode)
   :custom
   (codestral-api-key "17FqVZfhIrHCuN2Q8xQt1k3ebi8mvcSp")
   (codestral-api-url "https://codestral.mistral.ai")
