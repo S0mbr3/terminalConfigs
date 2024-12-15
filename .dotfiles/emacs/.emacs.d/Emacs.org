@@ -1395,7 +1395,8 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 
 ;; Bind commands under the new leader key
 (define-key my-evil-leader-map (kbd "w") 'evil-write)   ;; Save
-(define-key my-evil-leader-map (kbd "b") 'evil-delete-buffer)  ;; Kill buffer
+(define-key my-evil-leader-map (kbd "d") 'evil-delete-buffer) ;; Kill buffer
+(define-key my-evil-leader-map (kbd "b") 'consult-persp-buffer) ;; Switch buffer in persp
 (define-key my-evil-leader-map (kbd "c") 'evil-window-delete)  ;; Close window
 (define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
