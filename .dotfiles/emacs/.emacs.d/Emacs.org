@@ -2150,6 +2150,7 @@ because compile mode is too slow"
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
   (add-to-list 'org-structure-template-alist '("yaml" . "src yaml-ts"))
   (add-to-list 'org-structure-template-alist '("php" . "src php-ts"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
