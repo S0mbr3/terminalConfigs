@@ -1157,7 +1157,8 @@ folder, otherwise delete a word"
 
 ;; Bind commands under the new leader key
 (define-key my-evil-leader-map (kbd "w") 'evil-write)   ;; Save
-(define-key my-evil-leader-map (kbd "b") 'evil-delete-buffer)  ;; Kill buffer
+(define-key my-evil-leader-map (kbd "d") 'evil-delete-buffer) ;; Kill buffer
+(define-key my-evil-leader-map (kbd "b") 'consult-persp-buffer) ;; Switch buffer in persp
 (define-key my-evil-leader-map (kbd "c") 'evil-window-delete)  ;; Close window
 (define-key my-evil-leader-map (kbd "e") 'evil-execute-in-emacs-state)  ;; Execute next command in emacs state
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
@@ -1861,6 +1862,7 @@ because compile mode is too slow"
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell :results output"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
   (add-to-list 'org-structure-template-alist '("yaml" . "src yaml-ts"))
   (add-to-list 'org-structure-template-alist '("php" . "src php-ts"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
@@ -1952,7 +1954,9 @@ because compile mode is too slow"
       ;; enable in markdown, too
       (add-hook 'markdown-mode-hook 'toc-org-mode)
       (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
-  (warn "toc-org not found")))
+  (warn "toc-org not found"))
+  :config
+(add-to-list 'org-tag-alist '("TOC" . ?T)))
 
 (use-package org-roam
   :straight t
