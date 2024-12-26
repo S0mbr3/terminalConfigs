@@ -1479,6 +1479,10 @@ because compile mode is too slow"
 (use-package html-mode
   :mode "\\.html\\'")
 
+(use-package kotlin-ts-mode
+  :straight (:host gitlab :repo "bricka/emacs-kotlin-ts-mode")
+  :mode "\\.kt\\'")
+
 
 (use-package yaml-ts-mode
   :mode "\\.yaml\\'")
