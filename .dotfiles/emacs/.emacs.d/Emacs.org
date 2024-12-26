@@ -1679,6 +1679,7 @@ because compile mode is too slow"
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
+   (kotlin-ts-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred)
    (yaml-ts-mode . lsp-deferred)
    (typescript-ts-mode . lsp-deferred)
@@ -1690,6 +1691,7 @@ because compile mode is too slow"
   (setq lsp-keymap-prefix "C-c C-l")
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
+  (setq lsp-clients-kotlin-server-executable "~/builds/kotlin-language-server/server/build/install/server/bin/kotlin-language-server")
   (setq lsp-completion-enable nil)
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
