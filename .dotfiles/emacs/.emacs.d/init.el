@@ -381,7 +381,7 @@
 (defun ox/switch-to-last-persp ()
   "Switch to the last known perspective"
   (interactive)
- (persp-switch my-last-visited-persp))
+    (persp-switch my-last-visited-persp))
 
 ;; Hook to track last known perspective for ox/switch-to-last-persp function
 (add-hook 'persp-before-switch-functions
@@ -395,7 +395,9 @@
                                 new-persp))
                    (old-name (if (perspective-p old-persp)
                                  (persp-name old-persp)
-                               (format "%s" old-persp)))  ;; Ensure old-persp is a string
+			       (if (eq old-persp  nil)
+				   (format "none")
+				 (format "%s" old-persp))))  ;; Ensure old-persp is a string
                    (new-name (if (perspective-p new-persp)
                                  (persp-name new-persp)
                                (format "%s" new-persp)))) ;; Ensure new-persp is a string
@@ -1231,6 +1233,10 @@ because compile mode is too slow"
 (use-package html-mode
   :mode "\\.html\\'")
 
+(use-package kotlin-ts-mode
+  :straight (:host gitlab :repo "bricka/emacs-kotlin-ts-mode")
+  :mode "\\.kt\\'")
+
 
 (use-package yaml-ts-mode
   :mode "\\.yaml\\'")
@@ -1412,6 +1418,7 @@ because compile mode is too slow"
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
+   (kotlin-ts-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred)
    (yaml-ts-mode . lsp-deferred)
    (typescript-ts-mode . lsp-deferred)
@@ -1423,6 +1430,7 @@ because compile mode is too slow"
   (setq lsp-keymap-prefix "C-c C-l")
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   :config
+  (setq lsp-clients-kotlin-server-executable "~/builds/kotlin-language-server/server/build/install/server/bin/kotlin-language-server")
   (setq lsp-completion-enable nil)
   (setq lsp-rust-server 'rust-analyzer) ; or 'rls
 
