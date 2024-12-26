@@ -251,7 +251,7 @@ We use the no-littering package to keep folders where we edit files and the Emac
 #+end_src
 * Workspaces
 Using persp-mode to create different workspaces
-** persp-mode
+** COMMENT persp-mode
 #+begin_src emacs-lisp
   (use-package persp-mode
     :straight t
@@ -430,7 +430,7 @@ Using persp-mode to create different workspaces
 (defun ox/switch-to-last-persp ()
   "Switch to the last known perspective"
   (interactive)
- (persp-switch my-last-visited-persp))
+    (persp-switch my-last-visited-persp))
 
 ;; Hook to track last known perspective for ox/switch-to-last-persp function
 (add-hook 'persp-before-switch-functions
@@ -444,14 +444,15 @@ Using persp-mode to create different workspaces
                                 new-persp))
                    (old-name (if (perspective-p old-persp)
                                  (persp-name old-persp)
-                               (format "%s" old-persp)))  ;; Ensure old-persp is a string
+			       (if (eq old-persp  nil)
+				   (format "none")
+				 (format "%s" old-persp))))  ;; Ensure old-persp is a string
                    (new-name (if (perspective-p new-persp)
                                  (persp-name new-persp)
                                (format "%s" new-persp)))) ;; Ensure new-persp is a string
               ;; Switch the names here to display the correct old to new perspective
               ;;(print (format "Switching from %s to %s" new-name old-name))
 	      (setq my-last-visited-persp old-name))))
-
 #+end_src
 
 ** my-switch-to-project
