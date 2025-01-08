@@ -1931,6 +1931,8 @@ because compile mode is too slow"
                    :latex-compiler ("lualatex -output-format=dvi -interaction nonstopmode -output-directory %o %f")
 		   :image-converter
 		   ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --output=%O"))))
+(setq org-format-latex-header
+      (concat org-format-latex-header "\n\\usepackage{tikz}")) ;; adding tikz package to latex header
 
   (setq org-return-follows-link t) ;; Allow to follow links using RET key
   (setq org-link-frame-setup
