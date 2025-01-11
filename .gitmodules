@@ -19,3 +19,6 @@
 [submodule ".dotfiles/awesome/net_widgets"]
     path = .dotfiles/awesome/net_widgets
     url = https://github.com/username/repo-url.git
+[submodule ".dotfiles/scripts/scripts/install_mutagen"]
+	path = .dotfiles/scripts/scripts/install_mutagen
+	url = git@github.com:S0mbr3/install_mutagen.git
