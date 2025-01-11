@@ -3,4 +3,5 @@ node_modules
 .dotfiles/nodenv/.nodenv/versions
 nohup.out
 .env
+.dotfiles/scripts/scripts/fete/day.json
 **/*~
