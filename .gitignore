@@ -3,3 +3,4 @@ node_modules
 .dotfiles/nodenv/.nodenv/versions
 nohup.out
 .env
+**/*~
