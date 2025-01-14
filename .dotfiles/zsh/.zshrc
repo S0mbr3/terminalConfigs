@@ -171,7 +171,7 @@ if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
 export PATH="$HOME/.nodenv/bin:$PATH"
-eval "$(nodenv init -)"
+eval "$(nodenv init - zsh)"
 export TERM=xterm-kitty
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 
