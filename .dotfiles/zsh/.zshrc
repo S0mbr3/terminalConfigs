@@ -1,35 +1,85 @@
+is_socket_x0() {
+if [ -x "/tmp/.X11-unix/X0" ]; then
+    echo "Socket X0 running."
+else
+    nohup socat -b65536 UNIX-LISTEN:/tmp/.X11-unix/X0,fork,mode=777 VSOCK-CONNECT:2:6000 &
+    Echo "Socket starting."
+fi
+}
+
+function_name (){
+  toilet "Hello Ox"
+  if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
+    cowsay "The system is running Arch Linux"
+  elif [[ "$(uname -a | cut -d' ' -f3 | cut -d'-' -f4)" == "WSL2" ]]; then
+    cowsay "The system is running under WSL2"
+    #sudo service ssh start
+    #for wsl2 if gui application is set to true in c://Users/Myuser/.wslconfig
+    # then i am not using vcxsrv and no need to export the DISPLAY var 
+    #export DISPLAY=$(ip route|awk '/^default/{print $3}'):0.0
+    #export DISPLAY=$(ip route|awk '/^default/{print $3}'):0.0
+
+    #For X410 with socket connection "VSOCK"
+    export DISPLAY=:0.0
+    is_socket_x0
+    export HOST_IP="$(ip route |awk '/^default/{print $3}')"
+    export PULSE_SERVER="tcp:$HOST_IP"
+
+    # export DISPLAY="`sed -n 's/nameserver //p' /etc/resolv.conf`:0.0"
+    #export LIBGL_ALWAYS_INDIRECT=0
+    # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
+    #Only for wsl to have a notify-send like
+    notify-send() { wsl-notify-send.exe --category $WSL_DISTRO_NAME "${@}"; }
+  else
+    echo "The system is running something strange O.O"
+
+  fi
+  #neofetch
+  fortune > fortune;
+  lolcat  fortune
+  rm fortune
+}
+function_name
 
 #Auto-launching ssh-agent to save passphrases
 
-env=~/.ssh/agent.env
+function sshe(){
+  env=~/.ssh/agent.env
 
-agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+  agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
 
-agent_start () {
+  agent_start () {
     (umask 077; ssh-agent >| "$env")
     . "$env" >| /dev/null ; }
 
-agent_load_env
+  agent_load_env
 
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+  # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+  agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
 
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+  if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
     agent_start
-    ssh-add
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-    ssh-add
-fi
+    ssh-add ~/.ssh/id_* 2>/dev/null # Add all private keys
+  elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+    ssh-add ~/.ssh/id_* 2>/dev/null
+  fi
 
-unset env
-#nvr -s
-#
+  unset env
+  echo "ssh-agent running"
+}
+sshe
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+
+#nvr -s
+
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -104,16 +154,17 @@ ZSH_THEME=powerlevel10k/powerlevel10k
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git z zsh-autosuggestions zsh-syntax-highlighting) # z is zsh-z
+#plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git z zsh-autosuggestions aliases web-search zsh-syntax-highlighting zsh-history-substring-search)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -121,8 +172,11 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
-export VISUAL='nvr -l'
-export EDITOR="$VISUAL"
+#export VISUAL='nvr -l'
+#export VISUAL='nvim'
+export VISUAL='emacsclient -n'
+#export EDITOR="$VISUAL"
+export EDITOR='emacsclient -n'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -139,28 +193,40 @@ export EDITOR="$VISUAL"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
+alias ls='lsd --hyperlink=auto'
+alias l='ls -l --hyperlink=auto'
+alias la='ls -a --hyperlink=auto'
+alias lla='ls -la --hyperlink=auto'
+alias lt='ls --tree --hyperlink=auto'
 alias c='cht.sh'
-alias zz="z && ls"
+alias ecn='emacsclient -n'
+#alias zz="z && ls"
 alias kssh='kitty +kitten ssh'
-alias deb='kitty +kitten ssh debian'
+alias kdeb='kitty +kitten ssh debian'
+#with exec instead of alias to execute it from the file name it is stored
+alias mg='kitty +kitten hyperlinked_grep --smart-case "$@"'
+alias deb='ssh ledeb'
+alias ts='tmux-sessionizer'
+alias tt='tmux-attacher'
+export PATH="$HOME/scripts:$PATH"
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye >/dev/null
+
+#bindkey -s '^o' 'tmux-sessionizer^M'
+
+functin zz(){
+z $1
+ls
+}
 function bt(){
-  fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
 }
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/oxhart/.sdkman"
-[[ -s "/home/oxhart/.sdkman/bin/sdkman-init.sh" ]] && source "/home/oxhart/.sdkman/bin/sdkman-init.sh"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
-alias luamake=/home/oxhart/builds/lua-language-server/3rd/luamake/luamake
-export PATH="$PATH:/home/oxhart/.local/bin/"
+alias luamake=$HOME/builds/lua-language-server/3rd/luamake/luamake
 
 #node = "${node -v}"
 #source /usr/share/nvm/init-nvm.sh
@@ -170,24 +236,71 @@ result=$(Command)
 if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
-export PATH="$HOME/.nodenv/bin:$PATH"
-eval "$(nodenv init - zsh)"
-export TERM=xterm-kitty
+#eval "$(nodenv init -)"
+# export TERM=xterm-kitty
+export TERM=tmux-256color
+# export TERM=xterm-256color
 export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
+export NVIM_APPNAME="nvim"
+## uncomment below line to allow shell integration with wezterm using wezterm.sh
+#source ~/wezterm.sh
 
 # for vterm of emacs to pass messages between vterm and the shell
 vterm_printf(){
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
+  if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+    # Tell tmux to pass the escape sequences through
+    printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+  elif [ "${TERM%%-*}" = "screen" ]; then
+    # GNU screen (screen, screen-256color, screen-256color-bce)
+    printf "\eP\e]%s\007\e\\" "$1"
+  else
+    printf "\e]%s\e\\" "$1"
+  fi
 }
 
-. "$HOME/.atuin/bin/env"
+HISTSIZE=20000
+SAVEHIST=20000
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# to ini phpenv
+eval "$(phpenv init -)"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "$HOME/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="$HOME/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# <<< conda initialize <<<
+
+
+# To customize prompt, run `p10k configure` or edit ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
+[[ ! -f ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/Documents/builds/terminalConfigs/.dotfiles/zsh/.p10k.zsh
+#source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
+
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# To customize prompt, run `p10k configure` or edit ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh.
+[[ ! -f ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh ]] || source ~/terminalConfigs/.dotfiles/zsh/.p10k.zsh
