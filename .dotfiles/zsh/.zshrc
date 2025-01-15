@@ -242,7 +242,7 @@ fi
 # export TERM=xterm-kitty
 export TERM=tmux-256color
 # export TERM=xterm-256color
-export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
+#export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 export NVIM_APPNAME="nvim"
 ## uncomment below line to allow shell integration with wezterm using wezterm.sh
 #source ~/wezterm.sh
