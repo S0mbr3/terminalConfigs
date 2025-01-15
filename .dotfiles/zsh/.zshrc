@@ -14,7 +14,7 @@ function_name (){
     export XDG_RUNTIME_DIR=/run/user/$(id -u)
   elif [[ "$(uname -a | cut -d' ' -f1)" == "Darwin" ]]; then
     cowsay "The system is running macOS"
-    export XDG_RUNTIME_DIR=$TMPDIR
+    #export XDG_RUNTIME_DIR=$TMPDIR
   elif [[ "$(uname -a | cut -d' ' -f3 | cut -d'-' -f4)" == "WSL2" ]]; then
     export XDG_RUNTIME_DIR=/run/user/$(id -u)
     cowsay "The system is running under WSL2"
@@ -235,13 +235,13 @@ alias luamake=$HOME/builds/lua-language-server/3rd/luamake/luamake
 
 #node = "${node -v}"
 #source /usr/share/nvm/init-nvm.sh
+eval "$(nodenv init - zsh)"
 Command() { echo "$(node -v)"; }
 result=$(Command)
 # Load Angular CLI autocompletion.
 if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
-#eval "$(nodenv init -)"
 # export TERM=xterm-kitty
 export TERM=tmux-256color
 # export TERM=xterm-256color
