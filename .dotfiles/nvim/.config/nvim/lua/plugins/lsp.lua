@@ -143,7 +143,7 @@ return {
         --'emmet_ls',
         'emmet_language_server',
         'html', "phpactor",
-        "clangd", "eslint", "tailwindcss", "cssls",
+        "clangd", "eslint", "tailwindcss", "cssls", "rust_analyzer",
         --"jdtls"
       }
       -- Ensure the servers above are installed
