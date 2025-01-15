@@ -5,3 +5,4 @@ export PATH="$HOME/.nodenv/bin:$PATH"
 export PATH="$HOME/.phpenv/bin:$PATH"
 . "$HOME/.cargo/env"
 export PATH=$PATH:/opt/mutagen
+export PATH=$HOME/.local/bin/:$PATH
