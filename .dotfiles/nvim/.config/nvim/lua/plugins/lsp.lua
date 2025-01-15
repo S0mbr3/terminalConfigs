@@ -32,13 +32,14 @@ return {
       'nvim-tree/nvim-web-devicons',     -- optional
     }
   },
+  "mrcjkb/rustaceanvim",
   {'neovim/nvim-lspconfig',
     dependencies = {
       'mfussenegger/nvim-dap',
       'p00f/clangd_extensions.nvim',
       {'williamboman/mason.nvim', dependencies = {'hrsh7th/cmp-nvim-lsp'}},
       'williamboman/mason-lspconfig.nvim',
-      {'simrat39/rust-tools.nvim', event = 'BufEnter *.rs'},
+      --{'simrat39/rust-tools.nvim', event = 'BufEnter *.rs'},
     },
     config = function()
       --end of LSPSAGA CONFIGURATION
@@ -143,7 +144,7 @@ return {
         --'emmet_ls',
         'emmet_language_server',
         'html', "phpactor",
-        "clangd", "eslint", "tailwindcss", "cssls", "rust_analyzer",
+        "clangd", "eslint", "tailwindcss", "cssls",
         --"jdtls"
       }
       -- Ensure the servers above are installed
@@ -197,7 +198,7 @@ return {
         },
       }
 
-      -- Update this path
+      --[[ -- Update this path
       -- for rust debugger watch rust-tools
       local extension_path = vim.env.HOME .. '/.vscode-oss/extensions/vadimcn.vscode-lldb-1.8.1-universal/'
       local codelldb_path = extension_path .. 'adapter/codelldb'
@@ -225,7 +226,7 @@ return {
             vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
           end,
           setting = {
-            ["rust-analyzer"] = {
+            [""ust-analyzer"] = {
               checkOnSave = {
                 command = "clippy"
               },
@@ -237,7 +238,7 @@ return {
             }
           }
         },
-      })
+      }) ]]
     end,
   },
   {
