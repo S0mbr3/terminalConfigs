@@ -11,9 +11,12 @@ function_name (){
   toilet "Hello Ox"
   if [[ "$(uname -a | cut -d' ' -f2)" == "arch" ]]; then
     cowsay "The system is running Arch Linux"
+    export XDG_RUNTIME_DIR=/run/user/$(id -u)
   elif [[ "$(uname -a | cut -d' ' -f1)" == "Darwin" ]]; then
     cowsay "The system is running macOS"
+    export XDG_RUNTIME_DIR=$TMPDIR
   elif [[ "$(uname -a | cut -d' ' -f3 | cut -d'-' -f4)" == "WSL2" ]]; then
+    export XDG_RUNTIME_DIR=/run/user/$(id -u)
     cowsay "The system is running under WSL2"
     #sudo service ssh start
     #for wsl2 if gui application is set to true in c://Users/Myuser/.wslconfig
@@ -298,7 +301,6 @@ export NVM_DIR="$HOME/.nvm"
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 
 export SDKMAN_DIR="$HOME/.sdkman"
