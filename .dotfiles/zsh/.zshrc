@@ -213,6 +213,7 @@ alias mg='kitty +kitten hyperlinked_grep --smart-case "$@"'
 alias deb='ssh ledeb'
 alias ts='tmux-sessionizer'
 alias tt='tmux-attacher'
+alias lg='lazygit'
 export PATH="$HOME/scripts:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
