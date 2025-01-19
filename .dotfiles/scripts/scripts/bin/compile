@@ -1,5 +1,6 @@
 #!/bin/sh
 
 tmux next-window
+#tmux send-keys -t ':-1' ":w" Enter #send the keys to the previous tmux window
 tmux send-keys "make -k" Enter
 # Enter copy mode and set mode-keys to vi
