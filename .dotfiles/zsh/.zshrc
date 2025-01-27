@@ -217,8 +217,8 @@ alias lg='lazygit'
 export PATH="$HOME/scripts:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
-export GPG_TTY=$(tty)
-gpg-connect-agent updatestartuptty /bye >/dev/null
+# export GPG_TTY=$(tty)
+# gpg-connect-agent updatestartuptty /bye >/dev/null
 
 #bindkey -s '^o' 'tmux-sessionizer^M'
 
@@ -277,17 +277,17 @@ eval "$(phpenv init -)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-#         . "$HOME/miniconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="$HOME/miniconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
+__conda_setup="$('/Users/nebj/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/nebj/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/nebj/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/nebj/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
 # <<< conda initialize <<<
 
 
