@@ -9,7 +9,7 @@ bind a hint
 bind q bmark
 bind gc tabduplicate
 
-bind \ fillcmdline tgroupswitch 
+bind \ fillcmdline tgroupswitch
 bind | fillcmdline tgroupmove
 bind ;6 tgrouplast
 #bind AC-`
@@ -73,3 +73,39 @@ command histoDeleteByName jsb -p ((JS_ARG) => { \
         }); \
       }); \
 })(JS_ARG);
+
+command youtube-set-speed js -p ((JS_ARG) => { \
+  const player = document.querySelector('.html5-video-player'); \
+  if (!player) return; \
+
+  " Remove existing overlay if any
+  let existingOverlay = document.querySelector('#tridactyl-speed-overlay'); \
+  if (existingOverlay) existingOverlay.remove(); \
+
+  " Create the overlay
+  const overlay = document.createElement('div'); \
+  overlay.id = 'tridactyl-speed-overlay'; \
+  overlay.textContent = `${JS_ARG}x`; \
+  overlay.style.position = 'absolute'; \
+  overlay.style.top = '50%'; \
+  overlay.style.left = '50%'; \
+  overlay.style.transform = 'translate(-50%, -50%)'; \
+  overlay.style.background = 'rgba(0, 0, 0, 0.7)'; \
+  overlay.style.color = 'white'; \
+  overlay.style.padding = '10px 20px'; \
+  overlay.style.borderRadius = '5px'; \
+  overlay.style.fontSize = '24px'; \
+  overlay.style.zIndex = '1000'; \
+
+  " Remove the overlay after 1 second
+  player.appendChild(overlay); \
+  setTimeout(() => overlay.remove(), 1000); \
+
+  " Change video playback speed
+  document.querySelector('video').playbackRate = JS_ARG \
+  })(JS_ARG);
+
+bindurl https://www.youtube.com/ ;1 youtube-set-speed 0.5
+bindurl https://www.youtube.com/ ;2 youtube-set-speed 1
+bindurl https://www.youtube.com/ ;3 youtube-set-speed 1.75
+bindurl https://www.youtube.com/ ;4 youtube-set-speed 2

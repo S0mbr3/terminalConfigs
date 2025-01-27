@@ -51,25 +51,34 @@ set searchurls.dlp https://www.deepl.com/fr/translator#fr/ja/
 " This one use a Regexp to find matching history url and delete it
 command deleteHistoryByRegex jsb -p ((JS_ARG) => { \
     try { \
-      let pattern = new RegExp(JS_ARG); \
-      browser.history.search({text: "", maxResults: 100000, startTime: 2005-1-1}).then((historyItems) => { \
-      historyItems.forEach(item => { \
-      if (pattern.test(item.url)) { \
-          browser.history.deleteUrl({url: item.url}); \
+    let pattern = new RegExp(JS_ARG); \
+    browser.history.search({text: "", maxResults: 100000, startTime: 2005-1-1}).then((historyItems) => { \
+        historyItems.forEach(item => { \
+            if (pattern.test(item.url)) { \
+            browser.history.deleteUrl({url: item.url}); \
             } \
+            }); \
         }); \
-      }); \
     } catch (error) { \
-      throw new Error(error.message); \
+    throw new Error(error.message); \
     } \
-})(JS_ARG);
+    })(JS_ARG);
 
 " This one doesn't use regexp and leverage native browser history searching ability and thus is faster
 command histoDeleteByName jsb -p ((JS_ARG) => { \
-      browser.history.search({text: JS_ARG, maxResults: 100000, startTime: 2005-1-1}).then((historyItems) => { \
-      historyItems.forEach(item => { \
-          console.log(item); \
-          browser.history.deleteUrl({url: item.url}); \
+    browser.history.search({text: JS_ARG, maxResults: 100000, startTime: 2005-1-1}).then((historyItems) => { \
+        historyItems.forEach(item => { \
+            console.log(item); \
+            browser.history.deleteUrl({url: item.url}); \
+            }); \
         }); \
-      }); \
+    })(JS_ARG);
+
+command set-speed js -p ((JS_ARG) => { \
+#if(JS_ARG) sp = JS_ARG; \
+
+const showSpeedOverlay = (speed) => { const player = document.querySelector('.html5-video-player'); if (!player) return; Remove existing overlay if any let existingOverlay = document.querySelector('#tridactyl-speed-overlay'); if (existingOverlay) existingOverlay.remove(); Create the overlay const overlay = document.createElement('div'); overlay.id = 'tridactyl-speed-overlay'; overlay.textContent = `${speed}x`; overlay.style.position = 'absolute'; overlay.style.top = '50%'; overlay.style.left = '50%'; overlay.style.transform = 'translate(-50%, -50%)'; overlay.style.background = 'rgba(0, 0, 0, 0.7)'; overlay.style.color = 'white'; overlay.style.padding = '10px 20px'; overlay.style.borderRadius = '5px'; overlay.style.fontSize = '24px'; overlay.style.zIndex = '1000'; player.appendChild(overlay); Remove the overlay after 1 second setTimeout(() => overlay.remove(), 1000); }; \
+document.querySelector('video').playbackRate = {1}
+showSpeedOverlay(JS_ARG);
 })(JS_ARG);
+bindurl https://www.youtube.com/ gl js -r youtube.js
