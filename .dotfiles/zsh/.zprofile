@@ -7,7 +7,4 @@ if [ -d "$HOME/.cargo/bin" ] ; then
     PATH="$PATH:$HOME/.cargo/bin"
 fi
 
-export GPG_TTY=$(tty)
-gpg-connect-agent updatestartuptty /bye >/dev/null
-
 eval "$(/opt/homebrew/bin/brew shellenv)"

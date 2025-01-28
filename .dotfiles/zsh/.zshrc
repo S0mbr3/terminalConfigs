@@ -217,8 +217,13 @@ alias lg='lazygit'
 export PATH="$HOME/scripts:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
-# export GPG_TTY=$(tty)
-# gpg-connect-agent updatestartuptty /bye >/dev/null
+# Set GPG_TTY to the correct tty
+if [ -n "$TMUX" ]; then
+  export GPG_TTY=$(tmux display-message -p '#{pane_tty}')
+else
+  export GPG_TTY=$(tty)
+fi
+gpg-connect-agent updatestartuptty /bye >/dev/null
 
 #bindkey -s '^o' 'tmux-sessionizer^M'
 
