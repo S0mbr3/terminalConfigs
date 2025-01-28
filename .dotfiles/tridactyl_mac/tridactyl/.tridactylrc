@@ -30,6 +30,7 @@ set searchurls.arch https://wiki.archlinux.org/index.php?search=
 set searchurls.yt https://www.youtube.com/results?search_query=
 set searchurls.ytl https://www.youtube.com/playlist?list=WL
 set searchurls.yta https://www.youtube.com
+set searchurls.ytp https://www.youtube.com/feed/playlists
 set searchurls.pk https://www.pokepedia.fr/
 set searchurls.st https://www.stadiumgaming.gg/rank-checker?pokemon=
 set searchurls.sx https://searxng.brihx.fr/search?q=
