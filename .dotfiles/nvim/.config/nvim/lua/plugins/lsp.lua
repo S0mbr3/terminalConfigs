@@ -139,7 +139,7 @@ return {
 
       -- Enable the following language servers
 
-      local servers = {'pyright', 'ts_ls', 'yamlls', 'lua_ls', 'angularls', 'bashls','autotools_ls',
+      local servers = {'pyright', 'ts_ls', 'yamlls', 'lua_ls', 'angularls', 'bashls','autotools_ls', 'nil_ls',
         --'phpactor',
         --'emmet_ls',
         'emmet_language_server',
