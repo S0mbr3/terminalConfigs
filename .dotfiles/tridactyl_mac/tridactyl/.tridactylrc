@@ -12,7 +12,7 @@ bind gc tabduplicate
 bind \ fillcmdline tgroupswitch
 bind | fillcmdline tgroupmove
 bind ;6 tgrouplast
-bind <F2> source ./tridactylrc
+bind <F2> source .tridactylrc
 #bind AC-`
 colors midnight
 
