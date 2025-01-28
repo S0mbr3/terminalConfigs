@@ -12,6 +12,7 @@ bind gc tabduplicate
 bind \ fillcmdline tgroupswitch
 bind | fillcmdline tgroupmove
 bind ;6 tgrouplast
+bind <F2> source ./tridactylrc
 #bind AC-`
 colors midnight
 
@@ -28,6 +29,7 @@ set searchurls.r https://www.reddit.com/search/?q=
 set searchurls.arch https://wiki.archlinux.org/index.php?search=
 set searchurls.yt https://www.youtube.com/results?search_query=
 set searchurls.ytl https://www.youtube.com/playlist?list=WL
+set searchurls.yta https://www.youtube.com
 set searchurls.pk https://www.pokepedia.fr/
 set searchurls.st https://www.stadiumgaming.gg/rank-checker?pokemon=
 set searchurls.sx https://searxng.brihx.fr/search?q=
