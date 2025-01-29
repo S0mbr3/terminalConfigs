@@ -5,3 +5,4 @@ nohup.out
 .env
 .dotfiles/scripts/scripts/fete/day.json
 **/*~
+**/.DS_Store
