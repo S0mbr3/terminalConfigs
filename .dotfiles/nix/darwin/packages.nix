@@ -1,3 +1,8 @@
 { pkgs }:
 with pkgs;
-[ ranger ]
+[
+  ranger
+  neovim
+  tmux
+  fzf
+]
