@@ -30,10 +30,23 @@
       {
       # Build darwin flake using:
       # $ darwin-rebuild switch .
-      darwinConfigurations.default= nix-darwin.lib.darwinSystem {
+      darwinConfigurations.default = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
-        modules = [ ./darwin ];
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./darwin
+        ];
+        #specialArgs = { inherit inputs; };
+      };
+      darwinConfigurations."MacBook-Air-de-Aude" = nix-darwin.lib.darwinSystem {
+        pkgs = darwin-pkgs;
+        system = "aarch64-darwin";
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./darwin
+        ];
+        specialArgs = { inherit self inputs; };
       };
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#simple
