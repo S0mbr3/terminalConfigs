@@ -1,28 +1,36 @@
-{ self, config, pkgs, ...}:
+{ self, config, pkgs, home-manager, ...}:
 let
-  user = builtins.readfile ./username;
-  homeDir = "Users/${user}";
+  #user = builtins.readfile ./username;
+  #user = "Nebj";
+  #user = builtins.getEnv "USER";
+  user = "nebj";
+  homeDir = "/Users/${user}";
   configDir = "${homeDir}/.config";
   cacheDir = "${homeDir}/.cache";
 
   # Import the package list
-  packageList = import ./packages.nix { pkgs = pkgs; };
+  packageList = import ./packages.nix  { pkgs = pkgs; };
+  /* packageList = with pkgs;
+    (import ./packages.nix { pkgs = pkgs; }); */
 in
   {
   # https://nix-community.github.io/home-manager/index.html#sec-install-nix-darwin-module
   imports = [
-    <home-manager/nix-darwin>
+    #<home-manager/nix-darwin>
+    #home-manager.darwinModules.home-manager
+    #home-manager.users.Nebj
   ];
 
   # * Nix
   # auto upgrade nix package and the daemon service
-  service.nix-daemon.enable = true;
+  services.nix-daemon.enable = true;
 
   nix = {
-    package = pkgs.nixUnstable;
+    #package = pkgs.nixUnstable;
+    package = pkgs.nixVersions.latest;
     settings.trusted-users = [ "root" "@admin" ];
 
-    nix.settings.experimental-features = "nix-command flakes";
+    settings.experimental-features = "nix-command flakes";
 
     #automatically gargave collect to reduce nix store size
     gc = {
@@ -37,36 +45,39 @@ in
   # * Environment
   # installing both here with home manager
   # TODO split system wise packages with home wise packages
-  environment.systempackages = packageList;
+  environment.systemPackages = packageList;
 
   # * Fonts
   # don't fully manage fontdir (will remove any manually installed fonts)
   # (default is false)
-  fonts.fontDir.enable = false;
+  #fonts.fontDir.enable = false;
 
   # fonts to install
-  fonts.fonts = [
+  fonts.packages = [
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/nerdfonts/shas.nix
-    (pkgs.nerdfonts.override {
+    /* (pkgs.nerdfonts.override {
       fonts = ["CascadiaCode" "FiraCode" "FiraMono"];
-    })
+    }) */
     pkgs.cascadia-code
     pkgs.office-code-pro
+    pkgs.fira-code
+    pkgs.fira-mono
   ];
 
   homebrew = {
     enable = true;
     taps = [
-      "homebrew/core"
+      /* "homebrew/core"
       "homebrew/cask"
-      "homebrew/cask-fonts"
+      "homebrew/cask-fonts" */
       "koekeishiya/formulae"
     ];
     brews = [
       "progress"
+      { name = "neovim"; args = [ "fetch-HEAD" ]; } # Use the correct syntax for HEAD builds
     ];
     casks = [
-
+      "iterm2"
     ];
   };
 
@@ -90,7 +101,7 @@ in
       dock = {
         autohide = true;
         # make smaller (default 64)
-        titlesize = 48;
+        tilesize = 48;
       };
 
       # ** Keyboard
@@ -100,7 +111,7 @@ in
       # ** Mouse
       # enable tap to click
       trackpad.Clicking = true;
-      NSGlobalDomain."come.apple.mouse.tapBehavior" = 1;
+      NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
 
       # disable natural scroll direction
       NSGlobalDomain."com.apple.swipescrolldirection" = false;
@@ -110,13 +121,13 @@ in
       finder.CreateDesktop = false;
 
       NSGlobalDomain.AppleShowAllExtensions = true;
-      finder.AppleShowAllextensions = true;
+      finder.AppleShowAllExtensions = true;
 
       # default to list view
-      finder._FXPreferredViewStyle = "Nlsv";
+      finder.FXPreferredViewStyle = "Nlsv";
 
       # full path in window title
-      finder._FxShowPosixPathInTitle = true;
+      finder._FXShowPosixPathInTitle = true;
     };
   };
 
@@ -131,6 +142,9 @@ in
   users.users.${user} = {
     name = user;
     home = homeDir;
+    #home.homeUser = builtins.getEnv "USER";
+    #home.homeDirectory = builtins.getEnv "HOME";
+
   };
 
   # * Home Manager
@@ -138,7 +152,7 @@ in
   # together with the system when running darwin-rebuild
   home-manager = {
     useGlobalPkgs = true;
-    user.${user} = {
+    users.${user} = {
       home.enableNixpkgsReleaseCheck = false;
       home.packages = pkgs.callPackage ./packages.nix {};
 
