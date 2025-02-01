@@ -74,7 +74,7 @@ in
     ];
     brews = [
       "progress"
-      { name = "neovim"; args = [ "fetch-HEAD" ]; } # Use the correct syntax for HEAD builds
+      # { name = "neovim"; args = [ "fetch-HEAD" ]; } # Use the correct syntax for HEAD builds
     ];
     casks = [
       "iterm2"
@@ -95,7 +95,7 @@ in
       NSGlobalDomain.AppleInterfaceStyle = "Dark";
 
       # ** Menu Bar
-      NSGlobalDomain._HIHideMenuBar = true;
+      NSGlobalDomain._HIHideMenuBar = false;
 
       # ** Dock, Mission Control
       dock = {
