@@ -21,8 +21,10 @@ with pkgs;
   gnupg
   atuin
   pyenv
-  luarocks
   imagemagick
   zsh-history-substring-search
+  # lua5_1
+  # luajitPackages.magick
+  luarocks
   luajit
 ]
