@@ -172,6 +172,11 @@ in
       home.sessionPath = [
         "${user}/bin"
       ];
+      programs.neovim = {
+              enable = true;
+              extraLuaPackages = ps: [ ps.magick ];
+              extraPackages = [ pkgs.imagemagick ];
+          };
 
     };
   };

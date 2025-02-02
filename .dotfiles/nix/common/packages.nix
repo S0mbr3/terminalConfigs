@@ -2,7 +2,7 @@
 with pkgs;
 [
   ranger
-  neovim
+  # neovim
   tmux
   fzf
   cowsay
