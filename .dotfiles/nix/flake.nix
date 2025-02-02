@@ -12,9 +12,10 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs }:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util }:
     let
       pkg-config = {
         allowUnfree = true;
@@ -34,7 +35,17 @@
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
+          mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager
+          (
+            {pkgs, config, inputs, ...}:
+            {
+              # To enable it for all users:
+              home-manager.sharedModules = [
+                mac-app-util.homeManagerModules.default
+              ];
+            }
+          )
           ./darwin
         ];
         #specialArgs = { inherit inputs; };
@@ -43,6 +54,7 @@
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
+          mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager
           ./darwin
         ];
