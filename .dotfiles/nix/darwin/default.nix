@@ -71,8 +71,11 @@ in
       "homebrew/cask"
       "homebrew/cask-fonts" */
       "koekeishiya/formulae"
+      #To install JankyBoders
+      "FelixKratz/formulae"
     ];
     brews = [
+      "borders"
       "progress"
       # { name = "neovim"; args = [ "fetch-HEAD" ]; } # Use the correct syntax for HEAD builds
     ];
