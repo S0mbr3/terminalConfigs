@@ -19,6 +19,7 @@ in
     #<home-manager/nix-darwin>
     #home-manager.darwinModules.home-manager
     #home-manager.users.Nebj
+    ./pam-reattach.nix
   ];
 
   # * Nix
@@ -74,6 +75,7 @@ in
     brews = [
       "borders"
       "progress"
+      "pam-reattach"
     ];
     casks = [
       "iterm2"
@@ -81,6 +83,11 @@ in
   };
 
   programs.zsh.enable = true;
+
+  # To use TouchId for sudo operations
+  security.pam.enableSudoTouchIdAuth = true;
+  # Make TouchId for sudo operations work with tmux (see ./pam-reattach.nix)
+  security.pam.enableSudoTouchIdReattach = true;
 
   # * System Settings
   system = {
