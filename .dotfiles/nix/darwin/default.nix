@@ -78,6 +78,7 @@ in
       "sketchybar"
       "progress"
       "pam-reattach"
+      "reattach-to-user-namespace"
     ];
     casks = [
       "iterm2"
