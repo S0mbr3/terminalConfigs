@@ -248,8 +248,8 @@ result=$(Command)
 if [[ "$result" == "v16.10.0" ]]; then
   source <(ng completion script)
 fi
-# export TERM=xterm-kitty
-export TERM=tmux-256color
+export TERM=xterm-kitty
+#export TERM=tmux-256color
 # export TERM=xterm-256color
 #export NVIM_LISTEN_ADDRESS=/tmp/nvim-$(basename $PWD)
 export NVIM_APPNAME="nvim"
