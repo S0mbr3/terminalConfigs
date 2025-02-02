@@ -74,7 +74,6 @@ in
     brews = [
       "borders"
       "progress"
-      # { name = "neovim"; args = [ "fetch-HEAD" ]; } # Use the correct syntax for HEAD builds
     ];
     casks = [
       "iterm2"
