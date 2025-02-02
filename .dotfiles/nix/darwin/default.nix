@@ -63,6 +63,7 @@ in
     pkgs.office-code-pro
     pkgs.fira-code
     pkgs.fira-mono
+    pkgs.nerd-fonts.hack
   ];
 
   homebrew = {
