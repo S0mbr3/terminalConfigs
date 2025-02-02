@@ -5,4 +5,8 @@ with pkgs;
   neovim
   tmux
   fzf
+  cowsay
+  fortune
+  fd
+  lazygit
 ]
