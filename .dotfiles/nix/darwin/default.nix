@@ -75,6 +75,7 @@ in
     ];
     brews = [
       "borders"
+      "sketchybar"
       "progress"
       "pam-reattach"
     ];
