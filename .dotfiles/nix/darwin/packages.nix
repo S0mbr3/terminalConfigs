@@ -1,12 +1,8 @@
 { pkgs }:
 with pkgs;
-[
-  ranger
-  neovim
-  tmux
-  fzf
-  cowsay
-  fortune
-  fd
-  lazygit
+let
+common-packages = import ../common/packages.nix { pkgs = pkgs; };
+in
+
+common-packages ++ [
 ]
