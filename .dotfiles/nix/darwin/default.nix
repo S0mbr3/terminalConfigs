@@ -79,6 +79,7 @@ in
     ];
     casks = [
       "iterm2"
+      "nikitabobko/tap/aerospace"
     ];
   };
 
