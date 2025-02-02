@@ -5,4 +5,7 @@ common-packages = import ../common/packages.nix { pkgs = pkgs; };
 in
 
 common-packages ++ [
+  wget
+  gnugrep
+  tree
 ]
