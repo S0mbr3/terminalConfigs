@@ -7,6 +7,22 @@ with pkgs;
   fzf
   cowsay
   fortune
+  toilet
+  lolcat
   fd
+  ripgrep
   lazygit
+  lsd
+  nodenv
+  pipx
+  stow
+  kitty
+  wezterm
+  gnupg
+  atuin
+  pyenv
+  luarocks
+  imagemagick
+  zsh-history-substring-search
+  luajit
 ]
