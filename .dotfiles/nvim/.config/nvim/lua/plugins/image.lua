@@ -4,7 +4,7 @@ return {
   {
     'vhyrro/hologram.nvim',
     enabled = not vim.g.started_by_firenvim,
-    dependencies = {'leafo/magick'},
+    -- dependencies = {'leafo/magick'},
     config = function()
       require("hologram").setup()
     end,
@@ -14,7 +14,7 @@ return {
   -- to see images inside neovim
   {'3rd/image.nvim',
     enabled = not vim.g.started_by_firenvim,
-    dependencies = {'leafo/magick'},
+    -- dependencies = {'leafo/magick'},
     config = function()
       -- default config
       require("image").setup({
