@@ -67,9 +67,6 @@ in
   homebrew = {
     enable = true;
     taps = [
-      /* "homebrew/core"
-      "homebrew/cask"
-      "homebrew/cask-fonts" */
       "koekeishiya/formulae"
       #To install JankyBoders
       "FelixKratz/formulae"
