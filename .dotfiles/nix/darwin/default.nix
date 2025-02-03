@@ -1,4 +1,4 @@
-{ self, config, pkgs, home-manager, ...}:
+{ self, pkgs, ...}:
 let
   #user = builtins.readfile ./username;
   #user = "Nebj";
@@ -10,15 +10,9 @@ let
 
   # Import the package list
   packageList = import ./packages.nix  { pkgs = pkgs; };
-  /* packageList = with pkgs;
-    (import ./packages.nix { pkgs = pkgs; }); */
 in
   {
-  # https://nix-community.github.io/home-manager/index.html#sec-install-nix-darwin-module
   imports = [
-    #<home-manager/nix-darwin>
-    #home-manager.darwinModules.home-manager
-    #home-manager.users.Nebj
     ./pam-reattach.nix
   ];
 
@@ -55,10 +49,6 @@ in
 
   # fonts to install
   fonts.packages = [
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/nerdfonts/shas.nix
-    /* (pkgs.nerdfonts.override {
-      fonts = ["CascadiaCode" "FiraCode" "FiraMono"];
-    }) */
     pkgs.cascadia-code
     pkgs.office-code-pro
     pkgs.fira-code
@@ -152,33 +142,6 @@ in
   users.users.${user} = {
     name = user;
     home = homeDir;
-    #home.homeUser = builtins.getEnv "USER";
-    #home.homeDirectory = builtins.getEnv "HOME";
-
-  };
-
-  # * Home Manager
-  # use home manager as nix-darwin module, so that user profiles are built
-  # together with the system when running darwin-rebuild
-  home-manager = {
-    useGlobalPkgs = true;
-    users.${user} = {
-      home.enableNixpkgsReleaseCheck = false;
-      # home.packages = pkgs.callPackage ./packages.nix {};
-
-      home.stateVersion = "25.05";
-
-      # extra directories to add to path
-      home.sessionPath = [
-        "${user}/bin"
-      ];
-      programs.neovim = {
-              enable = true;
-              extraLuaPackages = ps: [ ps.magick ];
-              extraPackages = [ pkgs.imagemagick ];
-          };
-
-    };
   };
 
 }

@@ -47,6 +47,7 @@
             }
           )
           ./darwin
+          ./home.nix
         ];
         #specialArgs = { inherit inputs; };
       };
