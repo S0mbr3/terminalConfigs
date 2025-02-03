@@ -47,6 +47,7 @@ set searchurls.cg https://chatgpt.com/?model=gpt-4o&q=
 set searchurls.cgc https://chatgpt.com/?model=gpt-4o-canmore&q=
 
 set searchurls.lc https://chat.mistral.ai/chat?model=codestral&q=
+set searchurls.pe https://www.perplexity.ai/search?q=
 
 set searchurls.dle https://www.deepl.com/fr/translator#en/fr/
 set searchurls.dlf https://www.deepl.com/fr/translator#fr/en/
