@@ -76,7 +76,6 @@ in
     ];
   };
 
-  programs.zsh.enable = true;
 
   # To use TouchId for sudo operations
   security.pam.enableSudoTouchIdAuth = true;

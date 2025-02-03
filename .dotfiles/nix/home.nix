@@ -22,6 +22,7 @@ with pkgs;
               extraLuaPackages = ps: [ ps.magick ];
               extraPackages = [ pkgs.imagemagick ];
           };
+      programs.zsh.enable = true;
 
     };
   };
