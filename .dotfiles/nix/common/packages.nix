@@ -2,7 +2,7 @@
 with pkgs;
 [
   ranger
-  # neovim
+  neovim
   tmux
   fzf
   cowsay
@@ -21,10 +21,10 @@ with pkgs;
   gnupg
   atuin
   pyenv
-  imagemagick
   zsh-history-substring-search
-  # lua5_1
-  # luajitPackages.magick
+  # lua51
   luarocks
   luajit
+  imagemagick
+  # lua51Packages.magick
 ]

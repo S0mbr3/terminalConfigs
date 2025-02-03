@@ -5,5 +5,6 @@ return  {
   opts = {
     rocks = {"magick"},
   }
+  -- config = true,
   -- config = true, -- This automatically runs `require("luarocks-nvim").setup()`
 }

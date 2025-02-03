@@ -5,6 +5,7 @@ return {
     'vhyrro/hologram.nvim',
     enabled = not vim.g.started_by_firenvim,
     -- dependencies = {'leafo/magick'},
+    -- dependencies = {'vhyrro/luarocks.nvim'},
     config = function()
       require("hologram").setup()
     end,

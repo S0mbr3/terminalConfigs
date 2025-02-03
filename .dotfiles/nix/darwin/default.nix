@@ -164,7 +164,7 @@ in
     useGlobalPkgs = true;
     users.${user} = {
       home.enableNixpkgsReleaseCheck = false;
-      home.packages = pkgs.callPackage ./packages.nix {};
+      # home.packages = pkgs.callPackage ./packages.nix {};
 
       home.stateVersion = "25.05";
 
