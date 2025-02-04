@@ -18,6 +18,7 @@ with pkgs;
   stow
   kitty
   wezterm
+  chafa
   gnupg
   atuin
   pyenv
