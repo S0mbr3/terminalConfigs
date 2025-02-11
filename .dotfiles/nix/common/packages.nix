@@ -10,6 +10,7 @@ with pkgs;
   toilet
   lolcat
   fd
+  jq
   ripgrep
   lazygit
   lsd
@@ -23,9 +24,9 @@ with pkgs;
   atuin
   pyenv
   zsh-history-substring-search
-  # lua51
   luarocks
   luajit
-  imagemagick
-  # lua51Packages.magick
+  emacsLejiWithPackages
+  jansson
+  emacsPackages.cask
 ]
