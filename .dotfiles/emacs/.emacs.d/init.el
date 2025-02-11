@@ -18,35 +18,38 @@
 (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
       url-history-file (expand-file-name "url/history" user-emacs-directory))
 (setq straight-base-dir "~/.cache/emacs/"
-        native-comp-eln-load-path '("~/.cache/emacs/eln-cache/"))
-  (unless (file-directory-p "~/.cache/emacs/")
-    (make-directory "~/.cache/emacs/" t))
-  (unless (file-directory-p "~/.cache/emacs/eln-cache/")
-    (make-directory "~/.cache/emacs/eln-cache/" t))
+      native-comp-eln-load-path '("~/.cache/emacs/eln-cache/"))
+(unless (file-directory-p "~/.cache/emacs/")
+  (make-directory "~/.cache/emacs/" t))
+(unless (file-directory-p "~/.cache/emacs/eln-cache/")
+  (make-directory "~/.cache/emacs/eln-cache/" t))
 
-    (setq my-project-path "~/dev")
-    (setq my-font-size 200)
-    (setq my-opacity 90)
-    (setq my-leader-key "SPC")
-    ;;(setq my-linux-font "FiraCode Retina")
-    ;;(setq my-linux-font "Ubuntu Mono")
-    ;;(setq my-wsl-font "Fira Code Retina")
-    ;; (setq my-linux-font "0xProto Nerd Font")
-    ;; (setq my-windows-font "0xProto Nerd Font")
+;; Changing elpa default dir to ~/.cache/emacs
+(setq package-user-dir (expand-file-name "~/.cache/emacs/"))
 
-    (setq my-linux-font "CaskaydiaCove Nerd Font")
-    (setq my-windows-font "CaskaydiaCove Nerd Font")
+(setq my-project-path "~/dev")
+(setq my-font-size 200)
+(setq my-opacity 90)
+(setq my-leader-key "SPC")
+;;(setq my-linux-font "FiraCode Retina")
+;;(setq my-linux-font "Ubuntu Mono")
+;;(setq my-wsl-font "Fira Code Retina")
+;; (setq my-linux-font "0xProto Nerd Font")
+;; (setq my-windows-font "0xProto Nerd Font")
 
-    (setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
-    			 "~/syncthing/Sync/org-files/todo.org"
-    			 "~/syncthing/Sync/org-files/Habits.org"
-    			 "~/syncthing/Sync/org-files/Shopping.org"
-    			 "~/syncthing/Sync/org-files/Journal.org"
-    			 "~/syncthing/Sync/org-files/birthdays.org"))
+(setq my-linux-font "CaskaydiaCove Nerd Font")
+(setq my-windows-font "CaskaydiaCove Nerd Font")
 
-    (setq ox/enable-ivy nil )
-    (setq ox/enable-vertico t)
-    (setq ox/enable-cape t )
+(setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
+      		     "~/syncthing/Sync/org-files/todo.org"
+      		     "~/syncthing/Sync/org-files/Habits.org"
+      		     "~/syncthing/Sync/org-files/Shopping.org"
+      		     "~/syncthing/Sync/org-files/Journal.org"
+      		     "~/syncthing/Sync/org-files/birthdays.org"))
+
+(setq ox/enable-ivy nil )
+(setq ox/enable-vertico t)
+(setq ox/enable-cape t )
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -85,25 +88,25 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-(use-package doom-themes
-  :straight t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+  (use-package doom-themes
+    :straight t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;;(load-theme 'doom-challenger-deep t)
-  ;;(load-theme 'doom-moonlight t)
-  (load-theme 'doom-outrun-electric t)
+    ;;(load-theme 'doom-challenger-deep t)
+    ;;(load-theme 'doom-moonlight t)
+    (load-theme 'doom-outrun-electric t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
 
 (use-package doom-modeline
   :straight t
@@ -185,32 +188,32 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
-(use-package eaf
-  :straight t
-  :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
-  :custom
+  (use-package eaf
+    :straight t
+    :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
+    :custom
 					  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  (eaf-browser-continue-where-left-off t)
-  (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser)
-  ;;(eaf-browser-auto-import-chrome-cookies t)
-  :config
-  (defalias 'browse-web #'eaf-open-browser)
-  ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-;; (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-(setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0")
-  (require 'eaf-browser))
-;;(global-unset-key (kbd "<f1>"))
-;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
+    (eaf-browser-continue-where-left-off t)
+    (eaf-browser-enable-adblocker t)
+    (browse-url-browser-function 'eaf-open-browser)
+    ;;(eaf-browser-auto-import-chrome-cookies t)
+    :config
+    (defalias 'browse-web #'eaf-open-browser)
+    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  ;; (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+  (setq eaf-webengine-pc-user-agent "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/118.0")
+    (require 'eaf-browser))
+  ;;(global-unset-key (kbd "<f1>"))
+  ;;(define-key eaf-mode-map (kbd "<f1>") #'eaf-send-key)
 
 
-;;(require 'eaf-pyqterminal)
-;;(require 'eaf-pdf-viewer)
+  ;;(require 'eaf-pyqterminal)
+  ;;(require 'eaf-pdf-viewer)
 
-(use-package persp-mode
+  (use-package persp-mode
     :straight t
     :defer t
     ;;:hook (persp-mode-hook . my-update-dynamic-persps)
@@ -1845,14 +1848,14 @@ because compile mode is too slow"
   :straight t
   :hook (org-mode . ox/org-mode-visual-fill))
 
-(use-package org-superstar
-  :straight t
-  :after org
-  :config
-  ;;(setq org-superstar-hide-leading-stars t)
-  (setq org-superstar-leading-bullet " ")
-  ;; Hide away leading stars on terminal.
-  (setq org-superstar-leading-fallback ?\s))
+  (use-package org-superstar
+    :straight t
+    :after org
+    :config
+    ;;(setq org-superstar-hide-leading-stars t)
+    (setq org-superstar-leading-bullet " ")
+    ;; Hide away leading stars on terminal.
+    (setq org-superstar-leading-fallback ?\s))
 
 (use-package org-modern
   :straight t
@@ -2223,69 +2226,69 @@ map)
 ;; (use-package org-web-tools
 ;;   :straight t)
 
-;; This package allow single buffer navigation in Dired
-;; like (dired-kill-when-opening-new-dired-buffer t) does
-;; (use-package dired-single
-;;   :config
-;;   (evil-collection-define-key 'normal 'dired-mode-map
-;;     "h" 'dired-single-up-directory
-;;     "l" 'dired-single-buffer))
-(use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :config
-  (setq dired-kill-when-opening-new-dired-buffer t)
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-up-directory
-    "l" 'dired-find-file))
+  ;; This package allow single buffer navigation in Dired
+  ;; like (dired-kill-when-opening-new-dired-buffer t) does
+  ;; (use-package dired-single
+  ;;   :config
+  ;;   (evil-collection-define-key 'normal 'dired-mode-map
+  ;;     "h" 'dired-single-up-directory
+  ;;     "l" 'dired-single-buffer))
+  (use-package dired
+    :ensure nil
+    :commands (dired dired-jump)
+    :custom ((dired-listing-switches "-agho --group-directories-first"))
+    :config
+    (setq dired-kill-when-opening-new-dired-buffer t)
+    (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-up-directory
+      "l" 'dired-find-file))
 
-(use-package all-the-icons-dired
-  :straight t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package all-the-icons-dired
+    :straight t
+    :hook (dired-mode . all-the-icons-dired-mode))
 
 
-(use-package ranger
-  ;;:straight t
-  :straight '(ranger :host github
+  (use-package ranger
+    ;;:straight t
+    :straight '(ranger :host github
 		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
 		       :repo "S0mbr3/ranger.el"
 		       :branch "ranger-setup-image-preview")
-  :config
-  (global-set-key (kbd "C-c d") 'ranger)
-  (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
-
-  ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
-  (defun my/ranger-clear-header-line ()
-    "Clear the header line."
-    (setq header-line-format nil))
-
-  (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
-
-  (use-package dired-hide-dotfiles
-    :unless (featurep 'ranger)
-    :straight t
-    :hook (dired-mode . dired-hide-dotfiles-mode)
     :config
-    (evil-collection-define-key 'normal 'dired-mode-map
+    (global-set-key (kbd "C-c d") 'ranger)
+    (setq ranger-show-literal nil) ;; if nil show documents intead of text representation
+
+    ;; Make the header line cleaned when quiting ranger or it stays (sound like a bug)
+    (defun my/ranger-clear-header-line ()
+      "Clear the header line."
+      (setq header-line-format nil))
+
+    (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
+
+    (use-package dired-hide-dotfiles
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-hide-dotfiles-mode)
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
 	"H" 'dired-hide-dotfiles-mode))
 
-  (use-package dired-preview
-    :unless (featurep 'ranger)
-    :straight t
-    :hook (dired-mode . dired-preview-mode)
-    :config
-    (dired-preview-global-mode 1))
+    (use-package dired-preview
+      :unless (featurep 'ranger)
+      :straight t
+      :hook (dired-mode . dired-preview-mode)
+      :config
+      (dired-preview-global-mode 1))
 
-  (use-package dired-open
-    :unless (featurep 'ranger)
-    :straight t
-    :after dired
-    ;;:commands (dired dired-jump)
-    :config
-    ;; Strange behaviors not picking always the good program automatically
-    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-    (setq dired-open-extensions '(("png" . "feh")
+    (use-package dired-open
+      :unless (featurep 'ranger)
+      :straight t
+      :after dired
+      ;;:commands (dired dired-jump)
+      :config
+      ;; Strange behaviors not picking always the good program automatically
+      ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+      (setq dired-open-extensions '(("png" . "feh")
 				    ("mkv" . "mpv"))))
 
 (require 'tramp)

@@ -34,39 +34,42 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 #+end_src
 * Variables
 #+begin_src emacs-lisp
-    ;; Not if you want to move everything out of the ~/.emacs.d folder reliabily, set `user-emacs-directory` before loading the no-littering!
-  (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
-        url-history-file (expand-file-name "url/history" user-emacs-directory))
-  (setq straight-base-dir "~/.cache/emacs/"
-          native-comp-eln-load-path '("~/.cache/emacs/eln-cache/"))
-    (unless (file-directory-p "~/.cache/emacs/")
-      (make-directory "~/.cache/emacs/" t))
-    (unless (file-directory-p "~/.cache/emacs/eln-cache/")
-      (make-directory "~/.cache/emacs/eln-cache/" t))
+;; Not if you want to move everything out of the ~/.emacs.d folder reliabily, set `user-emacs-directory` before loading the no-littering!
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+(setq straight-base-dir "~/.cache/emacs/"
+      native-comp-eln-load-path '("~/.cache/emacs/eln-cache/"))
+(unless (file-directory-p "~/.cache/emacs/")
+  (make-directory "~/.cache/emacs/" t))
+(unless (file-directory-p "~/.cache/emacs/eln-cache/")
+  (make-directory "~/.cache/emacs/eln-cache/" t))
 
-      (setq my-project-path "~/dev")
-      (setq my-font-size 200)
-      (setq my-opacity 90)
-      (setq my-leader-key "SPC")
-      ;;(setq my-linux-font "FiraCode Retina")
-      ;;(setq my-linux-font "Ubuntu Mono")
-      ;;(setq my-wsl-font "Fira Code Retina")
-      ;; (setq my-linux-font "0xProto Nerd Font")
-      ;; (setq my-windows-font "0xProto Nerd Font")
+;; Changing elpa default dir to ~/.cache/emacs
+(setq package-user-dir (expand-file-name "~/.cache/emacs/"))
 
-      (setq my-linux-font "CaskaydiaCove Nerd Font")
-      (setq my-windows-font "CaskaydiaCove Nerd Font")
+(setq my-project-path "~/dev")
+(setq my-font-size 200)
+(setq my-opacity 90)
+(setq my-leader-key "SPC")
+;;(setq my-linux-font "FiraCode Retina")
+;;(setq my-linux-font "Ubuntu Mono")
+;;(setq my-wsl-font "Fira Code Retina")
+;; (setq my-linux-font "0xProto Nerd Font")
+;; (setq my-windows-font "0xProto Nerd Font")
 
-      (setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
-      			 "~/syncthing/Sync/org-files/todo.org"
-      			 "~/syncthing/Sync/org-files/Habits.org"
-      			 "~/syncthing/Sync/org-files/Shopping.org"
-      			 "~/syncthing/Sync/org-files/Journal.org"
-      			 "~/syncthing/Sync/org-files/birthdays.org"))
+(setq my-linux-font "CaskaydiaCove Nerd Font")
+(setq my-windows-font "CaskaydiaCove Nerd Font")
 
-      (setq ox/enable-ivy nil )
-      (setq ox/enable-vertico t)
-      (setq ox/enable-cape t )
+(setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
+      		     "~/syncthing/Sync/org-files/todo.org"
+      		     "~/syncthing/Sync/org-files/Habits.org"
+      		     "~/syncthing/Sync/org-files/Shopping.org"
+      		     "~/syncthing/Sync/org-files/Journal.org"
+      		     "~/syncthing/Sync/org-files/birthdays.org"))
+
+(setq ox/enable-ivy nil )
+(setq ox/enable-vertico t)
+(setq ox/enable-cape t )
 #+end_src
 
 * Configure straight and use-package
