@@ -66,6 +66,7 @@
           )
           ./darwin
           ./home.nix
+          # {nixpkgs.overlays = [(import ./overlays)];}
         ];
         #specialArgs = { inherit inputs; };
       };
@@ -76,6 +77,8 @@
           mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager
           ./darwin
+          # { nixpkgs.overlays = import ./overlays; }
+          # (import ./overlays)
         ];
         specialArgs = { inherit self inputs; };
       };
@@ -84,7 +87,10 @@
       darwinConfigurations."simple" = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
-        modules = [ ./darwin ];
+        modules = [
+          ./darwin
+          { nixpkgs.overlays = import ./overlays; }
+        ];
       };
     };
 }
