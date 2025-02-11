@@ -13,23 +13,41 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
+
+    # https://nixos.wiki/wiki/Emacs
+    # https://nixos.wiki/wiki/Overlays#In_a_Nix_flake
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util }:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay }:
     let
       pkg-config = {
         allowUnfree = true;
         allowBroken = true;
         allowInsecure = false;
       };
+      common-overlays =
+        [
+          # default emacs-overlay (overriden by ./overlays/emacs.nix)
+          (import emacs-overlay)
+        ] ++ import ./overlays {inherit inputs;};
       darwin-pkgs = import nixpkgs {
         # M1
         system = "aarch64-darwin";
         config = pkg-config;
+        # overlays = [(import ./overlays/emacs.nix)];
+        # overlays = import ./overlays {inherit inputs;};
+        overlays = common-overlays;
+        # overlays = [ (import ./overlays/emacs.nix) ];
       };
     in
       {
-      # Build darwin flake using:
+      # overlays = import ./overlays {inherit inputs;};
+      # overlays = [(import ./overlays)];
+      # # Build darwin flake using:
       # $ darwin-rebuild switch .
       darwinConfigurations.default = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
