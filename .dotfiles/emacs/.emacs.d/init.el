@@ -25,7 +25,9 @@
   (make-directory "~/.cache/emacs/eln-cache/" t))
 
 ;; Changing elpa default dir to ~/.cache/emacs
-(setq package-user-dir (expand-file-name "~/.cache/emacs/"))
+(setq package-user-dir (expand-file-name "~/.cache/emacs/elpa"))
+;; gnupg still search the key in ~/.emacs.d/elpa/gnupg
+(setq package-gnupghome-dir (expand-file-name "elpa/gnupg" user-emacs-directory))
 
 (setq my-project-path "~/dev")
 (setq my-font-size 200)
