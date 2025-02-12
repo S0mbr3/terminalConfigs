@@ -202,11 +202,6 @@ We use the no-littering package to keep folders where we edit files and the Emac
 
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
-
-;;(set-frame-parameter nil 'internal-border-width 0)
-
-
-;;(load-theme 'deeper-blue t)
 #+end_src
 
 * Ligatures
@@ -507,8 +502,6 @@ It can also add projects on the fly with the Add project option
 #+end_src
 * Basic Settings
 #+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
-(add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
 (setq native-comp-async-report-warnings-errors nil) ;; Remove warning of compiled package with Emacs compiled with Native flag
 (setq native-comp-deferred-compilation t) ;; To compile all site-lisp on demand (repos/AUR packages, ELPA, MELPA, whatever)
  (setq native-compile-prune-cache t) ;; And to keep the eln cache clean add 
