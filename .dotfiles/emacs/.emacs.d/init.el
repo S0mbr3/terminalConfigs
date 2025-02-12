@@ -53,6 +53,7 @@
 (setq ox/enable-vertico t)
 (setq ox/enable-cape t )
 
+(require 'package)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 6))
@@ -145,15 +146,21 @@
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; When on WSL change frame title name to help autohotkey script
-;; If we are not on WSL we can undecorate Emacs for a better integration with TWMs
-(if (string-match-p "Microsoft" (shell-command-to-string "uname -a"))
-    (setq frame-title-format "EmacsWSL")
-  (progn
-    (set-frame-parameter nil 'undecorated t)
-    (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
-    (add-to-list 'default-frame-alist '(internal-border-width . 9)) ;; helpful to see full letters at bottom
-    (add-to-list 'default-frame-alist '(undecorated . t)))) ;; Remove title bar, and every decorations
+(cond ((string-match-p "Microsoft" (shell-command-to-string "uname -a"))
+    (setq frame-title-format "EmacsWSL"))
+      ((string-match-p "Darwin" (shell-command-to-string "uname -a"))
+       (progn
+	 ;; Remove decorations dynamically on macOS using emacs-plus patch
+         (set-frame-parameter nil 'undecorated-round t)
+	 (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
+	 (add-to-list 'default-frame-alist '(internal-border-width . 9)))) ;; helpful to see full letters at bottom
+      ((and (not (string-match-p "Microsoft" (shell-command-to-string "uname -a")))
+	 (not (string-match-p "Darwin" (shell-command-to-string "uname -a"))))
+       (progn
+	 (set-frame-parameter nil 'undecorated t) ;; Remove title bar and decorations dynamically
+	 (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
+	 (add-to-list 'default-frame-alist '(internal-border-width . 9)) ;; helpful to see full letters at bottom
+	 (add-to-list 'default-frame-alist '(undecorated . t))))) ;; Remove title bar, and every decorations
 
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
@@ -191,6 +198,7 @@
   (global-ligature-mode t))
 
   (use-package eaf
+    :disabled t
     :straight t
     :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
     :custom
