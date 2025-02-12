@@ -9,19 +9,6 @@
 # {prev}:
 final: prev: rec {
   # configuration shared for all systems
-  /* emacsGitLejiGeneric = prev.emacs-git.override {
-    withSQLite3 = true;
-    withWebP = true;
-    withImageMagick = true;
-    # have to force this; lib.version check wrong or because emacsGit?
-    withTreeSitter = true;
-    withMailutils = true;
-    withNativeCompilation = true;
-
-    configureFlags = [
-      "'CFLAGS= -O3 -march=native'"
-    ];
-  }; */
   emacsGitLejiGeneric = (prev.emacs-git.override {
     withSQLite3 = true;
     withWebP = true;
