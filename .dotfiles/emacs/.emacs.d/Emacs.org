@@ -236,6 +236,7 @@ We use the no-littering package to keep folders where we edit files and the Emac
 * EAF
 #+begin_src emacs-lisp
   (use-package eaf
+    :disabled t
     :straight t
     :load-path "~/.cache/emacs/site-lisp/emacs-application-framework"
     :custom
