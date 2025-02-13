@@ -29,4 +29,7 @@ with pkgs;
   emacsLejiWithPackages
   jansson
   emacsPackages.cask
+  # emacsPackages.treesit-grammars.with-all-grammars
+
+  # tree-sitter-grammars.tree-sitter-php
 ]
