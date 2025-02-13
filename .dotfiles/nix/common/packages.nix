@@ -1,6 +1,7 @@
 { pkgs }:
 with pkgs;
 [
+  # home-manager
   ranger
   neovim
   tmux
