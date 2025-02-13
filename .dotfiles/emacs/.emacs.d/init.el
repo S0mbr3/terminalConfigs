@@ -33,7 +33,8 @@
 (setq my-font-size 200)
 (setq my-opacity 90)
 (setq my-leader-key "SPC")
-;;(setq my-linux-font "FiraCode Retina")
+;; (setq my-linux-font "Fira Code")
+;; (setq my-windows-font "Fira Code")
 ;;(setq my-linux-font "Ubuntu Mono")
 ;;(setq my-wsl-font "Fira Code Retina")
 ;; (setq my-linux-font "0xProto Nerd Font")
@@ -164,11 +165,6 @@
 
 (set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
 (add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
-
-;;(set-frame-parameter nil 'internal-border-width 0)
-
-
-;;(load-theme 'deeper-blue t)
 
 (use-package ligature
 :straight t
@@ -440,13 +436,11 @@
       (project-switch-project project)))
 
 ;; Set font
-(if (eq system-type 'gnu/linux)
+(if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
     (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
   (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
 
-(set-frame-parameter nil 'alpha-background my-opacity) ; For current frame
-(add-to-list 'default-frame-alist `(alpha-background . ,my-opacity)) ; For all new frames henceforth
 (setq native-comp-async-report-warnings-errors nil) ;; Remove warning of compiled package with Emacs compiled with Native flag
 (setq native-comp-deferred-compilation t) ;; To compile all site-lisp on demand (repos/AUR packages, ELPA, MELPA, whatever)
  (setq native-compile-prune-cache t) ;; And to keep the eln cache clean add 
