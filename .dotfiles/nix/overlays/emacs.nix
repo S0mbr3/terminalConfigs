@@ -96,6 +96,7 @@ final: prev: rec {
       epkgs.jinx
       # not needed on linux but needed on mac
       epkgs.vterm
+      epkgs.treesit-grammars.with-all-grammars
     ]));
 
   # for WSL with weston
