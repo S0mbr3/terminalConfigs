@@ -75,8 +75,14 @@
         system = "aarch64-darwin";
         modules = [
           mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager
+          home-manager.darwinModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.nebj = import ./home.nix;
+
+          }
           ./darwin
+          # ./home.nix
           # { nixpkgs.overlays = import ./overlays; }
           # (import ./overlays)
         ];
