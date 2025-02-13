@@ -54,6 +54,8 @@ in
     pkgs.fira-code
     pkgs.fira-mono
     pkgs.nerd-fonts.hack
+    pkgs.nerd-fonts.caskaydia-cove
+    pkgs.nerd-fonts.symbols-only
   ];
 
   homebrew = {
