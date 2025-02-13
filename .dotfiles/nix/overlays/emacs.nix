@@ -50,8 +50,15 @@ final: prev: rec {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/system-appearance.patch";
               sha256 = "3QLq91AQ6E921/W9nfDjdOUWR8YVsqBAT/W9c1woqAw=";
             })
+            # # Fix alpha-background not working on macOS NS build
+            # (prev.fetchpatch {
+            #   url = "https://raw.githubusercontent.com/jimeh/build-emacs-for-macos/master/patches/emacs-29/ns-alpha-background.patch";
+            #   sha256 = "1i39zjyjqw09j08if84pdlpi38x9blzrlqgihbz6d87glc6a73yy";
+            # })
+            ./ns_alpha_background.patch
           ];
         withNS = true;
+        # withPgtk = true;
         /* configureFlags = [
           "--with-ns"
           "--with-mailutils"
