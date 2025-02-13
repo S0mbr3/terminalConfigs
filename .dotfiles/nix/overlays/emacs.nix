@@ -55,7 +55,7 @@ final: prev: rec {
             #   url = "https://raw.githubusercontent.com/jimeh/build-emacs-for-macos/master/patches/emacs-29/ns-alpha-background.patch";
             #   sha256 = "1i39zjyjqw09j08if84pdlpi38x9blzrlqgihbz6d87glc6a73yy";
             # })
-            ./ns_alpha_background.patch
+            ~/test/ns_alpha_background.patch
           ];
         withNS = true;
         # withPgtk = true;
