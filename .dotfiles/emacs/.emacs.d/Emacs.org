@@ -496,7 +496,7 @@ It can also add projects on the fly with the Add project option
 * Font Configuration
 #+begin_src emacs-lisp
 ;; Set font
-(if (eq system-type 'gnu/linux)
+(if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
     (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
   (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
