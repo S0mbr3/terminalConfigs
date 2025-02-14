@@ -1,13 +1,13 @@
-From a854105c79509b3cfb50362674853bb4c9f52cc0 Mon Sep 17 00:00:00 2001
+From 28bd95f47160d84912e1daf52c8a86ac284840db Mon Sep 17 00:00:00 2001
 From: Jon Rubens <jonathanrubens@gmail.com>
 Date: Wed, 24 Jan 2024 19:45:55 -0800
 Subject: [PATCH] Enable frame parameter alpha_background for MacOS
 
 ---
  src/macfont.m |  10 +++-
- src/nsfns.m   |  42 ++++++++++---
- src/nsterm.m  | 163 ++++++++++++++++++++++++++++----------------------
- 3 files changed, 134 insertions(+), 81 deletions(-)
+ src/nsfns.m   |  42 +++++++++++++---
+ src/nsterm.m  | 135 ++++++++++++++++++++++++--------------------------
+ 3 files changed, 108 insertions(+), 79 deletions(-)
 
 diff --git a/src/macfont.m b/src/macfont.m
 index 4ff720c5dd2..a6e99e09e12 100644
@@ -123,7 +123,7 @@ index a2c50468cd1..64a484c91a9 100644
  #ifdef NS_IMPL_COCOA
    ns_set_appearance,
 diff --git a/src/nsterm.m b/src/nsterm.m
-index a4398e79211..cc608e03875 100644
+index a4398e79211..2f860c73405 100644
 --- a/src/nsterm.m
 +++ b/src/nsterm.m
 @@ -2617,8 +2617,9 @@ Hide the window (X11 semantics)
@@ -165,7 +165,7 @@ index a4398e79211..cc608e03875 100644
            NSRectFill (NSMakeRect (0, y, width, height));
            NSRectFill (NSMakeRect (FRAME_PIXEL_WIDTH (f) - width,
                                    y, width, height));
-@@ -2951,29 +2952,35 @@ Hide the window (X11 semantics)
+@@ -2951,28 +2952,24 @@ Hide the window (X11 semantics)
    NSTRACE_MSG ("which:%d cursor:%d overlay:%d width:%d height:%d period:%d",
                 p->which, p->cursor_p, p->overlay_p, p->wd, p->h, p->dh);
  
@@ -174,22 +174,16 @@ index a4398e79211..cc608e03875 100644
 -    {
 -      /* Work out the rectangle we will need to clear.  */
 -      clearRect = NSMakeRect (p->x, p->y, p->wd, p->h);
-+                         /* Clear screen unless overlay.  */
-+if (!p->overlay_p)
-+  {
-+    /* Work out the rectangle we will need to clear.  */
-+    clearRect = NSMakeRect(p->x, p->y, p->wd, p->h);
- 
+-
 -      if (p->bx >= 0)
 -        clearRect = NSUnionRect (clearRect, NSMakeRect (p->bx, p->by, p->nx, p->ny));
-+    if (p->bx >= 0)
-+      clearRect = NSUnionRect(clearRect,
-+                              NSMakeRect(p->bx, p->by, p->nx, p->ny));
++  /* Work out the rectangle we will need to clear.  */
++  clearRect = NSMakeRect (p->x, p->y, p->wd, p->h);
  
 -      /* Handle partially visible rows.  */
 -      clearRect = NSIntersectionRect (clearRect, rowRect);
-+    /* Handle partially visible rows.  */
-+    clearRect = NSIntersectionRect(clearRect, rowRect);
++  if (p->bx >= 0 && !p->overlay_p)
++    clearRect = NSUnionRect (clearRect, NSMakeRect (p->bx, p->by, p->nx, p->ny));
  
 -      /* The visible portion of imageRect will always be contained
 -	 within clearRect.  */
@@ -197,30 +191,25 @@ index a4398e79211..cc608e03875 100644
 -      if (!NSIsEmptyRect (clearRect))
 -        {
 -          NSTRACE_RECT ("clearRect", clearRect);
-+    /* The visible portion of imageRect will always be contained
-+       within clearRect.  */
-+    ns_focus(f, &clearRect, 1);
-+
-+    if (!NSIsEmptyRect(clearRect))
-+      {
-+        NSTRACE_RECT("clearRect", clearRect);
-+
-+        /* Combine the alpha-background logic with setting the color.  */
-+        [[[NSColor colorWithUnsignedLong:face->background]
-+            colorWithAlphaComponent:f->alpha_background] set];
-+
-+        NSRectFill(clearRect);
-+      }
-+  }
++  /* Handle partially visible rows.  */
++  clearRect = NSIntersectionRect (clearRect, rowRect);
  
 -          [[NSColor colorWithUnsignedLong:face->background] set];
 -          NSRectFill (clearRect);
 -        }
--    }
++  /* The visible portion of imageRect will always be contained within
++     clearRect.  */
++  ns_focus (f, &clearRect, 1);
++  if (! NSIsEmptyRect (clearRect))
++    {
++      NSTRACE_RECT ("clearRect", clearRect);
++      [[[NSColor colorWithUnsignedLong:face->background]
++	 colorWithAlphaComponent: f->alpha_background] set];
++      NSRectFill (clearRect);
+     }
  
    NSBezierPath *bmp = [fringe_bmp objectForKey:[NSNumber numberWithInt:p->which]];
- 
-@@ -3002,7 +3009,7 @@ Hide the window (X11 semantics)
+@@ -3002,7 +2999,7 @@ Hide the window (X11 semantics)
        else
          bm_color = f->output_data.ns->cursor_color;
  
@@ -229,7 +218,7 @@ index a4398e79211..cc608e03875 100644
        [bmp fill];
  
        [bmp release];
-@@ -3787,7 +3794,7 @@ Function modeled after x_draw_glyph_string_box ().
+@@ -3787,7 +3784,7 @@ Function modeled after x_draw_glyph_string_box ().
    if (s->face->box == FACE_SIMPLE_BOX && s->face->box_color)
      {
        ns_draw_box (r, abs (hthickness), abs (vthickness),
@@ -238,26 +227,21 @@ index a4398e79211..cc608e03875 100644
                     left_p, right_p);
      }
    else
-@@ -3800,9 +3807,10 @@ Function modeled after x_draw_glyph_string_box ().
- 
- static void
- ns_maybe_dumpglyphs_background (struct glyph_string *s, char force_p)
--/* --------------------------------------------------------------------------
--      Modeled after x_draw_glyph_string_background, which draws BG in
--      certain cases.  Others are left to the text rendering routine.
-+
-+                         /* --------------------------------------------------------------------------
-+   Modeled after x_draw_glyph_string_background, which draws BG in
-+   certain cases.  Others are left to the text rendering routine.
+@@ -3805,47 +3802,47 @@ Function modeled after x_draw_glyph_string_box ().
+       certain cases.  Others are left to the text rendering routine.
     -------------------------------------------------------------------------- */
  {
-   struct face *face = s->face;
-@@ -3814,40 +3822,53 @@ Function modeled after x_draw_glyph_string_box ().
+-  struct face *face = s->face;
+-  NSRect r;
+-
+   NSTRACE ("ns_maybe_dumpglyphs_background");
+ 
+-  if (!s->background_filled_p)
++  if (!s->background_filled_p/* || s->hl == DRAW_MOUSE_FACE*/)
      {
        int box_line_width = max (s->face->box_horizontal_line_width, 0);
  
-+      /* HEAD logic: if stippled, set the stipple mask and jump to fill.  */
-       if (s->stippled_p)
+-      if (s->stippled_p)
 -	{
 -	  struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (s->f);
 -	  [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
@@ -272,7 +256,14 @@ index a4398e79211..cc608e03875 100644
 -	       || s->font_not_found_p
 -	       || s->extends_to_end_of_line_p
 -	       || force_p)
--	{
++      if (FONT_HEIGHT (s->font) < s->height - 2 * box_line_width
++	  /* When xdisp.c ignores FONT_HEIGHT, we cannot trust font
++	     dimensions, since the actual glyphs might be much
++	     smaller.  So in that case we always clear the rectangle
++	     with background color.  */
++	  || FONT_TOO_HIGH (s->font)
++          || s->font_not_found_p || s->extends_to_end_of_line_p || force_p)
+ 	{
 -	  if (s->hl != DRAW_CURSOR)
 -	    [(NS_FACE_BACKGROUND (face) != 0
 -	      ? [NSColor colorWithUnsignedLong:NS_FACE_BACKGROUND (face)]
@@ -283,62 +274,41 @@ index a4398e79211..cc608e03875 100644
 -	    [[NSColor colorWithUnsignedLong:NS_FACE_FOREGROUND (face)] set];
 -	  else
 -	    [FRAME_CURSOR_COLOR (s->f) set];
-+        {
-+          struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (s->f);
-+          [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
-+          goto fill;
-+        }
-+      /* HEAD logic: various checks that determine whether to clear the BG. */
-+      else if (FONT_HEIGHT(s->font) < s->height - 2 * box_line_width
-+               /* … or other HEAD conditions … */
-+               || s->font_not_found_p
-+               || s->extends_to_end_of_line_p
-+               || force_p)
-+        {
-+          /* CHERRY-PICK logic (with alpha background) merged into HEAD’s
-+             existing background-setting code. */
-+          if (s->hl != DRAW_CURSOR)
++          struct face *face = s->face;
++          if (!face->stipple)
 +            {
-+              if (NS_FACE_BACKGROUND(face) != 0)
-+                {
-+                  /* Use alpha_background here. */
-+                  [[[NSColor colorWithUnsignedLong:NS_FACE_BACKGROUND(face)]
-+                     colorWithAlphaComponent:s->f->alpha_background] set];
-+                }
++              if (s->hl != DRAW_CURSOR)
++                [(NS_FACE_BACKGROUND (face) != 0
++		  ? [[NSColor colorWithUnsignedLong:NS_FACE_BACKGROUND (face)]
++		      colorWithAlphaComponent: s->f->alpha_background]
++                  : FRAME_BACKGROUND_COLOR (s->f)) set];
++
++              else if (face && (NS_FACE_BACKGROUND (face)
++                                == [(NSColor *) FRAME_CURSOR_COLOR (s->f)
++                                                unsignedLong]))
++                [[NSColor colorWithUnsignedLong:NS_FACE_FOREGROUND (face)] set];
 +              else
-+                {
-+                  /* Fallback frame background color (unchanged HEAD logic). */
-+                  [FRAME_BACKGROUND_COLOR(s->f) set];
-+                }
-+            }
-+          else if (face && (NS_FACE_BACKGROUND(face)
-+                            == [(NSColor *) FRAME_CURSOR_COLOR(s->f) unsignedLong]))
-+            {
-+              [[NSColor colorWithUnsignedLong:NS_FACE_FOREGROUND(face)] set];
++                [FRAME_CURSOR_COLOR (s->f) set];
 +            }
 +          else
 +            {
-+              [FRAME_CURSOR_COLOR(s->f) set];
++              struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (s->f);
++              [[dpyinfo->bitmaps[face->stipple-1].img stippleMask] set];
 +            }
  
 -	fill:
 -	  r = NSMakeRect (s->x, s->y + box_line_width,
 -			  s->background_width,
 -			  s->height - 2 * box_line_width);
--	  NSRectFill (r);
--	  s->background_filled_p = 1;
--	}
-+        fill:
-+          r = NSMakeRect(s->x, s->y + box_line_width,
-+                         s->background_width,
-+                         s->height - 2 * box_line_width);
-+          NSRectFill(r);
-+          s->background_filled_p = 1;
-+        }
++	  NSRect r = NSMakeRect (s->x, s->y + box_line_width,
++				 s->background_width,
++				 s->height - 2 * box_line_width);
+ 	  NSRectFill (r);
++
+ 	  s->background_filled_p = 1;
+ 	}
      }
- }
- 
-@@ -3971,7 +3992,7 @@ Function modeled after x_draw_glyph_string_box ().
+@@ -3971,7 +3968,7 @@ Function modeled after x_draw_glyph_string_box ().
       otherwise, since we composite the image under NS (instead of mucking
       with its background color), we must clear just the image area.  */
  
@@ -347,7 +317,7 @@ index a4398e79211..cc608e03875 100644
  
    if (bg_height > s->slice.height || s->img->hmargin || s->img->vmargin
        || s->img->mask || s->img->pixmap == 0 || s->width != s->background_width)
-@@ -4041,7 +4062,7 @@ Function modeled after x_draw_glyph_string_box ().
+@@ -4041,7 +4038,7 @@ Function modeled after x_draw_glyph_string_box ().
    if (s->hl == DRAW_CURSOR)
      {
        [FRAME_CURSOR_COLOR (s->f) set];
@@ -356,7 +326,7 @@ index a4398e79211..cc608e03875 100644
      }
    else
      tdCol = [NSColor colorWithUnsignedLong: NS_FACE_FOREGROUND (face)];
-@@ -4134,10 +4155,10 @@ Function modeled after x_draw_glyph_string_box ().
+@@ -4134,10 +4131,10 @@ Function modeled after x_draw_glyph_string_box ().
  		face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
  	      prepare_face_for_display (s->f, face);
  
@@ -369,7 +339,7 @@ index a4398e79211..cc608e03875 100644
  	  NSRectFill (NSMakeRect (x, y, w, h));
  	}
      }
-@@ -4168,7 +4189,7 @@ Function modeled after x_draw_glyph_string_box ().
+@@ -4168,7 +4165,7 @@ Function modeled after x_draw_glyph_string_box ().
  	  else if (s->stippled_p)
  	    [[dpyinfo->bitmaps[s->face->stipple - 1].img stippleMask] set];
  	  else
@@ -378,7 +348,7 @@ index a4398e79211..cc608e03875 100644
  
  	  NSRectFill (NSMakeRect (x, s->y, background_width, s->height));
  	}
-@@ -8609,8 +8630,8 @@ - (void)toggleFullScreen: (id)sender
+@@ -8609,8 +8606,8 @@ - (void)toggleFullScreen: (id)sender
          }
  
        [w setContentView:[fw contentView]];
@@ -389,7 +359,7 @@ index a4398e79211..cc608e03875 100644
          [w setOpaque: NO];
  
        f->border_width = [w borderWidth];
-@@ -9347,9 +9368,9 @@ - (instancetype) initWithEmacsFrame: (struct frame *) f
+@@ -9347,9 +9344,9 @@ - (instancetype) initWithEmacsFrame: (struct frame *) f
        f->border_width = [self borderWidth];
  
        col = [NSColor colorWithUnsignedLong:NS_FACE_BACKGROUND
