@@ -38,37 +38,25 @@
         # M1
         system = "aarch64-darwin";
         config = pkg-config;
-        # overlays = [(import ./overlays/emacs.nix)];
-        # overlays = import ./overlays {inherit inputs;};
         overlays = common-overlays;
-        # overlays = [ (import ./overlays/emacs.nix) ];
       };
     in
       {
-      # overlays = import ./overlays {inherit inputs;};
-      # overlays = [(import ./overlays)];
-      # # Build darwin flake using:
       # $ darwin-rebuild switch .
       darwinConfigurations.default = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
           mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager
-          (
-            {pkgs, config, inputs, ...}:
-            {
-              # To enable it for all users:
-              home-manager.sharedModules = [
-                mac-app-util.homeManagerModules.default
-              ];
-            }
-          )
+          home-manager.darwinModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.nebj = import ./home.nix;
+
+          }
           ./darwin
-          ./home.nix
-          # {nixpkgs.overlays = [(import ./overlays)];}
         ];
-        #specialArgs = { inherit inputs; };
+        specialArgs = { inherit self inputs; };
       };
       darwinConfigurations."MacBook-Air-de-Aude" = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
@@ -82,9 +70,6 @@
 
           }
           ./darwin
-          # ./home.nix
-          # { nixpkgs.overlays = import ./overlays; }
-          # (import ./overlays)
         ];
         specialArgs = { inherit self inputs; };
       };
