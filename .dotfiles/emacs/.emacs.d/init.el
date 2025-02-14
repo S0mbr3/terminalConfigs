@@ -31,7 +31,9 @@
 
 (setq my-project-path "~/dev")
 (setq my-font-size 200)
-(setq my-opacity 90)
+(if (eq system-type 'darwin)
+    (setq my-opacity 30)
+  (setq my-opacity 90))
 (setq my-leader-key "SPC")
 ;; (setq my-linux-font "Fira Code")
 ;; (setq my-windows-font "Fira Code")
