@@ -9,7 +9,10 @@
 # {prev}:
 final: prev: rec {
   # configuration shared for all systems
+  # To build on specific Emacs version use EG: (prev.emacs31.ovveride {
+  # Else it build uppon the emacs-git overlay declared in the flake.nix using Emacs master branch
   emacsGitLejiGeneric = (prev.emacs-git.override {
+  # emacsGitLejiGeneric = (prev.emacs29.override {
     withSQLite3 = true;
     withWebP = true;
     withImageMagick = true;
