@@ -28,11 +28,6 @@ final: prev: rec {
         patches =
           (old.patches or [])
           ++ [
-            /* # Don't raise another frame when closing a frame
-            (prev.fetchpatch {
-              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/no-frame-refocus-cocoa.patch";
-              sha256 = "1gfabyhwad923aq69mdzzvbdlgplpk16bbj3y54p780ai7f7fmzv";
-            }) */
             # Fix OS window role so that yabai can pick up Emacs
             (prev.fetchpatch {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
