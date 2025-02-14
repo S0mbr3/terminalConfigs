@@ -104,20 +104,21 @@ final: prev: rec {
       # not needed on linux but needed on mac
       epkgs.vterm
       epkgs.treesit-grammars.with-all-grammars
+      # epkgs.all-the-icons
     ]));
 
-  # for WSL with weston
-  emacsPgtk =
+  # for Wayland builds
+  emacsLejiWayland =
     (emacsGitLejiGeneric.override {
-      # pgtk since wslg uses weston (at least by default)
       withX = false;
       withPgtk = true;
     });
   emacsPgtkWithPackages =
-    ((prev.emacsPackagesFor emacsPgtk).emacsWithPackages (epkgs: [
+    ((prev.emacsPackagesFor emacsLejiWayland).emacsWithPackages (epkgs: [
       # necessary to install through nix to get libenchant integration working
       epkgs.jinx
       # not needed but prevents need to compile on first run
       epkgs.vterm
+      epkgs.treesit-grammars.with-all-grammars
     ]));
 }
