@@ -44,58 +44,32 @@ final: prev: rec {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-31/round-undecorated-frame.patch";
               sha256 = "/SX8rF4GMA7bobfQ4/F9BTSEigeOd9jgN0jvQ1M0MSs=";
             })
+            /* # Fix alpha-background not working on macOS NS build
+            (prev.fetchpatch {
+              url = "https://raw.githubusercontent.com/jimeh/build-emacs-for-macos/master/patches/emacs-29/ns-alpha-background.patch";
+              sha256 = "jdWAXzqJrdUHE/AtE2rnWKQpOdHM7I9ZhScdMeL/y6k=";
+            }) */
+            /* # Same but for Emacs 31
+            (prev.fetchpatch {
+              url = "https://raw.githubusercontent.com/bbenchen/homebrew-emacs-plus/master/patches/emacs-31/alpha-background.patch";
+              sha256 = "10d62i3kr4ld5idiklzh3fv0rfc31pf8p0f9dbkavj30vzpzqz9v";
+            }) */
+            # Modified patch to enable alpha-background on Emacs 31
+            ./ns_alpha_background.patch
             # Make Emacs aware of OS-level light/dark mode
             # https://github.com/d12frosted/homebrew-emacs-plus#system-appearance-change
             (prev.fetchpatch {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/system-appearance.patch";
               sha256 = "3QLq91AQ6E921/W9nfDjdOUWR8YVsqBAT/W9c1woqAw=";
             })
-            # # Fix alpha-background not working on macOS NS build
-            # (prev.fetchpatch {
-            #   url = "https://raw.githubusercontent.com/jimeh/build-emacs-for-macos/master/patches/emacs-29/ns-alpha-background.patch";
-            #   sha256 = "1i39zjyjqw09j08if84pdlpi38x9blzrlqgihbz6d87glc6a73yy";
-            # })
-            ./ns_alpha_background.patch
           ];
         withNS = true;
-        # withPgtk = true;
-        /* configureFlags = [
-          "--with-ns"
-          "--with-mailutils"
-          "--with-imagemgick"
-          "--with-wide-int"
-          "--with-tree-sitter"
-          "--with-native-compilation"
-          "--with-xwidgets"
-          "--width-dbus"
-          "--program-transform-name='s/^ctags$/emctags/' \ # avoid ctags namespace conflict"
-
-        ]; */
       })
     else
-      # TODO nix's lucid reports the wrong mm-size (breaks textsize package):
-      # (frame-monitor-attribute 'mm-size (selected-frame))
       (emacsGitLejiGeneric.override {
         withX = true;
-        # lucid
-        # withGTK2 = false;
         withGTK3 = true;
-        withXinput2 = true;
-      }).overrideAttrs(_: {
-        # for full control/testing (e.g. can't do lucid without cairo using
-        # builtin withs)
-        configureFlags = [
-          # for a (more) reproducible build
-          "--disable-build-details"
-          "--with-modules"
-          "--with-x-toolkit=gtk3"
-          "--with-xft"
-          "--with-cairo"
-          "--with-xaw3d"
-          "--with-native-compilation"
-          "--with-imagemagick"
-          "--with-xinput2"
-        ];
+        withDbus = true;
       });
   emacsLejiWithPackages =
     ((prev.emacsPackagesFor emacsLeji).emacsWithPackages (epkgs: [
