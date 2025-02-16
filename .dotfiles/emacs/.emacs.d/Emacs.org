@@ -52,8 +52,10 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 (setq my-project-path "~/dev")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
-    (setq my-opacity 10)
-  (setq my-opacity 90))
+    (progn (setq my-opacity 10)
+	   (setq my-switch-to-persp-key "s"))
+  (progn (setq my-opacity 90)
+	 (setq my-switch-to-persp-key "M")))
 (setq my-leader-key "SPC")
 ;; (setq my-linux-font "Fira Code")
 ;; (setq my-windows-font "Fira Code")
@@ -424,7 +426,7 @@ Using persp-mode to create different workspaces
 
     ;; Keybindings for Alt+numbers
     (dotimes (i 10)  ;; Loop from 0 to 9
-      (let ((key (format "M-%d" i)))
+      (let ((key (format "%s-%d" my-switch-to-persp-key i)))
 	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
   ;; (eval-after-load 'persp-mode
   ;;   '(my-update-dynamic-persps))
