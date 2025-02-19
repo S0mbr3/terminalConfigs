@@ -32,8 +32,14 @@
 (setq my-project-path "~/dev")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
-    (setq my-opacity 30)
-  (setq my-opacity 90))
+    (progn (setq my-opacity 10)
+	   (setq my-switch-to-persp-key "s")
+	   (setq my-switch-to-next-persp-vterm-key "s-]")
+	   (setq my-switch-to-prev-persp-vterm-key "s-["))
+  (progn (setq my-opacity 90)
+	 (setq my-switch-to-persp-key "M")
+	 	   (setq my-switch-to-next-persp-vterm-key "C-}")
+	 	   (setq my-switch-to-prev-persp-vterm-key "C-{")))
 (setq my-leader-key "SPC")
 ;; (setq my-linux-font "Fira Code")
 ;; (setq my-windows-font "Fira Code")
@@ -315,8 +321,8 @@
 
 
 
-    (global-set-key (kbd "C-}") 'switch-to-next-persp-vterm-from-last)
-    (global-set-key (kbd "C-{") 'switch-to-prev-persp-vterm-from-last)
+    (global-set-key (kbd my-switch-to-next-persp-vterm-key) 'switch-to-next-persp-vterm-from-last)
+    (global-set-key (kbd my-switch-to-prev-persp-vterm-key) 'switch-to-prev-persp-vterm-from-last)
 
 
 
@@ -375,7 +381,7 @@
 
     ;; Keybindings for Alt+numbers
     (dotimes (i 10)  ;; Loop from 0 to 9
-      (let ((key (format "M-%d" i)))
+      (let ((key (format "%s-%d" my-switch-to-persp-key i)))
 	(global-set-key (kbd key) `(lambda () (interactive) (my-switch-to-persp-by-number ,i))))))
   ;; (eval-after-load 'persp-mode
   ;;   '(my-update-dynamic-persps))
@@ -1231,6 +1237,14 @@ because compile mode is too slow"
 (use-package lua-mode
   :straight t
   :mode "\\.lua\\'")
+
+(use-package nix-mode
+  :straight t
+  ;; :mode "\\.nix\\'"
+  )
+(use-package nix-ts-mode
+  :straight t
+ :mode "\\.nix\\'")
 
 (use-package php-ts-mode
   :straight (:host github
@@ -2592,6 +2606,9 @@ map)
   :straight t
   :config
   :after flycheck)
+
+(use-package sops
+  :straight t)
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 ;;(setq gc-cons-threshold (* 2 1000 000))
