@@ -27,9 +27,13 @@ with pkgs;
   zsh-history-substring-search
   luarocks
   luajit
+  sops
+  # openssh
+  nodePackages.prettier
   emacsLejiWithPackages
   jansson
   emacsPackages.cask
+  telegram-desktop
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
