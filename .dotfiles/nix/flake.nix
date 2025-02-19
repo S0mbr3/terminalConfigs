@@ -13,6 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
+    sops-nix.url = "github:Mic92/sops-nix";
 
     # https://nixos.wiki/wiki/Emacs
     # https://nixos.wiki/wiki/Overlays#In_a_Nix_flake
@@ -22,7 +23,7 @@
     };
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay }:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, sops-nix}:
     let
       pkg-config = {
         allowUnfree = true;
@@ -67,9 +68,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.nebj = import ./home.nix;
-
           }
           ./darwin
+	  # sops-nix.nixosModules.sops
         ];
         specialArgs = { inherit self inputs; };
       };
