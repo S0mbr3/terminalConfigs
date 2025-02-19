@@ -2980,6 +2980,11 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
   :config
   :after flycheck)
 #+end_src
+* Encryption
+#+begin_src emacs-lisp
+(use-package sops
+  :straight t)
+#+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
 ;; Make gc pauses faster by decreasubg tge threshold.
