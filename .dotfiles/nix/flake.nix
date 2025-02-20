@@ -59,7 +59,7 @@
         ];
         specialArgs = { inherit self inputs; };
       };
-      darwinConfigurations."MacBook-Air-de-Aude" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations."Personal-Darwin-Air" = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
