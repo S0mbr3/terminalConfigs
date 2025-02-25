@@ -245,18 +245,6 @@ wezterm.on("update-status", function(window, pane)
   }));
 end);
 return {
-  ssh_domains = {
-    {
-      name = 'ledeb',
-      remote_address = '192.168.0.50:5045',
-      username = 'nebj',
-    },
-    {
-      name = 'learc',
-      remote_address = '82.66.43.46:5046',
-      username = 'oxhart',
-    },
-  },
   --color_scheme = "tokyonight-storm",
   enable_kitty_keyboard=true,
   enable_kitty_graphics=true,
