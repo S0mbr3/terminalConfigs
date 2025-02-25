@@ -8,4 +8,6 @@ common-packages ++ [
   wget
   gnugrep
   tree
+  # needed for Emacs to use --dired in ls commands
+  coreutils
 ]
