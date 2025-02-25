@@ -12,6 +12,7 @@ with pkgs;
   lolcat
   fd
   jq
+  yq
   ripgrep
   lazygit
   lsd
