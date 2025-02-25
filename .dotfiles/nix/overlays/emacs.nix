@@ -47,13 +47,13 @@ final: prev: rec {
               url = "https://raw.githubusercontent.com/jimeh/build-emacs-for-macos/master/patches/emacs-29/ns-alpha-background.patch";
               sha256 = "jdWAXzqJrdUHE/AtE2rnWKQpOdHM7I9ZhScdMeL/y6k=";
             }) */
-            /* # Same but for Emacs 31
+            # Same but for Emacs 31
             (prev.fetchpatch {
               url = "https://raw.githubusercontent.com/bbenchen/homebrew-emacs-plus/master/patches/emacs-31/alpha-background.patch";
               sha256 = "10d62i3kr4ld5idiklzh3fv0rfc31pf8p0f9dbkavj30vzpzqz9v";
-            }) */
+            })
             # Modified patch to enable alpha-background on Emacs 31
-            ./ns_alpha_background.patch
+            # ./ns_alpha_background.patch
             # Make Emacs aware of OS-level light/dark mode
             # https://github.com/d12frosted/homebrew-emacs-plus#system-appearance-change
             (prev.fetchpatch {
