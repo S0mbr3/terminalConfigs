@@ -1,6 +1,7 @@
 scripts/.git
 node_modules
 .dotfiles/nodenv/.nodenv/versions
+.dotfiles/nix/personal-user.nix
 nohup.out
 .env
 .dotfiles/scripts/scripts/fete/day.json
