@@ -2608,7 +2608,9 @@ map)
   :after flycheck)
 
 (use-package sops
-  :straight t)
+  :straight t
+  :init
+  (global-sops-mode 1))
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 ;;(setq gc-cons-threshold (* 2 1000 000))
