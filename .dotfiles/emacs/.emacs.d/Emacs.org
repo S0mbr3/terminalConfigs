@@ -2983,7 +2983,9 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
 * Encryption
 #+begin_src emacs-lisp
 (use-package sops
-  :straight t)
+  :straight t
+  :init
+  (global-sops-mode 1))
 #+end_src
 * Runtime Performance
 #+begin_src emacs-lisp
