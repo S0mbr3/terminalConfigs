@@ -30,6 +30,7 @@ with pkgs;
   luarocks
   luajit
   sops
+  age
   # openssh
   nodePackages.prettier
   emacsLejiWithPackages
