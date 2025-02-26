@@ -1446,6 +1446,7 @@ because compile mode is too slow"
   :hook
   ((lsp-mode . ox/lsp-mode-setup)
    (c-ts-mode . lsp-deferred)
+   (c++-ts-mode . lsp-deferred)
    (lua-mode . lsp-deferred)
    (kotlin-ts-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred)
