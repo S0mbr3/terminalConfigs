@@ -18,6 +18,7 @@ with pkgs;
   lsd
   nodenv
   pipx
+  rustup
   stow
   kitty
   wezterm
