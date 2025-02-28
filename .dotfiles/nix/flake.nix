@@ -14,6 +14,12 @@
     };
     mac-app-util.url = "github:hraban/mac-app-util";
     sops-nix.url = "github:Mic92/sops-nix";
+    nix-rage = {
+      #url = "github:S0mbr3/nix-rage?ref=fix-clang-compilation";
+      #url = "git+file:///Users/nebj/git_builds/nix-rage?ref=fix";
+      url = "path:/Users/nebj/git_builds/nix-rage";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # https://nixos.wiki/wiki/Emacs
     # https://nixos.wiki/wiki/Overlays#In_a_Nix_flake
@@ -21,9 +27,14 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, sops-nix}:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, sops-nix, nix-rage, rust-overlay}:
     let
       pkg-config = {
         allowUnfree = true;
@@ -34,6 +45,7 @@
         [
           # default emacs-overlay (overriden by ./overlays/emacs.nix)
           (import emacs-overlay)
+	  (import rust-overlay)
         ] ++ import ./overlays {inherit inputs;};
       darwin-pkgs = import nixpkgs {
         # M1

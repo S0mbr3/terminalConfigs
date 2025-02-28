@@ -18,7 +18,8 @@ with pkgs;
   lsd
   nodenv
   pipx
-  rustup
+  #rustup
+  rust-bin.nightly.latest.default
   stow
   kitty
   wezterm
