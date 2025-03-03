@@ -78,7 +78,7 @@ in
 
 
   # To use TouchId for sudo operations
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
   # Make TouchId for sudo operations work with tmux (see ./pam-reattach.nix)
   security.pam.enableSudoTouchIdReattach = true;
 
