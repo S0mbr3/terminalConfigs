@@ -28,7 +28,6 @@ in
 
     #automatically gargave collect to reduce nix store size
     gc = {
-      user = "root";
       automatic = true;
       interval = { Weekday = 0; Hour = 2; Minute = 0; };
       options = "--delete-older-than 15d";
