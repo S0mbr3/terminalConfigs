@@ -50,7 +50,8 @@ final: prev: rec {
             # Same but for Emacs 31
             (prev.fetchpatch {
               url = "https://raw.githubusercontent.com/bbenchen/homebrew-emacs-plus/master/patches/emacs-31/alpha-background.patch";
-              sha256 = "10d62i3kr4ld5idiklzh3fv0rfc31pf8p0f9dbkavj30vzpzqz9v";
+              # sha256 = "10d62i3kr4ld5idiklzh3fv0rfc31pf8p0f9dbkavj30vzpzqz9v";
+	      sha256 = "aozFcD8Vo3/4/VfZdqPPCWdsBvBQicPPYzoozGxKVOk=";
             })
             # Modified patch to enable alpha-background on Emacs 31
             # ./ns_alpha_background.patch

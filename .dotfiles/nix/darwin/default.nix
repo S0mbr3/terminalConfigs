@@ -141,6 +141,5 @@ in
     name = user;
     home = homeDir;
   };
-
 }
 
