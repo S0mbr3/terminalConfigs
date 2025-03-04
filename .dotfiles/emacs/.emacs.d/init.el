@@ -558,7 +558,7 @@
     "\\" '(ox/eval :which-key "eval-last-sexp")
 
     "ff" '(find-file :which-key "find-file")
-    "fh" '((lambda () (interactive) (find-file "~/.emacs.d/Emacs.org")) :which-key "Open Emacs.org")
+    "fh" '((lambda () (interactive) (find-file "~/terminalConfigs/.dotfiles/emacs/.emacs.d/Emacs.org")) :which-key "Open Emacs.org")
     "fd" '(ox/ledeb-dired :which-key "dired-ledeb")
     "fp" '(consult-project-buffer :which-key "consult-project-buffer")
     "fe" '(consult-find :which-key "consult-find")
