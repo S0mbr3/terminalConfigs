@@ -1,9 +1,6 @@
-{ self, pkgs, ...}:
+{ self, pkgs, inputs, config, ...}:
 let
-  #user = builtins.readfile ./username;
-  #user = "Nebj";
-  #user = builtins.getEnv "USER";
-  user = "nebj";
+  user = builtins.trace "${config.rage-username}" config.rage-username;
   homeDir = "/Users/${user}";
   configDir = "${homeDir}/.config";
   cacheDir = "${homeDir}/.cache";

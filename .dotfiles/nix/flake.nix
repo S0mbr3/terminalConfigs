@@ -16,8 +16,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     nix-rage = {
       #url = "github:S0mbr3/nix-rage?ref=fix-clang-compilation";
-      #url = "git+file:///Users/nebj/git_builds/nix-rage?ref=fix";
-      url = "path:/Users/nebj/git_builds/nix-rage";
+      url = "path:/Users/nebj/test/mynix-rage";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -53,18 +52,34 @@
         config = pkg-config;
         overlays = common-overlays;
       };
+      # We import our separate "sops.nix" module, which defines the secret "user"
+      sopsModule = import ./sops.nix {inherit inputs;};
+      secrets = import ./secrets.nix {
+	inherit (darwin-pkgs) lib config;
+	inherit pkg-config;} ;
+      rage-username = secrets.config.rage-username;
+
+      # This module references config.sops.secrets.user.contents 
+      # and sets up home-manager.users."<secret>"
     in
       {
+	# NixOS system-wide home-manager configuration
+	home-manager.sharedModules = [
+	  inputs.sops-nix.homeManagerModules.sops
+	];
       # $ darwin-rebuild switch .
       darwinConfigurations.default = nix-darwin.lib.darwinSystem {
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
+	  # First load sops so the secrets are available
+	  sops-nix.darwinModules.sops
+	  sopsModule
           mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.nebj = import ./home.nix;
+            home-manager.users."${rage-username}" = import ./home.nix;
 
           }
           ./darwin
@@ -75,14 +90,23 @@
         pkgs = darwin-pkgs;
         system = "aarch64-darwin";
         modules = [
+	   {
+            nix.extraOptions = let
+               nix-rage-package = nix-rage.packages."aarch64-darwin".default;
+            in ''
+	       plugin-files = ${nix-rage-package}/lib/libmynix_rage.dylib
+            '';
+          }
+	  #sopsModule
+	  ./sops.nix
+	  ./secrets.nix
           mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.nebj = import ./home.nix;
+	    home-manager.users.${rage-username} = import ./home.nix;
           }
           ./darwin
-	  # sops-nix.nixosModules.sops
         ];
         specialArgs = { inherit self inputs; };
       };
