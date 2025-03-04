@@ -1,17 +1,10 @@
-{ pkgs, ... }:
-
+{ self, pkgs, inputs, config,... }:
   # * Home Manager
   # use home manager as nix-darwin module, so that user profiles are built
   # together with the system when running darwin-rebuild
-{
-  home.username = "nebj";
-  home.homeDirectory = "/Users/nebj";
+rec {
+  home.homeDirectory = builtins.trace "configdir: ${config.home.username}" "/Users/${config.home.username}";
       home.enableNixpkgsReleaseCheck = false;
-      # home.packages = pkgs.callPackage ./packages.nix {};
-      # home.packages = with pkgs;[
-      #   home-manager
-      #   ];
-
       home.stateVersion = "25.05";
 
       # extra directories to add to path
