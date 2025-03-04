@@ -23,4 +23,3 @@ rec {
         source = ../emacs/.emacs.d;
       };
     }
-
