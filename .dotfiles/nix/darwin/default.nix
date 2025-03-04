@@ -16,9 +16,11 @@ in
   # * Nix
   # auto upgrade nix package and the daemon service
 
+  #services.nix-daemon.enable = true;
   nix = {
-    #package = pkgs.nixUnstable;
-    package = pkgs.nixVersions.latest;
+    enable = true;
+    #package = pkgs.nixVersions.latest;
+    package = pkgs.nixVersions.nix_2_24;
     settings.trusted-users = [ "root" "@admin" ];
 
     settings.experimental-features = "nix-command flakes";
