@@ -50,6 +50,7 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 (setq package-gnupghome-dir (expand-file-name "elpa/gnupg" user-emacs-directory))
 
 (setq my-project-path "~/dev")
+(setq my-org-directory "~/org")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
     (progn (setq my-opacity 10)
@@ -71,12 +72,10 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 (setq my-linux-font "CaskaydiaCove Nerd Font")
 (setq my-windows-font "CaskaydiaCove Nerd Font")
 
-(setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
-      		     "~/syncthing/Sync/org-files/todo.org"
-      		     "~/syncthing/Sync/org-files/Habits.org"
-      		     "~/syncthing/Sync/org-files/Shopping.org"
-      		     "~/syncthing/Sync/org-files/Journal.org"
-      		     "~/syncthing/Sync/org-files/birthdays.org"))
+(setq my-org-files
+      (mapcar (lambda (file)
+                (format "%s/org-files/%s" my-org-directory file))
+              '("Tasks.org" "todo.org" "Habits.org" "Shopping.org" "Journal.org" "birthdays.org")))
 
 (setq ox/enable-ivy nil )
 (setq ox/enable-vertico t)
@@ -2091,36 +2090,36 @@ because compile mode is too slow"
 
   (setq org-capture-templates
 	`(("t" "Tasks / Projects")
-	  ("tt" "Task" entry (file+olp "~/syncthing/Sync/org-files/Tasks.org" "Inbox")
+	  ("tt" "Task" entry (file+olp (format "%s/org-files/Tasks.org"  my-org-directory) "Inbox")
 	   "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 	  ("s" "Shopping / Projects")
-	  ("ss" "Shop" entry (file+olp "~/syncthing/Sync/org-files/Shopping.org" "Inbox")
+	  ("ss" "Shop" entry (file+olp (format "%s/org-files/Shopping.org"  my-org-directory) "Inbox")
 	   "* BUYING %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 	  ("j" "Journal Entries")
 	  ("jj" "Journal" entry
-	   (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	   (file+olp+datetree (format "%s/org-files/Journal.org" my-org-directory) )
 	   "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
 	   ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
 	   :clock-in :clock-resume
 	   :empty-lines 1)
 	  ("jm" "Meeting" entry
-	   (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	   (file+olp+datetree (format "%s/org-files/Journal.org" my-org-directory) )
 	   "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
 	   :clock-in :clock-resume
 	   :empty-lines 1)
 
 	  ("w" "Workflows")
-	  ("we" "Checking Email" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	  ("we" "Checking Email" entry (file+olp+datetree (format "%s/org-files/Journal.org" my-org-directory) )
 	   "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 	  ("v" "Activities")
-	  ("va" "Activities idea" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	  ("va" "Activities idea" entry (file+olp+datetree (format "%s/org-files/Journal.org" my-org-directory) )
 	   "* A-PLAN %? :activities:" :clock-in :clock-resume :empty-lines 1)
 
 	  ("m" "Metrics Capture")
-	  ("mw" "Weight" table-line (file+headline "~/syncthing/Sync/org-files/Metrics.org" "Weight")
+	  ("mw" "Weight" table-line (file+headline (format "%s/org-files/Metrics.org" "Weight"))
 	   "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
   (define-key global-map (kbd "C-c j")
@@ -2130,8 +2129,8 @@ because compile mode is too slow"
     "oa" '(org-agenda :which-key "open org-agenda")
     "ot" '(org-todo-list :which-key "open all todo lists")
     "oc" '(org-capture :which-key "open org-capture")
-    "oh" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Habits.org")) :which-key "Open Habits.org")
-    "ow" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Metrics.org")) :which-key "Open Metrics.org")))
+    "oh" '((lambda () (interactive) (find-file (format "%s/org-files/Habits.org" my-org-directory))) :which-key "Open Habits.org")
+    "ow" '((lambda () (interactive) (find-file (format "%s/org-files/Metrics.org" my-org-directory))) :which-key "Open Metrics.org")))
 
 
 ;; Center the text, and set a max column width to go next line in org mode
@@ -2267,7 +2266,7 @@ Allow to create flashcards for the space repetition learning method (Leitner sys
   :after org
   ;; :hook ((org-fc-review-flip-mode org-fc-review-rate-mode) . my-check-org-fc-and-set-evil-state )
   :config
-  (setq org-fc-directories '("~/syncthing/Sync/org-files"))
+  (setq org-fc-directories '((format "%s/org-files")))
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
@@ -2326,7 +2325,7 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
       (concat "${title:*} " 
               (propertize "${tags:10}" 'face 'org-tag)))
 
-  (setq org-roam-directory (file-truename "~/syncthing/Sync/org-roam"))
+  (setq org-roam-directory (file-truename (format "%s/org-roam" my-org-directory)))
   (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
 )
