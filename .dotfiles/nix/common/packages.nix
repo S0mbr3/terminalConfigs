@@ -38,6 +38,7 @@ with pkgs;
   jansson
   emacsPackages.cask
   telegram-desktop
+  gawk
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
