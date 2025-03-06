@@ -58,6 +58,7 @@
 	inherit (darwin-pkgs) lib config;
 	inherit pkg-config;} ;
       rage-username = secrets.config.rage-username;
+      rage-hostName = secrets.config.rage-hostName;
 
       # This module references config.sops.secrets.user.contents 
       # and sets up home-manager.users."<secret>"
@@ -66,6 +67,7 @@
 	# NixOS system-wide home-manager configuration
 	home-manager.sharedModules = [
 	  inputs.sops-nix.homeManagerModules.sops
+	  secrets
 	];
       # $ darwin-rebuild switch .
       darwinConfigurations.default = nix-darwin.lib.darwinSystem {
@@ -97,14 +99,13 @@
 	       plugin-files = ${nix-rage-package}/lib/libmynix_rage.dylib
             '';
           }
-	  #sopsModule
-	  ./sops.nix
+	  {networking.hostName = rage-hostName;}
 	  ./secrets.nix
           mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-	    home-manager.users.${rage-username} = import ./home.nix;
+	    home-manager.users.${rage-username}.imports = [ ./home.nix secrets ];
           }
           ./darwin
         ];
