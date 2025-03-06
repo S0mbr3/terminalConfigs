@@ -1,4 +1,6 @@
-{ self, pkgs, inputs, config,... }:
+#{ self, pkgs, inpts, config,... }:
+{ config, pkgs, lib, ... }:
+
   # * Home Manager
   # use home manager as nix-darwin module, so that user profiles are built
   # together with the system when running darwin-rebuild
