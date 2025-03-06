@@ -11,7 +11,23 @@ in
       default = "tmp";
     };
   };
+  options = {
+    rage-hostName = lib.mkOption {
+      type = lib.types.str;
+      description = "hostName encrypted with age";
+      default = "tmpHostName";
+    };
+  };
+  options = {
+    rage-syncthingUser = lib.mkOption {
+      type = lib.types.str;
+      description = "Syncthing user encrypted with age";
+      default = "tmpSyncthingUser";
+    };
+  };
   config = {
     rage-username = secrets.rage-username;
+    rage-hostName = secrets.rage-hostName;
+    rage-syncthingUser = secrets.rage-syncthingUser;
     };
 }
