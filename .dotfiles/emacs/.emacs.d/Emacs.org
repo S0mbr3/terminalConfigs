@@ -2266,7 +2266,7 @@ Allow to create flashcards for the space repetition learning method (Leitner sys
   :after org
   ;; :hook ((org-fc-review-flip-mode org-fc-review-rate-mode) . my-check-org-fc-and-set-evil-state )
   :config
-  (setq org-fc-directories '((format "%s/org-files" my-org-directory)))
+  (setq org-fc-directories (list (format "%s/org-files" my-org-directory)))
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
