@@ -20,6 +20,7 @@ set tabsort mru
 set smoothscroll true
 
 set searchurls.g https://www.google.com/search?q=
+set searchurls.s https://www.startpage.com/sp/search?q=
 set searchurls.qw https://www.qwant.com/?q=
 set searchurls.d https://duckduckgo.com/?q=
 set searchurls.az https://www.amazon.fr/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=
