@@ -24,8 +24,9 @@ in
     settings.trusted-users = [ "root" "@admin" ];
 
     settings.experimental-features = "nix-command flakes";
+    optimise.automatic = true;
 
-    #automatically gargave collect to reduce nix store size
+    #automatically gargage collect to reduce nix store size
     gc = {
       automatic = true;
       interval = { Weekday = 0; Hour = 2; Minute = 0; };
