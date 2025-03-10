@@ -39,6 +39,8 @@ with pkgs;
   emacsPackages.cask
   telegram-desktop
   gawk
+  floorp
+  tor
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
