@@ -55,6 +55,9 @@ set searchurls.dlf https://www.deepl.com/fr/translator#fr/en/
 set searchurls.dlc https://www.deepl.com/fr/translator#fr/zh-hant/
 set searchurls.dlp https://www.deepl.com/fr/translator#fr/ja/
 
+set searchurls.nsp https://search.nixos.org/packages?channel=unstable&show=
+set searchurls.nso https://search.nixos.org/options?channel=unstable&show=
+
 " This one use a Regexp to find matching history url and delete it
 command deleteHistoryByRegex jsb -p ((JS_ARG) => { \
     try { \
