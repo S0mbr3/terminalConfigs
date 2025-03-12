@@ -87,11 +87,9 @@ command histoDeleteByName jsb -p ((JS_ARG) => { \
 command youtube-set-speed js -p ((JS_ARG) => { \
   const player = document.querySelector('.html5-video-player'); \
   if (!player) return; \
-
   " Remove existing overlay if any
   let existingOverlay = document.querySelector('#tridactyl-speed-overlay'); \
   if (existingOverlay) existingOverlay.remove(); \
-
   " Create the overlay
   const overlay = document.createElement('div'); \
   overlay.id = 'tridactyl-speed-overlay'; \
@@ -106,13 +104,31 @@ command youtube-set-speed js -p ((JS_ARG) => { \
   overlay.style.borderRadius = '5px'; \
   overlay.style.fontSize = '24px'; \
   overlay.style.zIndex = '1000'; \
-
   " Remove the overlay after 1 second
   player.appendChild(overlay); \
   setTimeout(() => overlay.remove(), 1000); \
 
   " Change video playback speed
-  document.querySelector('video').playbackRate = JS_ARG \
+  " document.querySelector('video').playbackRate = JS_ARG;  NO PERSISTANCE
+
+  " persist accross videos
+  "Inject the javascript into the page actual context to directly use YouTube's Javascript Player API
+  const script = document.createElement('script'); \
+  script.textContent = ` \
+    (() => { \
+      const setPlayerSpeed = (JS_ARG) => { \
+        const ytPlayer = document.getElementById('movie_player'); \
+        if (ytPlayer && ytPlayer.setPlaybackRate) { \
+          ytPlayer.setPlaybackRate(JS_ARG); \
+        } \
+      }; \
+
+      setPlayerSpeed(${JS_ARG}); \
+
+    })(); \
+  `; \
+  document.documentElement.appendChild(script); \
+  script.remove(); \
   })(JS_ARG);
 
 bindurl https://www.youtube.com/ ;1 youtube-set-speed 0.5
