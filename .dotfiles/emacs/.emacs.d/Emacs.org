@@ -2965,17 +2965,14 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
   (setq gptel-api-key #'my-openai-api-key))
   ;; Groq offers an OpenAI compatible API
   (defun my-groq-setup ()
-    (setq gptel-model   'llama-3.1-70b-versatile
+    (setq gptel-model   'llama-3.3-70b-versatile
       gptel-backend
       (gptel-make-openai "Groq"               ;Any name you want
 	:host "api.groq.com"
 	:endpoint "/openai/v1/chat/completions"
 	:stream t
 	:key #'my-groq-api-key                   ;can be a function that returns the key
-	:models '(llama-3.1-70b-versatile
-		  llama-3.1-8b-instant
-		  llama3-70b-8192
-		  llama3-8b-8192
+	:models '(llama-3.3-70b-versatile
 		  mixtral-8x7b-32768
 		  gemma-7b-it))))
   (my-groq-setup))
