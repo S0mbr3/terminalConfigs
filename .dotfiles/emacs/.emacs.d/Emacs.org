@@ -2927,7 +2927,13 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
 #+begin_src emacs-lisp
 (use-package gptel
   :straight t
+  :after general
   :config
+  (ox/leader-keys
+    "g" '(:ignore t :which-key "gptel")
+    "gm" '(gptel-menu :which-key "Open gptel-menu")
+    "gc" '(gptel :which-key "Open gptel chats buffers")
+    "gs" '(gptel-send :whick-key "gptel-send"))
   (defun my-groq-api-key ()
     (let ((auth-info (auth-source-search
 		      :host "api.groq.com"
@@ -2960,21 +2966,21 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
   ;;   (setq gptel-model 'gpt-3.5-turbo)
   ;;   (setq gptel-api-key #'my-mistral-api-key))
   
-(defun my-openai-setup ()
-  (setq gptel-model 'gpt-4o-mini)
-  (setq gptel-api-key #'my-openai-api-key))
+  (defun my-openai-setup ()
+    (setq gptel-model 'gpt-4o-mini)
+    (setq gptel-api-key #'my-openai-api-key))
   ;; Groq offers an OpenAI compatible API
   (defun my-groq-setup ()
     (setq gptel-model   'llama-3.3-70b-versatile
-      gptel-backend
-      (gptel-make-openai "Groq"               ;Any name you want
-	:host "api.groq.com"
-	:endpoint "/openai/v1/chat/completions"
-	:stream t
-	:key #'my-groq-api-key                   ;can be a function that returns the key
-	:models '(llama-3.3-70b-versatile
-		  mixtral-8x7b-32768
-		  gemma-7b-it))))
+	  gptel-backend
+	  (gptel-make-openai "Groq"               ;Any name you want
+	    :host "api.groq.com"
+	    :endpoint "/openai/v1/chat/completions"
+	    :stream t
+	    :key #'my-groq-api-key                   ;can be a function that returns the key
+	    :models '(llama-3.3-70b-versatile
+		      mixtral-8x7b-32768
+		      gemma-7b-it))))
   (my-groq-setup))
 #+end_src
 * package creation
