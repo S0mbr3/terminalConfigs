@@ -153,6 +153,8 @@ We use the no-littering package to keep folders where we edit files and the Emac
     ;;(load-theme 'doom-challenger-deep t)
     ;;(load-theme 'doom-moonlight t)
     (load-theme 'doom-outrun-electric t)
+    (set-face-attribute 'line-number nil :foreground "purple")
+
 
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
