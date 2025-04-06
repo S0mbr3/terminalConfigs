@@ -74,6 +74,7 @@ in
       "iterm2"
       "nikitabobko/tap/aerospace"
       "tor-browser"
+      "jdownloader"
     ];
   };
 
