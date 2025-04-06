@@ -73,10 +73,53 @@ in
     casks = [
       "iterm2"
       "nikitabobko/tap/aerospace"
+      "tor-browser"
     ];
   };
 
+  # networking.firewall = {
+  #   enable = true;
+  # };
 
+  # # 1. Provide a pf.conf with the desired rules
+  # environment.etc."nix-pf.conf" ={
+  #   text = ''
+  #   scrub-anchor "com.apple/*"
+  #   nat-anchor "com.apple/*"
+  #   rdr-anchor "com.apple/*"
+  #   dummynet-anchor "com.apple/*"
+  #   anchor "com.apple/*"
+  #   load anchor "com.apple" from "/etc/pf.anchors/com.apple"
+  #   # e.g. allow inbound on ports 8384, 22000
+  #   pass in proto tcp from any to any port 8384
+  #   pass out proto tcp from any to any port 8384
+
+  #   pass in proto tcp from any to any port 22000
+  #   pass out proto tcp from any to any port 22000
+
+
+  #   pass in proto udp from any to any port 22000
+  #   pass out proto udp from any to any port 22000
+
+
+  #   pass in proto udp from any to any port 21027
+  #   pass out proto udp from any to any port 21027
+  # '';
+  #   mode = "0644";  # Ensure correct file permissions
+  #   user = "root";
+  #   group = "wheel";
+  # };
+
+  # # 2. Activation script: load pf at the end of system activation
+  # system.activationScripts.postUserActivation.text = ''
+  #   echo "Enabling and loading pf rules from /etc/nix-pf.conf..."
+  #   /usr/bin/pfctl -e -f /etc/nix-pf.conf
+  # '';
+  # syncthingIsEnabled = true;
+  # system.activationscripts.postUserActivation.text = ''
+  #   ${if syncthingIsEnabled then ''
+  #     ''}
+  #   '';
   # To use TouchId for sudo operations
   security.pam.services.sudo_local.touchIdAuth = true;
   # Make TouchId for sudo operations work with tmux (see ./pam-reattach.nix)
