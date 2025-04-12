@@ -41,6 +41,10 @@ with pkgs;
   gawk
   floorp
   tor
+  yt-dlp
+  aria2
+  mpv
+  aider-chat
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
