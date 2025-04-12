@@ -70,6 +70,7 @@ in
       "pam-reattach"
       "reattach-to-user-namespace"
       "libb2" #needed Because pip has blake2 errors related
+      "openssl"
     ];
     casks = [
       "iterm2"
