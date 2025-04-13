@@ -105,6 +105,7 @@
           home-manager.darwinModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+	    home-manager.backupFileExtension = "Backup";
 	    home-manager.users.${rage-username}.imports = [ ./home.nix secrets ];
           }
           ./darwin
