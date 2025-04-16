@@ -58,8 +58,8 @@ final: prev: rec {
             # Make Emacs aware of OS-level light/dark mode
             # https://github.com/d12frosted/homebrew-emacs-plus#system-appearance-change
             (prev.fetchpatch {
-              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/system-appearance.patch";
-              sha256 = "3QLq91AQ6E921/W9nfDjdOUWR8YVsqBAT/W9c1woqAw=";
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-31/system-appearance.patch";
+              sha256 = "4+2U+4+2tpuaThNJfZOjy1JPnneGcsoge9r+WpgNDko=";
             })
           ];
         withNS = true;
