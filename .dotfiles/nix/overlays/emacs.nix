@@ -40,7 +40,7 @@ final: prev: rec {
             # have to alter default-frame-alist)
             (prev.fetchpatch {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-31/round-undecorated-frame.patch";
-              sha256 = "/SX8rF4GMA7bobfQ4/F9BTSEigeOd9jgN0jvQ1M0MSs=";
+              sha256 = "WWLg7xUqSa656JnzyUJTfxqyYB/4MCAiiiZUjMOqjuY=";
             })
             /* # Fix alpha-background not working on macOS NS build
             (prev.fetchpatch {
