@@ -18,7 +18,6 @@ in
 
   #services.nix-daemon.enable = true;
   nix = {
-    enable = true;
     #package = pkgs.nixVersions.latest;
     package = pkgs.nixVersions.nix_2_24;
     settings.trusted-users = [ "root" "@admin" ];
