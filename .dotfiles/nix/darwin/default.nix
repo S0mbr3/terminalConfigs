@@ -18,8 +18,8 @@ in
 
   #services.nix-daemon.enable = true;
   nix = {
-    #package = pkgs.nixVersions.latest;
-    package = pkgs.nixVersions.nix_2_24;
+    package = pkgs.nixVersions.latest;
+    #package = pkgs.nixVersions.nix_2_24;
     settings.trusted-users = [ "root" "@admin" ];
 
     settings.experimental-features = "nix-command flakes";
