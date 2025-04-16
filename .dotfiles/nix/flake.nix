@@ -98,7 +98,7 @@
             nix.extraOptions = let
                nix-rage-package = nix-rage.packages."aarch64-darwin".default;
             in ''
-	       plugin-files = ${nix-rage-package}/lib/libmynix_rage.dylib
+	       plugin-files = ${nix-rage-package}/lib/libnix_rage.dylib
             '';
           }
 	  {networking.hostName = rage-hostName;}
