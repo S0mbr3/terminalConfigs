@@ -2,7 +2,7 @@
 with pkgs;
 [
   # home-manager
-  ranger
+  #ranger
   neovim
   tmux
   fzf

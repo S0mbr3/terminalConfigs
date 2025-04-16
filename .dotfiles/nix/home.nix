@@ -21,9 +21,24 @@ rec {
       programs.home-manager.enable = true;
       programs.zsh.enable = false;
 
-      home.file.".emacs.d" = {
-        source = ../emacs/.emacs.d;
-      };
+  home.packages = with pkgs; [ ueberzugpp ];
+
+  programs.ranger = {
+    enable = true;
+    extraConfig = ''
+      set preview_images true
+      set preview_images_method ueberzug
+      '';
+  };
+
+  home.file = {
+    ".emacs.d" = {
+      source = ../emacs/.emacs.d;
+    };
+    ".config/ueberzugpp" = {
+      source = ../ueberzugpp/.config/ueberzugpp;
+    };
+  };
 
    home.activation.decryptPassword = lib.hm.dag.entryAfter ["writeBoundary"] ''
     ${pkgs.age}/bin/age --decrypt -i ~/.config/sops/age/keys.txt ${config.home.homeDirectory}/terminalConfigs/.dotfiles/nix/.passwordFile.age > ${config.home.homeDirectory}/.passwordFile
