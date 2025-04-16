@@ -39,12 +39,13 @@ with pkgs;
   emacsPackages.cask
   telegram-desktop
   gawk
-  floorp
+  #floorp
   tor
   yt-dlp
   aria2
   mpv
   aider-chat
+  direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
