@@ -16,7 +16,9 @@
     sops-nix.url = "github:Mic92/sops-nix";
     nix-rage = {
       #url = "github:S0mbr3/nix-rage?ref=fix-clang-compilation";
-      url = "path:/Users/nebj/test/mynix-rage";
+      #url = "path:/Users/nebj/test/mynix-rage";
+      #url = "github:renesat/nix-rage";
+      url = "path:/Users/nebj/test/nix-rage";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -33,7 +35,7 @@
     };
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, sops-nix, nix-rage, rust-overlay}:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, nix-rage, sops-nix, rust-overlay}:
     let
       pkg-config = {
         allowUnfree = true;
