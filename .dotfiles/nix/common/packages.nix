@@ -45,7 +45,7 @@ with pkgs;
   aria2
   mpv
   aider-chat
-  direnv
+  #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php

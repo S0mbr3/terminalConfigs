@@ -30,6 +30,11 @@ rec {
       set preview_images_method ueberzug
       '';
   };
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
 
   home.file = {
     ".emacs.d" = {
