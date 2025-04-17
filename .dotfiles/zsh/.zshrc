@@ -198,6 +198,8 @@ export EDITOR='emacsclient -n'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+alias home-manager="nix run home-manager -- $@"
+alias hms="nix run home-manager -- $@ switch --flake"
 alias ls='lsd --hyperlink=auto'
 alias l='ls -l --hyperlink=auto'
 alias la='ls -a --hyperlink=auto'
