@@ -20,6 +20,8 @@ unbind f
 unbind F
 set tabsort mru
 set smoothscroll true
+unbind ;o
+bind ;o tabopen https://chatgpt.com/?model=o4-mini-high&q=
 
 set searchurls.g https://www.google.com/search?q=
 set searchurls.s https://www.startpage.com/sp/search?q=
