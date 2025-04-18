@@ -70,58 +70,68 @@
 	  inputs.sops-nix.homeManagerModules.sops
 	  secrets
 	];
-      # $ darwin-rebuild switch .
-      darwinConfigurations.default = nix-darwin.lib.darwinSystem {
-        pkgs = darwin-pkgs;
-        system = "aarch64-darwin";
-        modules = [
-	  # First load sops so the secrets are available
-	  sops-nix.darwinModules.sops
-	  sopsModule
-          mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users."${rage-username}" = import ./home.nix;
+	# $ darwin-rebuild switch .
+	darwinConfigurations.default = nix-darwin.lib.darwinSystem {
+          pkgs = darwin-pkgs;
+          system = "aarch64-darwin";
+          modules = [
+	    # First load sops so the secrets are available
+	    sops-nix.darwinModules.sops
+	    sopsModule
+            mac-app-util.darwinModules.default
+            home-manager.darwinModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users."${rage-username}" = import ./home.nix;
 
-          }
-          ./darwin
-        ];
-        specialArgs = { inherit self inputs; };
+            }
+            ./darwin
+          ];
+          specialArgs = { inherit self inputs; };
+	};
+	darwinConfigurations."Personal-Darwin-Air" = nix-darwin.lib.darwinSystem {
+          pkgs = darwin-pkgs;
+          system = "aarch64-darwin";
+          modules = [
+	    {
+              nix.extraOptions = let
+		nix-rage-package = nix-rage.packages."aarch64-darwin".default;
+              in ''
+		plugin-files = ${nix-rage-package}/lib/libnix_rage.dylib
+              '';
+            }
+	    {networking.hostName = rage-hostName;}
+	    ./secrets.nix
+            mac-app-util.darwinModules.default
+            home-manager.darwinModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+	      home-manager.backupFileExtension = "Backup";
+	      home-manager.users.${rage-username}.imports = [ ./home.nix secrets ];
+            }
+            ./darwin
+          ];
+          specialArgs = { inherit self inputs; };
+	};
+	# Build darwin flake using:
+	# $ darwin-rebuild build --flake .#simple
+	darwinConfigurations."simple" = nix-darwin.lib.darwinSystem {
+          pkgs = darwin-pkgs;
+          system = "aarch64-darwin";
+          modules = [
+            ./darwin
+            { nixpkgs.overlays = import ./overlays; }
+          ];
+	};
+	# Build home-manager flake using:
+	# home-manager switch --flake .#user
+	homeConfigurations.${rage-username} = home-manager.lib.homeManagerConfiguration {
+	  pkgs = darwin-pkgs; # Match your system architecture
+	  modules = [ 
+	    ./home.nix 
+	    ./secrets.nix
+	  ];
+	  extraSpecialArgs = { inherit inputs self; };
+	};
       };
-      darwinConfigurations."Personal-Darwin-Air" = nix-darwin.lib.darwinSystem {
-        pkgs = darwin-pkgs;
-        system = "aarch64-darwin";
-        modules = [
-	   {
-            nix.extraOptions = let
-               nix-rage-package = nix-rage.packages."aarch64-darwin".default;
-            in ''
-	       plugin-files = ${nix-rage-package}/lib/libnix_rage.dylib
-            '';
-          }
-	  {networking.hostName = rage-hostName;}
-	  ./secrets.nix
-          mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-	    home-manager.backupFileExtension = "Backup";
-	    home-manager.users.${rage-username}.imports = [ ./home.nix secrets ];
-          }
-          ./darwin
-        ];
-        specialArgs = { inherit self inputs; };
-      };
-      # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#simple
-      darwinConfigurations."simple" = nix-darwin.lib.darwinSystem {
-        pkgs = darwin-pkgs;
-        system = "aarch64-darwin";
-        modules = [
-          ./darwin
-          { nixpkgs.overlays = import ./overlays; }
-        ];
-      };
-    };
 }
