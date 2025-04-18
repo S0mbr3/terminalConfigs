@@ -15,10 +15,9 @@
     mac-app-util.url = "github:hraban/mac-app-util";
     sops-nix.url = "github:Mic92/sops-nix";
     nix-rage = {
-      #url = "github:S0mbr3/nix-rage?ref=fix-clang-compilation";
-      #url = "path:/Users/nebj/test/mynix-rage";
       #url = "github:renesat/nix-rage";
-      url = "path:/Users/nebj/test/nix-rage";
+      #url = "path:/Users/user/test/nix-rage";
+      url = "github:S0mbr3/nix-rage?ref=fix_missing_headers";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
