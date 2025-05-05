@@ -176,7 +176,7 @@
     "Green Component" : 0.098039217293262482
   },
   "Ambiguous Double Width" : false,
-  "Option Key Sends" : 0,
+  "Option Key Sends" : 2,
   "HotKey Modifier Activation" : 0,
   "Ansi 3 Color" : {
     "Red Component" : 0.78058648109436035,
@@ -190,6 +190,7 @@
   "BM Growl" : true,
   "Prompt Before Closing 2" : false,
   "Command" : "",
+  "Left Option Key Changeable" : true,
   "Selected Text Color" : {
     "Red Component" : 0,
     "Color Space" : "sRGB",
@@ -540,6 +541,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.67044717073440552
   },
+  "Treat Option as Alt" : true,
   "Ansi 10 Color (Dark)" : {
     "Red Component" : 0.3450070321559906,
     "Color Space" : "sRGB",
