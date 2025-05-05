@@ -495,6 +495,7 @@
 
   ],
   "Cursor Boost (Light)" : 0,
+  "Blur Radius" : 64,
   "Ansi 6 Color (Light)" : {
     "Red Component" : 0,
     "Color Space" : "sRGB",
@@ -570,7 +571,7 @@
     "Alpha Component" : 1,
     "Green Component" : 1
   },
-  "Blur" : false,
+  "Blur" : true,
   "Use Separate Colors for Light and Dark Mode" : true,
   "Faint Text Alpha (Light)" : 0.50119047619047619,
   "HotKey Characters" : "†",
