@@ -42,7 +42,7 @@ function_name (){
   fi
   #neofetch
   fortune > fortune;
-  lolcat  fortune
+  lolcat  fortune 2>/dev/null
   rm fortune
 }
 function_name
