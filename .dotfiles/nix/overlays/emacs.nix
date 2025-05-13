@@ -18,7 +18,7 @@ final: prev: rec {
     withImageMagick = true;
     withTreeSitter = true;
     withMailutils = true;
-    withNativeCompilation = true;
+    withNativeCompilation = false;
   }).overrideAttrs (oldAttrs: {
       env = (oldAttrs.env or {}) // {
         NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -O3 -march=native";
