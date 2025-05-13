@@ -902,9 +902,10 @@ folder, otherwise delete a word"
 	(add-to-list 'completion-at-point-functions
                      (cape-capf-super #'codeium-completion-at-point  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
         (add-to-list 'completion-at-point-functions #'cape-file))))
-  ;; Disable lsp-completion-mode from being automatically enabled
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-configure-hook 'lsp-completion--disable)))
+;;   ;; Disable lsp-completion-mode from being automatically enabled
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-configure-hook 'lsp-completion--disable))
+)
 
 (use-package yasnippet-capf
   :straight '(yasnippet-capf :host github
