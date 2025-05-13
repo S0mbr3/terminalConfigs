@@ -30,6 +30,7 @@
 (setq package-gnupghome-dir (expand-file-name "elpa/gnupg" user-emacs-directory))
 
 (setq my-project-path "~/dev")
+(setq my-org-directory "~/org")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
     (progn (setq my-opacity 10)
@@ -51,12 +52,10 @@
 (setq my-linux-font "CaskaydiaCove Nerd Font")
 (setq my-windows-font "CaskaydiaCove Nerd Font")
 
-(setq my-org-files '("~/syncthing/Sync/org-files/Tasks.org"
-      		     "~/syncthing/Sync/org-files/todo.org"
-      		     "~/syncthing/Sync/org-files/Habits.org"
-      		     "~/syncthing/Sync/org-files/Shopping.org"
-      		     "~/syncthing/Sync/org-files/Journal.org"
-      		     "~/syncthing/Sync/org-files/birthdays.org"))
+(setq my-org-files
+      (mapcar (lambda (file)
+                (format "%s/org-files/%s" my-org-directory file))
+              '("Tasks.org" "todo.org" "Habits.org" "Shopping.org" "Journal.org" "birthdays.org")))
 
 (setq ox/enable-ivy nil )
 (setq ox/enable-vertico t)
@@ -100,6 +99,17 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
+;; Replace yes-or-no-p with y-or-n-p
+(setq use-short-answers t)
+
+;; Don't confirm when opening non-existent files/buffers
+(setq confirm-nonexistent-file-or-buffer nil)
+
+;; Don't ask about attached processes when killing buffers
+(setq kill-buffer-query-functions
+  (remq 'process-kill-buffer-query-function
+         kill-buffer-query-functions))
+
   (use-package doom-themes
     :straight t
     :config
@@ -109,6 +119,8 @@
     ;;(load-theme 'doom-challenger-deep t)
     ;;(load-theme 'doom-moonlight t)
     (load-theme 'doom-outrun-electric t)
+    (set-face-attribute 'line-number nil :foreground "purple")
+
 
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -697,9 +709,10 @@ folder, otherwise delete a word"
 	(add-to-list 'completion-at-point-functions
                      (cape-capf-super #'codeium-completion-at-point  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
         (add-to-list 'completion-at-point-functions #'cape-file))))
-  ;; Disable lsp-completion-mode from being automatically enabled
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-configure-hook 'lsp-completion--disable)))
+;;   ;; Disable lsp-completion-mode from being automatically enabled
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-configure-hook 'lsp-completion--disable))
+)
 
 (use-package yasnippet-capf
   :straight '(yasnippet-capf :host github
@@ -1816,36 +1829,36 @@ because compile mode is too slow"
 
   (setq org-capture-templates
 	`(("t" "Tasks / Projects")
-	  ("tt" "Task" entry (file+olp "~/syncthing/Sync/org-files/Tasks.org" "Inbox")
+	  ("tt" "Task" entry (file+olp ,(expand-file-name "org-files/Tasks.org"  my-org-directory) "Inbox")
 	   "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 	  ("s" "Shopping / Projects")
-	  ("ss" "Shop" entry (file+olp "~/syncthing/Sync/org-files/Shopping.org" "Inbox")
+	  ("ss" "Shop" entry (file+olp ,(expand-file-name "org-files/Shopping.org"  my-org-directory) "Inbox")
 	   "* BUYING %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
 	  ("j" "Journal Entries")
 	  ("jj" "Journal" entry
-	   (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	   (file+olp+datetree ,(expand-file-name "org-files/Journal.org" my-org-directory) )
 	   "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
 	   ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
 	   :clock-in :clock-resume
 	   :empty-lines 1)
 	  ("jm" "Meeting" entry
-	   (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	   (file+olp+datetree ,(expand-file-name "org-files/Journal.org" my-org-directory) )
 	   "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
 	   :clock-in :clock-resume
 	   :empty-lines 1)
 
 	  ("w" "Workflows")
-	  ("we" "Checking Email" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	  ("we" "Checking Email" entry (file+olp+datetree ,(expand-file-name "org-files/Journal.org" my-org-directory) )
 	   "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 	  ("v" "Activities")
-	  ("va" "Activities idea" entry (file+olp+datetree "~/syncthing/Sync/org-files/Journal.org")
+	  ("va" "Activities idea" entry (file+olp+datetree ,(expand-file-name "org-files/Journal.org" my-org-directory) )
 	   "* A-PLAN %? :activities:" :clock-in :clock-resume :empty-lines 1)
 
 	  ("m" "Metrics Capture")
-	  ("mw" "Weight" table-line (file+headline "~/syncthing/Sync/org-files/Metrics.org" "Weight")
+	  ("mw" "Weight" table-line (file+headline ,(expand-file-name "org-files/Metrics.org" my-org-directory) "Weight")
 	   "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
   (define-key global-map (kbd "C-c j")
@@ -1855,8 +1868,8 @@ because compile mode is too slow"
     "oa" '(org-agenda :which-key "open org-agenda")
     "ot" '(org-todo-list :which-key "open all todo lists")
     "oc" '(org-capture :which-key "open org-capture")
-    "oh" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Habits.org")) :which-key "Open Habits.org")
-    "ow" '((lambda () (interactive) (find-file "~/syncthing/Sync/org-files/Metrics.org")) :which-key "Open Metrics.org")))
+    "oh" '((lambda () (interactive) (find-file (format "%s/org-files/Habits.org" my-org-directory))) :which-key "Open Habits.org")
+    "ow" '((lambda () (interactive) (find-file (format "%s/org-files/Metrics.org" my-org-directory))) :which-key "Open Metrics.org")))
 
 
 ;; Center the text, and set a max column width to go next line in org mode
@@ -1973,7 +1986,7 @@ because compile mode is too slow"
   :after org
   ;; :hook ((org-fc-review-flip-mode org-fc-review-rate-mode) . my-check-org-fc-and-set-evil-state )
   :config
-  (setq org-fc-directories '("~/syncthing/Sync/org-files"))
+  (setq org-fc-directories (list (format "%s/org-files" my-org-directory)))
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c f") 'org-fc-hydra/body))
   (require 'org-fc-hydra))
@@ -2024,7 +2037,7 @@ because compile mode is too slow"
       (concat "${title:*} " 
               (propertize "${tags:10}" 'face 'org-tag)))
 
-  (setq org-roam-directory (file-truename "~/syncthing/Sync/org-roam"))
+  (setq org-roam-directory (file-truename (format "%s/org-roam" my-org-directory)))
   (setq org-roam-completion-everywhere t)
    (org-roam-db-autosync-enable)
 )
@@ -2544,7 +2557,13 @@ map)
 
 (use-package gptel
   :straight t
+  :after general
   :config
+  (ox/leader-keys
+    "g" '(:ignore t :which-key "gptel")
+    "gm" '(gptel-menu :which-key "Open gptel-menu")
+    "gc" '(gptel :which-key "Open gptel chats buffers")
+    "gs" '(gptel-send :whick-key "gptel-send"))
   (defun my-groq-api-key ()
     (let ((auth-info (auth-source-search
 		      :host "api.groq.com"
@@ -2577,24 +2596,21 @@ map)
   ;;   (setq gptel-model 'gpt-3.5-turbo)
   ;;   (setq gptel-api-key #'my-mistral-api-key))
   
-(defun my-openai-setup ()
-  (setq gptel-model 'gpt-4o-mini)
-  (setq gptel-api-key #'my-openai-api-key))
+  (defun my-openai-setup ()
+    (setq gptel-model 'gpt-4o-mini)
+    (setq gptel-api-key #'my-openai-api-key))
   ;; Groq offers an OpenAI compatible API
   (defun my-groq-setup ()
-    (setq gptel-model   'llama-3.1-70b-versatile
-      gptel-backend
-      (gptel-make-openai "Groq"               ;Any name you want
-	:host "api.groq.com"
-	:endpoint "/openai/v1/chat/completions"
-	:stream t
-	:key #'my-groq-api-key                   ;can be a function that returns the key
-	:models '(llama-3.1-70b-versatile
-		  llama-3.1-8b-instant
-		  llama3-70b-8192
-		  llama3-8b-8192
-		  mixtral-8x7b-32768
-		  gemma-7b-it))))
+    (setq gptel-model   'llama-3.3-70b-versatile
+	  gptel-backend
+	  (gptel-make-openai "Groq"               ;Any name you want
+	    :host "api.groq.com"
+	    :endpoint "/openai/v1/chat/completions"
+	    :stream t
+	    :key #'my-groq-api-key                   ;can be a function that returns the key
+	    :models '(llama-3.3-70b-versatile
+		      mixtral-8x7b-32768
+		      gemma-7b-it))))
   (my-groq-setup))
 
 (use-package package-build
