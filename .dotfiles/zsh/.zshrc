@@ -226,6 +226,10 @@ else
   export GPG_TTY=$(tty)
 fi
 gpg-connect-agent updatestartuptty /bye >/dev/null
+if [[ -f ~/terminalConfigs/.aider.gpg ]]; then
+    source <(gpg --quiet --decrypt ~/terminalConfigs/.aider.gpg 2>/dev/null) 
+fi
+
 
 #bindkey -s '^o' 'tmux-sessionizer^M'
 
