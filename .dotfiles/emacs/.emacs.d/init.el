@@ -2023,6 +2023,9 @@ because compile mode is too slow"
   :config
 (add-to-list 'org-tag-alist '("TOC" . ?T)))
 
+(use-package org-appear
+  :straight t)
+
 (use-package org-roam
   :straight t
   :bind (("C-c n l" . org-roam-buffer-toggle)
@@ -2284,6 +2287,7 @@ map)
 
   (use-package ranger
     ;;:straight t
+    :disabled t
     :straight '(ranger :host github
 		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
 		       :repo "S0mbr3/ranger.el"
