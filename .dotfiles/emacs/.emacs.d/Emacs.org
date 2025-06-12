@@ -2325,6 +2325,12 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
   :config
 (add-to-list 'org-tag-alist '("TOC" . ?T)))
 #+end_src
+** org-appear
+Make invisible parts of Org elements appear visible.
+#+begin_src emacs-lisp
+(use-package org-appear
+  :straight t)
+#+end_src
 * Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
