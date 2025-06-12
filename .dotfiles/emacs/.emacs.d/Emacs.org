@@ -2310,6 +2310,7 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
 (add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 #+end_src
 ** org-toc
+toc-org helps you to have an up-to-date table of contents in org files without exporting (useful primarily for readme files on GitHub).
 #+begin_src emacs-lisp
 (use-package toc-org
   :straight t
