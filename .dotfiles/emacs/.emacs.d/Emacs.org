@@ -2628,6 +2628,7 @@ We are using consult-dash as an ui-front end to parse dash-docs
 
   (use-package ranger
     ;;:straight t
+    :disabled t
     :straight '(ranger :host github
 		       ;;:local-repo "/home/oxhart/builds/ranger.el/"
 		       :repo "S0mbr3/ranger.el"
