@@ -7,12 +7,18 @@
 # https://github.com/nix-community/emacs-overlay/blob/master/overlays/emacs.nix
 # https://github.com/d12frosted/homebrew-emacs-plus/tree/master/patches/emacs-30
 # {prev}:
-final: prev: rec {
+{emacs-src}:
+final: prev:
+
+let
+  inherit (emacs-src) outPath rev;          # flake inputs expose these
+  shortRev = builtins.substring 0 7 rev;
+in rec {
   # configuration shared for all systems
   # To build on specific Emacs version use EG: (prev.emacs31.ovveride {
   # Else it build uppon the emacs-git overlay declared in the flake.nix using Emacs master branch
   emacsGitLejiGeneric = (prev.emacs-git.override {
-  # emacsGitLejiGeneric = (prev.emacs29.override {
+    # emacsGitLejiGeneric = (prev.emacs29.override {
     withSQLite3 = true;
     withWebP = true;
     withImageMagick = true;
