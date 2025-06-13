@@ -9,8 +9,10 @@ emacsLeji = import ./emacs.nix {inherit prev;};
 } */
 {inputs}:
 
-[
-  (import ./emacs.nix)
+let
+  inherit (inputs) emacs-src;
+in [
+  (import ./emacs.nix {inherit emacs-src;})
 ]
 
 /* {inputs}: {
