@@ -28,13 +28,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # To get a pinned version for the emacs overlay
+    # Updating emacs is now:  nix flake lock --update-input emacs-src
+    emacs-src = {
+      #url    = "git+https://git.savannah.gnu.org/git/emacs.git?rev=dd5ae0f3ba56e762ae1265b0cb0fe9f2a28281ec";  # ← good commit
+      url = "github:emacs-mirror/emacs?rev=dd5ae0f3ba56e762ae1265b0cb0fe9f2a28281ec";
+      flake  = false;      # it is *not* a flake
+    };
+
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, nix-rage, sops-nix, rust-overlay}:
+  outputs = inputs@{ self, home-manager, nix-darwin, nixpkgs, mac-app-util, emacs-overlay, nix-rage, sops-nix, rust-overlay, emacs-src}:
     let
       pkg-config = {
         allowUnfree = true;
