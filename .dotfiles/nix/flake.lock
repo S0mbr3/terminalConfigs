@@ -51,6 +51,23 @@
         "type": "github"
       }
     },
+    "emacs-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1746049544,
+        "narHash": "sha256-YwN1AK3mqGhFFdUUdhcZyD7S+rsfJmvHm7svyf1llds=",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "dd5ae0f3ba56e762ae1265b0cb0fe9f2a28281ec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "dd5ae0f3ba56e762ae1265b0cb0fe9f2a28281ec",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -358,6 +375,7 @@
     "root": {
       "inputs": {
         "emacs-overlay": "emacs-overlay",
+        "emacs-src": "emacs-src",
         "home-manager": "home-manager",
         "mac-app-util": "mac-app-util",
         "nix-darwin": "nix-darwin",
