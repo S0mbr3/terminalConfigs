@@ -26,10 +26,12 @@ in rec {
     withMailutils = true;
     withNativeCompilation = false;
   }).overrideAttrs (oldAttrs: {
-      env = (oldAttrs.env or {}) // {
-        NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -O3 -march=native";
-      };
-    });
+    src     = emacs-src;                  # ← pin the tree
+    version = "${oldAttrs.version}-${shortRev}";
+    env = (oldAttrs.env or {}) // {
+      NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -O3 -march=native";
+    };
+  });
   emacsLeji =
     if prev.stdenv.isDarwin
     then
