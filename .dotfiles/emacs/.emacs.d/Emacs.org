@@ -2147,6 +2147,7 @@ because compile mode is too slow"
     "oa" '(org-agenda :which-key "open org-agenda")
     "ot" '(org-todo-list :which-key "open all todo lists")
     "oc" '(org-capture :which-key "open org-capture")
+    "os" '(org-capture-string :which-key "open org-capture-string")
     "oh" '((lambda () (interactive) (find-file (format "%s/org-files/Habits.org" my-org-directory))) :which-key "Open Habits.org")
     "ow" '((lambda () (interactive) (find-file (format "%s/org-files/Metrics.org" my-org-directory))) :which-key "Open Metrics.org")))
 
