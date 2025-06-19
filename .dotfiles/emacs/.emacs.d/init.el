@@ -1829,8 +1829,10 @@ because compile mode is too slow"
 
   (setq org-capture-templates
 	`(("t" "Tasks / Projects")
-	  ("tt" "Task" entry (file+olp ,(expand-file-name "org-files/Tasks.org"  my-org-directory) "Inbox")
+	  ("tc" "Task" entry (file+olp ,(expand-file-name "org-files/Tasks.org"  my-org-directory) "Inbox")
 	   "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+	  ("tt" "Task" entry (file+olp ,(expand-file-name "org-files/Tasks.org"  my-org-directory) "Inbox")
+	   "* TODO %?\n  %U\n  %i" :empty-lines 1)
 
 	  ("s" "Shopping / Projects")
 	  ("ss" "Shop" entry (file+olp ,(expand-file-name "org-files/Shopping.org"  my-org-directory) "Inbox")
