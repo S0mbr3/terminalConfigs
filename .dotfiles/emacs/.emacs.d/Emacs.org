@@ -1965,6 +1965,8 @@ because compile mode is too slow"
   (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
 
+  (setq org-image-actual-width nil) ;; Allowing to resize images in org files
+
   (setq org-latex-compiler "lualatex") ;; Compile pdfwith lualatex instead of pdflatex
   (setq org-preview-latex-default-process 'dvisvgm) ;; using svg instead of dvipng for formula and graphics
   (setq org-preview-latex-process-alist
