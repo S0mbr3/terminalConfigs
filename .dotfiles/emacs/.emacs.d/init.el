@@ -1688,6 +1688,8 @@ because compile mode is too slow"
   (setq org-startup-with-latex-preview t) ;; Preview of latex symbols
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0)) ;; Change latex symbols size
 
+  (setq org-image-actual-width nil) ;; Allowing to resize images in org files
+
   (setq org-latex-compiler "lualatex") ;; Compile pdfwith lualatex instead of pdflatex
   (setq org-preview-latex-default-process 'dvisvgm) ;; using svg instead of dvipng for formula and graphics
   (setq org-preview-latex-process-alist
@@ -1718,6 +1720,21 @@ because compile mode is too slow"
   (require 'org-indent)
   (require 'org-habit)
   (add-to-list 'org-modules 'org-habit)
+
+  ;; Uncheck all checkboxes in a habit entry when it's marked DONE
+  (defun my/org-uncheck-checkboxes-in-habit ()
+  "Uncheck all checkboxes in a habit entry when it's marked DONE."
+  (when (and (string= org-state "DONE")
+             (org-entry-get nil "STYLE")
+             (string= (org-entry-get nil "STYLE") "habit"))
+    (save-excursion
+      (org-back-to-heading t)
+      (let ((end (save-excursion (org-end-of-subtree t t))))
+        (while (re-search-forward "^\\s-*\\([-+*]\\) \\[\\([Xx]\\|[-]\\)\\] " end t)
+          (replace-match (concat (match-string 1) " [ ] ") nil nil))))))
+  
+(add-hook 'org-after-todo-state-change-hook #'my/org-uncheck-checkboxes-in-habit)
+
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
 	  (sequence "TODO(t)" "HABIT(h)" "|" "DONE(d!)")
