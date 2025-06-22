@@ -75,7 +75,7 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 (setq my-org-files
       (mapcar (lambda (file)
                 (format "%s/org-files/%s" my-org-directory file))
-              '("Tasks.org" "todo.org" "Habits.org" "Shopping.org" "Journal.org" "birthdays.org")))
+              '("Tasks.org" "todo.org" "Habits.org" "Shopping.org" "Journal.org" "birthdays.org" "Activities.org")))
 
 (setq ox/enable-ivy nil )
 (setq ox/enable-vertico t)
@@ -2151,7 +2151,7 @@ because compile mode is too slow"
 	   "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
 	  ("v" "Activities")
-	  ("va" "Activities idea" entry (file+olp+datetree ,(expand-file-name "org-files/Journal.org" my-org-directory) )
+	  ("va" "Activities idea" entry (file+olp+datetree ,(expand-file-name "org-files/Activities.org" my-org-directory) )
 	   "* A-PLAN %? :activities:" :clock-in :clock-resume :empty-lines 1)
 
 	  ("m" "Metrics Capture")
