@@ -45,6 +45,7 @@ with pkgs;
   aria2
   mpv
   aider-chat
+  texliveFull
   #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
