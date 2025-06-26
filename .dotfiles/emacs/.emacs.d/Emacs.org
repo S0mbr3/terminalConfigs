@@ -2051,6 +2051,7 @@ because compile mode is too slow"
 	  ("@home" . ?H)
 	  ("@work" . ?W)
 	  ("@learn" . ?L)
+	  ("@math" . ?m)
 	  ("@wsl-configs" . ?w)
 	  ("agenda" . ?a)
 	  ("planning" . ?p)
