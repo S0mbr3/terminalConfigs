@@ -277,12 +277,12 @@
     (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
 
     ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
-    (defun harpoon--file-name ()
-      "File name for harpoon on current project."
-      (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
-			    (safe-persp-name (get-current-persp))
-			  "none")))
-	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+    ;; (defun harpoon--file-name ()
+    ;;   "File name for harpoon on current project."
+    ;;   (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
+    ;; 			    (safe-persp-name (get-current-persp))
+    ;; 			  "none")))
+    ;; 	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
 
     (defun ox/find-first-vterm-in-persp ()
       "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
@@ -456,10 +456,27 @@
       (project-switch-project project)))
 
 ;; Set font
-(if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
-    (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
-  (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
+;; (if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
+;;     (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
+;;   (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
+
+
+(defun my/apply-fonts ()
+  "Apply default and fixed-pitch fonts depending on system."
+  (let ((font-family (if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
+                         my-linux-font
+                       my-windows-font)))
+    ;; Set default face
+    (set-face-attribute 'default nil :family font-family :height my-font-size)
+    ;; Set fixed-pitch face for tables, code blocks, etc.
+    (set-face-attribute 'fixed-pitch nil :family font-family :height 0.8)))
+
+;; Apply once on startup
+(my/apply-fonts)
+
+;; Reapply after any theme change
+(add-hook 'after-load-theme-hook #'my/apply-fonts)
 
 (setq native-comp-async-report-warnings-errors nil) ;; Remove warning of compiled package with Emacs compiled with Native flag
 (setq native-comp-deferred-compilation t) ;; To compile all site-lisp on demand (repos/AUR packages, ELPA, MELPA, whatever)
@@ -1757,6 +1774,8 @@ because compile mode is too slow"
 	  ("@home" . ?H)
 	  ("@work" . ?W)
 	  ("@learn" . ?L)
+	  ("@math" . ?m)
+	  ("@config" . ?c)
 	  ("@wsl-configs" . ?w)
 	  ("agenda" . ?a)
 	  ("planning" . ?p)
@@ -2505,40 +2524,31 @@ map)
   :config
   (setq frog-jump-buffer-use-all-the-icons-ivy t)
   )
+
 (defun ox/custom-frog-face-outrun ()
-  "Change, faces for frog-meny and posframe to adapt frog-menu-buffer with the doom-outrun-electric theme"
-  ;; Custom faces for frog-menu and posframe
-  (custom-set-faces
-   ;; Frog Menu Faces
-   `(frog-menu-border ((t (:background unspecified)))) ;; No border color
-   `(frog-menu-posframe ((t (:background unspecified :foreground "inherit")))) ;; Transparent background
-   `(frog-menu-prompt-face ((t (:foreground unspecified :weight bold :background unspecified)))) ;; Transparent prompt background
-   `(frog-menu-actions-face ((t (:foreground unspecified :background unspecified)))) ;; Transparent actions background
-   `(frog-menu-candidates-face ((t (:background unspecified :foreground unspecified)))) ;; Transparent candidates background
-   `(frog-menu-action-keybinding-face ((t (:foreground unspecified :background unspecified)))) ;; Transparent action keybinding background
-   `(frog-menu-posframe-background-face ((t (:background unspecified)))) ;; Transparent posframe background
+  "Tweak frog-menu visuals to be readable with transparent frames."
+  ;; Settings both bg & fg to 'unspecified gives default colors
+  (let ((bg 'unspecified)  ;; dark semi-transparent friendly color
+        (fg "#f8f8f2")) ;; you can adapt this to match your theme
+    (custom-set-faces
+     `(frog-menu-border ((t (:background ,bg))))
+     `(frog-menu-posframe ((t (:background ,bg :foreground ,fg))))
+     `(frog-menu-prompt-face ((t (:foreground ,fg :weight bold :background ,bg))))
+     `(frog-menu-actions-face ((t (:foreground ,fg :background ,bg))))
+     `(frog-menu-candidates-face ((t (:foreground ,fg :background ,bg))))
+     `(frog-menu-action-keybinding-face ((t (:foreground "#ff79c6" :background ,bg))))
+     `(frog-menu-posframe-background-face ((t (:background ,bg))))
+     `(avy-lead-face ((t (:foreground "#ff79c6" :background ,bg))))
+     `(posframe-background-face ((t (:background ,bg)))))))
 
-   ;; Posframe Faces
-   `(posframe-background-face ((t (:background unspecified)))) ;; Transparent posframe background
-   )
-
-  ;; (custom-set-faces
-  ;;  ;; Frog Menu Faces
-  ;;  `(frog-menu-border ((t (:background "#ffd400" :foreground "#ffd400" :weight bold)))) ;; Brighter border color
-  ;;  `(frog-menu-prompt-face ((t (:foreground "#ff2afc" :weight bold)))) ;; Prompt color
-  ;;  `(frog-menu-actions-face ((t (:foreground "#a7da1e")))) ;; Actions color
-  ;;  `(frog-menu-candidates-face ((t (:background "#0c0a20" :foreground "#f2f3f7")))) ;; Candidates color
-  ;;  `(frog-menu-action-keybinding-face ((t (:foreground "#42c6ff")))) ;; Action keybinding color
-  ;;  `(frog-menu-posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
-
-  ;;  ;; Posframe Faces
-  ;;  `(posframe-background-face ((t (:background "#0c0a20")))) ;; Posframe background color
-  ;;  )
-
-  )
-;; (defun my/frog-menu-hook () (
-;; 			       (setq-local avy-background nil))
-;; 	 (add-hook 'frog-menu-after-init-hook 'my/frog-menu-hook))
+(setq frog-jump-buffer-posframe-parameters
+      '((alpha . (100 . 100))           ; Make posframe less transparent
+	(alpha-background . 60)
+        (background-color ."#6600cc") ; Set a solid background color
+        (foreground-color . "#e2e8f0") ; Set foreground color for contrast
+        (internal-border-width . 2)
+        (border-color . "#4a5568")))
+;;(setq frog-menu-type 'avy-posframe)
 
 (ox/leader-keys
     "w" '(:ignore t :which-key "ace")
