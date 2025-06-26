@@ -328,12 +328,12 @@ Using persp-mode to create different workspaces
     (add-hook 'persp-common-buffer-filter-functions #'my-persp-buffer-filter)
 
     ;; Making harpoon maintaining a seperates set of bookmarks to each perspective
-    (defun harpoon--file-name ()
-      "File name for harpoon on current project."
-      (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
-			    (safe-persp-name (get-current-persp))
-			  "none")))
-	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
+    ;; (defun harpoon--file-name ()
+    ;;   "File name for harpoon on current project."
+    ;;   (let ((persp-name (if (and (boundp 'persp-mode) persp-mode)
+    ;; 			    (safe-persp-name (get-current-persp))
+    ;; 			  "none")))
+    ;; 	(concat harpoon-cache-file persp-name "_" (harpoon--cache-key))))
 
     (defun ox/find-first-vterm-in-persp ()
       "Find the first *vterminal<n>* buffer in the current perspective, in last-used order."
