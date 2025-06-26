@@ -518,10 +518,27 @@ It can also add projects on the fly with the Add project option
 * Font Configuration
 #+begin_src emacs-lisp
 ;; Set font
-(if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
-    (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
-  (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
+;; (if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
+;;     (set-face-attribute 'default nil :family my-linux-font :height my-font-size)
+;;   (set-face-attribute 'default nil :family my-windows-font :height my-font-size))
 ;;(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 140)
+
+
+(defun my/apply-fonts ()
+  "Apply default and fixed-pitch fonts depending on system."
+  (let ((font-family (if (or (eq system-type 'gnu/linux) (eq system-type 'darwin))
+                         my-linux-font
+                       my-windows-font)))
+    ;; Set default face
+    (set-face-attribute 'default nil :family font-family :height my-font-size)
+    ;; Set fixed-pitch face for tables, code blocks, etc.
+    (set-face-attribute 'fixed-pitch nil :family font-family :height 0.8)))
+
+;; Apply once on startup
+(my/apply-fonts)
+
+;; Reapply after any theme change
+(add-hook 'after-load-theme-hook #'my/apply-fonts)
 #+end_src
 * Basic Settings
 #+begin_src emacs-lisp
