@@ -2909,7 +2909,6 @@ We are using consult-dash as an ui-front end to parse dash-docs
         (foreground-color . "#e2e8f0") ; Set foreground color for contrast
         (internal-border-width . 2)
         (border-color . "#4a5568")))
-;;(setq frog-menu-type 'avy-posframe)
 #+end_src
 * Window management
 #+begin_src emacs-lisp
