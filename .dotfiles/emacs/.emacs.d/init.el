@@ -2548,7 +2548,6 @@ map)
         (foreground-color . "#e2e8f0") ; Set foreground color for contrast
         (internal-border-width . 2)
         (border-color . "#4a5568")))
-;;(setq frog-menu-type 'avy-posframe)
 
 (ox/leader-keys
     "w" '(:ignore t :which-key "ace")
