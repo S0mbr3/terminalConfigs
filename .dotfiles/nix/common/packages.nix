@@ -4,6 +4,7 @@ with pkgs;
   # home-manager
   #ranger
   neovim
+  yazi
   tmux
   fzf
   cowsay
