@@ -239,7 +239,12 @@ z $1
 ls
 }
 function bt(){
-  fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+	fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
+    elif [[ "$OSTYPE" == "linux"* ]]; then
+	fzf --preview 'batcat --color=always --style=numbers --line-range=:500 {}'
+    fi
+
 }
 
 
