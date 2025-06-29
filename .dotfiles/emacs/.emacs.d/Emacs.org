@@ -1775,10 +1775,14 @@ because compile mode is too slow"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package lsp-pyright
     :straight t
-    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    :custom
+    (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    (setq lsp-pyright-multi-root nil) ;; disable multi-root
     :hook (python-ts-mode . (lambda ()
                            (require 'lsp-pyright)
-                           (lsp-deferred))))
+                           (lsp-deferred)
+			    ;; enable python pyright flycheck
+			   (flycheck-add-next-checker 'lsp 'python-pyright))))
   (setq lsp-clients-angular-language-server-command
 	'("node"
 	  "/usr/local/lib/node_modules/@angular/language-server"
