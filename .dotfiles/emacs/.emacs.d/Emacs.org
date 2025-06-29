@@ -1459,6 +1459,8 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
 (define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
 (define-key my-evil-leader-map (kbd "l") 'ox/switch-to-last-persp)
+(define-key my-evil-leader-map (kbd "p") 'flycheck-previous-error)  ;; Previous error
+(define-key my-evil-leader-map (kbd "n") 'flycheck-next-error)  ;; Next error
 ;; Split buffer horizontally
 #+end_src
 
