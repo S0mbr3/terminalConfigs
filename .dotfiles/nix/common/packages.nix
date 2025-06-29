@@ -47,6 +47,7 @@ with pkgs;
   mpv
   aider-chat
   texliveFull
+  bat
   #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
