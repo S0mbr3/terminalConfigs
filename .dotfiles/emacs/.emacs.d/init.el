@@ -143,7 +143,8 @@
 
 (setq inhibit-startup-message t ; Don't show the spalsh screen
       ring-bell-function 'ignore
-      visible-bell nil)  ; Stop screen to flash when the bell rings
+      visible-bell nil  ; Stop screen to flash when the bell rings
+      tab-bar-show 1) ;; if there is more than one tab it shows the tab bar
 
 ;; Turn off some uneeded ui elements
 (tool-bar-mode -1)
@@ -601,6 +602,7 @@
 
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
+    "pf" '(project-forget-project :which-key "Forget project")
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
@@ -1113,6 +1115,7 @@ folder, otherwise delete a word"
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-undo-system 'undo-fu)
+  (setq evil-respect-visual-line-mode t)
   :hook (evil-mode . ox/evil-hook)
   :config
   (evil-set-undo-system 'undo-redo)
@@ -1218,6 +1221,26 @@ folder, otherwise delete a word"
 (define-key my-evil-leader-map (kbd "v") 'evil-window-vsplit)  ;; Split buffer vertically
 (define-key my-evil-leader-map (kbd "s") 'evil-window-split)  ;; Split buffer horizontally
 (define-key my-evil-leader-map (kbd "l") 'ox/switch-to-last-persp)
+(define-key my-evil-leader-map (kbd "p") 'flycheck-previous-error)  ;; Previous error
+(define-key my-evil-leader-map (kbd "n") 'flycheck-next-error)  ;; Next error
+
+(defun my/evil-next-visual-line (count)
+  "Move COUNT screen lines down."
+  (interactive "p")
+  (if (> count 1) 
+      (evil-next-line count)
+    (evil-next-visual-line count)))
+
+(defun my/evil-previous-visual-line (count)
+  "Move COUNT screen lines up."
+  (interactive "p")
+  (if (> count 1) 
+      (evil-previous-line count)
+    (evil-previous-visual-line count)))
+
+(define-key evil-normal-state-map (kbd "j") 'my/evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'my/evil-previous-visual-line)
+
 ;; Split buffer horizontally
 
 (use-package projectile
@@ -1508,10 +1531,14 @@ because compile mode is too slow"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package lsp-pyright
     :straight t
-    :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    :custom
+    (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+    (setq lsp-pyright-multi-root nil) ;; disable multi-root
     :hook (python-ts-mode . (lambda ()
                            (require 'lsp-pyright)
-                           (lsp-deferred))))
+                           (lsp-deferred)
+			    ;; enable python pyright flycheck
+			   (flycheck-add-next-checker 'lsp 'python-pyright))))
   (setq lsp-clients-angular-language-server-command
 	'("node"
 	  "/usr/local/lib/node_modules/@angular/language-server"
