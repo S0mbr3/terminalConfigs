@@ -183,7 +183,8 @@ We use the no-littering package to keep folders where we edit files and the Emac
 #+begin_src emacs-lisp
 (setq inhibit-startup-message t ; Don't show the spalsh screen
       ring-bell-function 'ignore
-      visible-bell nil)  ; Stop screen to flash when the bell rings
+      visible-bell nil  ; Stop screen to flash when the bell rings
+      tab-bar-show 1) ;; if there is more than one tab it shows the tab bar
 
 ;; Turn off some uneeded ui elements
 (tool-bar-mode -1)
@@ -192,8 +193,6 @@ We use the no-littering package to keep folders where we edit files and the Emac
 (tooltip-mode -1) ;; Disable tooltips
 (set-fringe-mode 10) ;; give some breathing room
 
-;; if there is more than one tab it shows the tab bar
-( tab-bar-show 1)
 ;;(set-frame-parameter nil 'alpha-background 70) ; For current frame
 ;;(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
 (column-number-mode)
