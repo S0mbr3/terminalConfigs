@@ -669,6 +669,7 @@ It can also add projects on the fly with the Add project option
 
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
+    "pf" '(project-forget-project :which-key "Forget project")
 
     "c" '(:ignore t :which-key "compiling")
     "cc" '(compile :which-key "compile")
