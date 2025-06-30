@@ -1462,6 +1462,24 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 (define-key my-evil-leader-map (kbd "l") 'ox/switch-to-last-persp)
 (define-key my-evil-leader-map (kbd "p") 'flycheck-previous-error)  ;; Previous error
 (define-key my-evil-leader-map (kbd "n") 'flycheck-next-error)  ;; Next error
+
+(defun my/evil-next-visual-line (count)
+  "Move COUNT screen lines down."
+  (interactive "p")
+  (if (> count 1) 
+      (evil-next-line count)
+    (evil-next-visual-line count)))
+
+(defun my/evil-previous-visual-line (count)
+  "Move COUNT screen lines up."
+  (interactive "p")
+  (if (> count 1) 
+      (evil-previous-line count)
+    (evil-previous-visual-line count)))
+
+(define-key evil-normal-state-map (kbd "j") 'my/evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'my/evil-previous-visual-line)
+
 ;; Split buffer horizontally
 #+end_src
 
