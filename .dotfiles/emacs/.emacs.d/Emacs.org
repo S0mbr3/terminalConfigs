@@ -53,7 +53,7 @@ testing to keep [[(setq gc-cons-threshold 200000000][gc-cons-threshold]] at a hi
 (setq my-org-directory "~/org")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
-    (progn (setq my-opacity 10)
+    (progn (setq my-opacity 30)
 	   (setq my-switch-to-persp-key "s")
 	   (setq my-switch-to-next-persp-vterm-key "s-]")
 	   (setq my-switch-to-prev-persp-vterm-key "s-["))
