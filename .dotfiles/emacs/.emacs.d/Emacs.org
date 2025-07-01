@@ -2395,6 +2395,10 @@ toc-org helps you to have an up-to-date table of contents in org files without e
 (add-to-list 'org-tag-alist '("TOC" . ?T)))
 #+end_src
 ** org-appear
+#+begin_src emacs-lisp
+(use-package org-appear
+  :straight t)
+#+end_src
 ** org-download
 This extension facilitates moving images from point A to point B.
 [[https://github.com/abo-abo/org-download][org-download]]
@@ -2411,10 +2415,6 @@ This extension facilitates moving images from point A to point B.
   (setq org-download-screenshot-method "screencapture -i %s"))
 #+end_src
 Make invisible parts of Org elements appear visible.
-#+begin_src emacs-lisp
-(use-package org-appear
-  :straight t)
-#+end_src
 * Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
