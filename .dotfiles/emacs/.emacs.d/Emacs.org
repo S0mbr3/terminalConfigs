@@ -2374,22 +2374,25 @@ Actually using it to display zettels from org-roam to org-fc flashcards without 
   :config
   (setq org-transclusion-add-all-on-activate t
   org-transclusion-exclude-elements '(property-drawer keyword)))
+
 (defun my-disable-transclusion-mode ()
-  "Disable org-transclusion-mode."
-  (if (eq org-transclusion-mode t)
-      (org-transclusion-mode -1)))
+  (when org-transclusion-mode
+    (org-transclusion-mode -1)))
 
 (defun my-enable-transclusion-mode ()
-  "Enable org-transclusion-mode."
-  (if (eq org-transclusion-mode nil)
-      (org-transclusion-mode 1)))
+  (unless org-transclusion-mode
+    (org-transclusion-mode 1)))
 
-(advice-add 'org-fc-review-rate-easy :before #'my-disable-transclusion-mode)
-(advice-add 'org-fc-review-rate-easy :after #'my-enable-transclusion-mode)
-(advice-add 'org-fc-review-rate-good :before #'my-disable-transclusion-mode)
-(advice-add 'org-fc-review-rate-good :after #'my-enable-transclusion-mode)
-(advice-add 'org-fc-review-rate-hard :before #'my-disable-transclusion-mode)
-(advice-add 'org-fc-review-rate-hard :after #'my-enable-transclusion-mode)
+(defun my/org-fc-safe-wrapper (orig-fn &rest args)
+  (my-disable-transclusion-mode)
+  (unwind-protect
+      (apply orig-fn args)
+    (my-enable-transclusion-mode)))
+
+(when (featurep 'org-transclusion)
+  (advice-add 'org-fc-review-rate-easy :around #'my/org-fc-safe-wrapper)
+  (advice-add 'org-fc-review-rate-good :around #'my/org-fc-safe-wrapper)
+  (advice-add 'org-fc-review-rate-hard :around #'my/org-fc-safe-wrapper))
 
 (add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 #+end_src
