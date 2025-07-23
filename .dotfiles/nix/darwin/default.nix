@@ -61,6 +61,7 @@ in
       "koekeishiya/formulae"
       #To install JankyBoders
       "FelixKratz/formulae"
+      "mhaeuser/mhaeuser"
     ];
     brews = [
       "borders"
@@ -76,8 +77,11 @@ in
       "nikitabobko/tap/aerospace"
       "tor-browser"
       "jdownloader"
+      "ungoogled-chromium"
+      "battery-toolkit"
     ];
   };
+
 
   # networking.firewall = {
   #   enable = true;
