@@ -80,6 +80,9 @@ in
       "ungoogled-chromium"
       "battery-toolkit"
     ];
+    caskArgs = {
+      no_quarantine = true;
+    };
   };
 
 
