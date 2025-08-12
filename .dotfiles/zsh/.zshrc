@@ -161,7 +161,7 @@ ZSH_THEME=powerlevel10k/powerlevel10k
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
-plugins=(git z zsh-autosuggestions aliases web-search zsh-syntax-highlighting zsh-history-substring-search)
+plugins=(git z zsh-autosuggestions aliases web-search zsh-syntax-highlighting zsh-history-substring-search direnv direnv)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
 source $ZSH/oh-my-zsh.sh
@@ -198,6 +198,8 @@ export EDITOR='emacsclient -n'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+ZSH_WEB_SEARCH_ENGINES=(dev "https://devdocs.io/#q=")
+alias dev="web_search dev $@"
 
 #alias home-manager="nix run home-manager -- $@"
 alias hms="nix run home-manager -- $@ switch --flake"
