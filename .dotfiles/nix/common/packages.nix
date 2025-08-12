@@ -48,6 +48,8 @@ with pkgs;
   aider-chat
   texliveFull
   bat
+  typescript
+  nodemon
   #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
