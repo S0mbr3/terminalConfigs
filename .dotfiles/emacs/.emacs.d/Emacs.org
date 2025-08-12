@@ -1418,7 +1418,12 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
   (global-evil-mc-mode  1)
 
   (use-package evil-surround
-    :straight t)
+  :straight '(evil-surround :host github
+                   :repo "Roger-Roger-debug/evil-surround"
+		   :branch "change-newline")
+    ;;:straight t
+    :config
+    (global-evil-surround-mode 1))
 
 
   (defun evil--mc-make-cursor-at-col (_startcol endcol orig-line)
