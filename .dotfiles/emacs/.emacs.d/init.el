@@ -33,7 +33,7 @@
 (setq my-org-directory "~/org")
 (setq my-font-size 200)
 (if (eq system-type 'darwin)
-    (progn (setq my-opacity 10)
+    (progn (setq my-opacity 30)
 	   (setq my-switch-to-persp-key "s")
 	   (setq my-switch-to-next-persp-vterm-key "s-]")
 	   (setq my-switch-to-prev-persp-vterm-key "s-["))
@@ -921,6 +921,8 @@ folder, otherwise delete a word"
   (setf (alist-get 'prettier-json apheleia-formatters)
         '("prettier" "--stdin-filepath" filepath))
   (add-to-list 'apheleia-mode-alist '(emacs-lisp-mode . lisp-indent))
+  (add-to-list 'apheleia-mode-alist '(typescript-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(javascript-ts-mode . prettier))
   (apheleia-global-mode +1))
 
 (use-package lsp-eslint
@@ -1135,9 +1137,12 @@ folder, otherwise delete a word"
     (prin1 evil-emacs-state-modes))
   (ox/leader-keys
     "e" '(:ignore t :which-key "Evil")
-    "eu" '(evil-collection-unimpaired-move-text-up :which-key "Evil")
+    "eu" '(evil-collection-unimpaired-move-text-up :which-key "evil move-text-up")
     "ep" '(print-evil-state :which-key "print evil state")
-    "ed" '(evil-collection-unimpaired-move-text-down :which-key "Evil"))
+    "ed" '(evil-collection-unimpaired-move-text-down :which-key "evil move-text-down")
+
+    "ew" '(evil-avy-goto-word-1 :which-key "evil-avy-goto-wrord-1")
+    "el" '(evil-avy-goto-char-in-line :which-key "evil-avy-goto-char-in-line"))
   (defhydra hydra-move-text (:timeout 4)
     "scale text"
     ("j" evil-collection-unimpaired-move-text-up "Move up")
@@ -1174,7 +1179,12 @@ folder, otherwise delete a word"
   (global-evil-mc-mode  1)
 
   (use-package evil-surround
-    :straight t)
+  :straight '(evil-surround :host github
+                   :repo "Roger-Roger-debug/evil-surround"
+		   :branch "change-newline")
+    ;;:straight t
+    :config
+    (global-evil-surround-mode 1))
 
 
   (defun evil--mc-make-cursor-at-col (_startcol endcol orig-line)
@@ -1223,6 +1233,10 @@ folder, otherwise delete a word"
 (define-key my-evil-leader-map (kbd "l") 'ox/switch-to-last-persp)
 (define-key my-evil-leader-map (kbd "p") 'flycheck-previous-error)  ;; Previous error
 (define-key my-evil-leader-map (kbd "n") 'flycheck-next-error)  ;; Next error
+
+(define-key my-evil-leader-map (kbd "1") 'evil-avy-goto-char)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "2") 'evil-avy-goto-char-2)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "3") 'evil-avy-goto-word-1)  ;; Easymotions
 
 (defun my/evil-next-visual-line (count)
   "Move COUNT screen lines down."
@@ -1934,6 +1948,7 @@ because compile mode is too slow"
     "oa" '(org-agenda :which-key "open org-agenda")
     "ot" '(org-todo-list :which-key "open all todo lists")
     "oc" '(org-capture :which-key "open org-capture")
+    "oi" '(org-id-get-create :which-key "crate an ID for the current entry")
     "os" '(org-capture-string :which-key "open org-capture-string")
     "oh" '((lambda () (interactive) (find-file (format "%s/org-files/Habits.org" my-org-directory))) :which-key "Open Habits.org")
     "ow" '((lambda () (interactive) (find-file (format "%s/org-files/Metrics.org" my-org-directory))) :which-key "Open Metrics.org")))
@@ -2072,8 +2087,27 @@ because compile mode is too slow"
   :after org
   :config
   (setq org-transclusion-add-all-on-activate t
-  org-transclusion-exclude-elements '(property-drawer keyword))
-  )
+  org-transclusion-exclude-elements '(property-drawer keyword)))
+
+(defun my-disable-transclusion-mode ()
+  (when org-transclusion-mode
+    (org-transclusion-mode -1)))
+
+(defun my-enable-transclusion-mode ()
+  (unless org-transclusion-mode
+    (org-transclusion-mode 1)))
+
+(defun my/org-fc-safe-wrapper (orig-fn &rest args)
+  (my-disable-transclusion-mode)
+  (unwind-protect
+      (apply orig-fn args)
+    (my-enable-transclusion-mode)))
+
+(when (featurep 'org-transclusion)
+  (advice-add 'org-fc-review-rate-easy :around #'my/org-fc-safe-wrapper)
+  (advice-add 'org-fc-review-rate-good :around #'my/org-fc-safe-wrapper)
+  (advice-add 'org-fc-review-rate-hard :around #'my/org-fc-safe-wrapper))
+
 (add-hook 'org-mode-hook  #'(lambda() (org-transclusion-mode)))
 
 (use-package toc-org
@@ -2092,6 +2126,17 @@ because compile mode is too slow"
 
 (use-package org-appear
   :straight t)
+
+(use-package org-download
+  :straight t
+  :after org
+  :config
+  (require 'org-download)
+  ;; Drag and drop to Dired
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq org-download-method 'directory)
+  (setq-default org-download-image-dir "./img")
+  (setq org-download-screenshot-method "screencapture -i %s"))
 
 (use-package org-roam
   :straight t
