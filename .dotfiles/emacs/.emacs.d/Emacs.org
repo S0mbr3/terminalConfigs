@@ -1123,6 +1123,8 @@ To help keeping in the 80 character long for elisp we wrap the code using auto-f
   (setf (alist-get 'prettier-json apheleia-formatters)
         '("prettier" "--stdin-filepath" filepath))
   (add-to-list 'apheleia-mode-alist '(emacs-lisp-mode . lisp-indent))
+  (add-to-list 'apheleia-mode-alist '(typescript-ts-mode . prettier))
+  (add-to-list 'apheleia-mode-alist '(javascript-ts-mode . prettier))
   (apheleia-global-mode +1))
 #+end_src
 * Linters
