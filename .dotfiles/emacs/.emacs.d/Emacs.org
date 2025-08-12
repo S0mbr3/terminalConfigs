@@ -1376,9 +1376,12 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
     (prin1 evil-emacs-state-modes))
   (ox/leader-keys
     "e" '(:ignore t :which-key "Evil")
-    "eu" '(evil-collection-unimpaired-move-text-up :which-key "Evil")
+    "eu" '(evil-collection-unimpaired-move-text-up :which-key "evil move-text-up")
     "ep" '(print-evil-state :which-key "print evil state")
-    "ed" '(evil-collection-unimpaired-move-text-down :which-key "Evil"))
+    "ed" '(evil-collection-unimpaired-move-text-down :which-key "evil move-text-down")
+
+    "ew" '(evil-avy-goto-word-1 :which-key "evil-avy-goto-wrord-1")
+    "el" '(evil-avy-goto-char-in-line :which-key "evil-avy-goto-char-in-line"))
   (defhydra hydra-move-text (:timeout 4)
     "scale text"
     ("j" evil-collection-unimpaired-move-text-up "Move up")
