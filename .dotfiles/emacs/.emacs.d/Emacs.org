@@ -1473,6 +1473,10 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 (define-key my-evil-leader-map (kbd "p") 'flycheck-previous-error)  ;; Previous error
 (define-key my-evil-leader-map (kbd "n") 'flycheck-next-error)  ;; Next error
 
+(define-key my-evil-leader-map (kbd "1") 'evil-avy-goto-char)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "2") 'evil-avy-goto-char-2)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "3") 'evil-avy-goto-word-1)  ;; Easymotions
+
 (defun my/evil-next-visual-line (count)
   "Move COUNT screen lines down."
   (interactive "p")
