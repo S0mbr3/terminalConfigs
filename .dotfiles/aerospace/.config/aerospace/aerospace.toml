@@ -22,7 +22,7 @@ on-focus-changed = ["exec-and-forget ./update-borders.sh"]
 exec-on-workspace-change = ["/bin/bash", "-lc", "./update-borders.sh"]
 
 # Start AeroSpace at login
-start-at-login = false
+start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
