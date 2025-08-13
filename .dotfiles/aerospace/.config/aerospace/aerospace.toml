@@ -10,16 +10,15 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  #'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
-  "exec-and-forget borders active_color=0xffd126f1 inactive_color=0xff494d64 width=5.0",
-  "exec-and-forget ./update-borders.sh"
+  "exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=0.0",
+  "exec-and-forget ~/.config/aerospace/update-borders.sh"
 ]
 
 # Recompute on any focus/workspace change
-on-focus-changed = ["exec-and-forget ./update-borders.sh"]
+on-focus-changed = ["exec-and-forget ~/.config/aerospace/update-borders.sh"]
 
 # Also recompute when the focused workspace changes
-exec-on-workspace-change = ["/bin/bash", "-lc", "./update-borders.sh"]
+exec-on-workspace-change = ["/bin/bash", "-lc", "~/.config/aerospace/update-borders.sh"]
 
 # Start AeroSpace at login
 start-at-login = true
