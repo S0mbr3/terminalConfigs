@@ -146,7 +146,7 @@ in
       NSGlobalDomain.AppleInterfaceStyle = "Dark";
 
       # ** Menu Bar
-      NSGlobalDomain._HIHideMenuBar = false;
+      NSGlobalDomain._HIHideMenuBar = true;
 
       # ** Dock, Mission Control
       dock = {
