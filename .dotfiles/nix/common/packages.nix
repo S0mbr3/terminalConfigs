@@ -50,6 +50,7 @@ with pkgs;
   bat
   typescript
   nodemon
+  nixd #nix lsp server
   #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
