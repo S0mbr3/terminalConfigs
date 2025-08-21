@@ -21,7 +21,7 @@ unbind F
 set tabsort mru
 set smoothscroll true
 unbind ;o
-bind ;o tabopen https://chatgpt.com/?model=o4-mini-high&q=
+bind ;o tabopen https://chatgpt.com/?model=gpt-5-auto
 
 set searchurls.g https://www.google.com/search?q=
 set searchurls.s https://www.startpage.com/sp/search?q=
@@ -46,7 +46,7 @@ set searchurls.pv https://pvpoke.com/rankings/all/%s1/overall/%s2/
 set searchurls.lsp https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#
 set searchurls.c https://devdocs.io/#q=
 " set searchurls.cg https://chat.openai.com/?model=gpt-4o&q=
-set searchurls.cg https://chatgpt.com/?model=gpt-4-5&q=
+set searchurls.cg https://chatgpt.com/?model=gpt-5-auto&q=
 set searchurls.cgc https://chatgpt.com/?model=gpt-4o-canmore&q=
 set searchurls.co https://chatgpt.com/?model=o4-mini-high&q=
 
