@@ -1522,6 +1522,7 @@ because compile mode is too slow"
    (typescript-ts-mode . lsp-deferred)
    (css-ts-mode . lsp-deferred)
    (html-mode . lsp-deferred)
+   (nix-ts-mode . lsp-deferred)
    ;; (rust-ts-mode . lsp-deferred)
    (js-ts-mode . lsp-deferred))
   :init
