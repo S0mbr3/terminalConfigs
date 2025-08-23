@@ -175,6 +175,12 @@
 	 ;; Remove decorations dynamically on macOS using emacs-plus patch
          (set-frame-parameter nil 'undecorated-round t)
 	 (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
+	 ;; remove decorations to every new frame
+	 (add-hook 'after-make-frame-functions
+		   #'(lambda (frame)
+		       (with-selected-frame frame
+			 (set-frame-parameter frame 'undecorated-round t)
+			 (add-to-list 'default-frame-alist '(drag-internal-border . 1))))) ;;Help to drag window when no title 
 	 (add-to-list 'default-frame-alist '(internal-border-width . 9)))) ;; helpful to see full letters at bottom
       ((and (not (string-match-p "Microsoft" (shell-command-to-string "uname -a")))
 	 (not (string-match-p "Darwin" (shell-command-to-string "uname -a"))))
@@ -523,7 +529,7 @@
 (set-default-coding-systems 'utf-8)
 
 ;; Start automatically the daemon
-(server-start)
+;;(server-start)
 ;; Mode to log commands use clm/open-command-log-buffer to see them
 (use-package command-log-mode
 :straight t
@@ -2315,7 +2321,7 @@ map)
   ;;				      list list_comprehension
   ;;				      dictionary dictionary_comprehension
   ;;				      parenthesized_expression subscript)))
-  :hook ((python-base-mode yaml-mode c-mode makefile-gmake-mode) . indent-bars-mode))
+  :hook ((python-base-mode yaml-mode c-ts-mode makefile-gmake-mode) . indent-bars-mode))
 
 (use-package aggressive-indent
   :straight nil
