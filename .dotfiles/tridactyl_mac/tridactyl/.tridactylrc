@@ -24,6 +24,8 @@ unbind ;o
 bind ;o tabopen https://chatgpt.com/?model=gpt-5
 
 set searchurls.g https://www.google.com/search?q=
+set searchurls.w https:/fr.wikipedia.org/wiki/Spécial:Recherche/
+set searchurls.ww https://fr.wiktionary.org/wiki/Spécial:Recherche/
 set searchurls.s https://www.startpage.com/sp/search?q=
 set searchurls.qw https://www.qwant.com/?q=
 set searchurls.d https://duckduckgo.com/?q=
