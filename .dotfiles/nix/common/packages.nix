@@ -1,7 +1,7 @@
 { pkgs }:
 with pkgs;
 [
-  # home-manager
+  home-manager
   #ranger
   neovim
   yazi
