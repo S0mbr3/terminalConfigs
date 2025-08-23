@@ -203,6 +203,7 @@ alias dev="web_search dev $@"
 
 #alias home-manager="nix run home-manager -- $@"
 alias hms="nix run home-manager -- $@ switch --flake"
+alias e="emacsclient -r -n"
 alias ls='lsd --hyperlink=auto'
 alias l='ls -l --hyperlink=auto'
 alias la='ls -a --hyperlink=auto'
