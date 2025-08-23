@@ -215,6 +215,12 @@ We use the no-littering package to keep folders where we edit files and the Emac
 	 ;; Remove decorations dynamically on macOS using emacs-plus patch
          (set-frame-parameter nil 'undecorated-round t)
 	 (add-to-list 'default-frame-alist '(drag-internal-border . 1)) ;;Help to drag window when no title bar
+	 ;; remove decorations to every new frame
+	 (add-hook 'after-make-frame-functions
+		   #'(lambda (frame)
+		       (with-selected-frame frame
+			 (set-frame-parameter frame 'undecorated-round t)
+			 (add-to-list 'default-frame-alist '(drag-internal-border . 1))))) ;;Help to drag window when no title 
 	 (add-to-list 'default-frame-alist '(internal-border-width . 9)))) ;; helpful to see full letters at bottom
       ((and (not (string-match-p "Microsoft" (shell-command-to-string "uname -a")))
 	 (not (string-match-p "Darwin" (shell-command-to-string "uname -a"))))
