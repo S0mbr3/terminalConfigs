@@ -21,7 +21,7 @@ unbind F
 set tabsort mru
 set smoothscroll true
 unbind ;o
-bind ;o tabopen https://chatgpt.com/?model=gpt-5-auto
+bind ;o tabopen https://chatgpt.com/?model=gpt-5
 
 set searchurls.g https://www.google.com/search?q=
 set searchurls.s https://www.startpage.com/sp/search?q=
