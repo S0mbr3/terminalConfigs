@@ -593,7 +593,7 @@ It can also add projects on the fly with the Add project option
 (set-default-coding-systems 'utf-8)
 
 ;; Start automatically the daemon
-(server-start)
+;;(server-start)
 ;; Mode to log commands use clm/open-command-log-buffer to see them
 (use-package command-log-mode
 :straight t
