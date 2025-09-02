@@ -165,6 +165,7 @@
 		eshell-mode-hook
 		vterm-mode-hook
 		treemacs-mode-hook
+		reader-mode-hook
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -729,11 +730,11 @@ folder, otherwise delete a word"
 	    (derived-mode-p 'makefile-mode))
 	(progn
 	  (setq completion-at-point-functions
-      (list (cape-capf-super #'codeium-completion-at-point #'yasnippet-capf #'cape-dabbrev)))
+      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
-                     (cape-capf-super #'codeium-completion-at-point  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+                     (cape-capf-super #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
         (add-to-list 'completion-at-point-functions #'cape-file))))
 ;;   ;; Disable lsp-completion-mode from being automatically enabled
 ;; (with-eval-after-load 'lsp-mode
@@ -1109,6 +1110,7 @@ folder, otherwise delete a word"
 		  sauron-mode
 		  vterm-mode
 		  term-mode
+		  reader-mode
 		  ))
     (add-to-list 'evil-emacs-state-modes mode)))
 ;;(evil-set-initial-state mode 'emacs)))
@@ -1770,6 +1772,8 @@ because compile mode is too slow"
 (setq org-format-latex-header
       (concat org-format-latex-header "\n\\usepackage{tikz}")) ;; adding tikz package to latex header
 
+ ;; Open PDF files links in org-mode inside emacs instead of an external tool
+(push '("\\.pdf\\'" . emacs) org-file-apps)
   (setq org-return-follows-link t) ;; Allow to follow links using RET key
   (setq org-link-frame-setup
         '((vm . vm-visit-folder-other-frame)
@@ -2306,7 +2310,7 @@ map)
   :hook ((prog-mode . combobulate-mode))
   ;; Amend this to the directory where you keep Combobulate's source
   ;; code.
-  :load-path ("~/builds/combobulate/"))
+  :load-path ("~/git_builds/combobulate/"))
 
 (use-package indent-bars
   :straight (indent-bars :type git :host github :repo "jdtsmith/indent-bars")
@@ -2651,6 +2655,7 @@ map)
   :bind ("C-c q" . chatgpt-query))
 
 (use-package codeium
+  :disabled
   :straight '(codeium :host github :repo "Exafunction/codeium.el")
   :config
 (dolist (element '(completion-at-point corfu-expand corfu-insert))
@@ -2741,6 +2746,21 @@ map)
   :straight t
   :init
   (global-sops-mode 1))
+
+  (use-package reader
+    :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
+  	      :files ("*.el" "render-core.dylib")
+  	      :pre-build ("make" "all")))
+
+;;       Manual install of emacs-reader
+;; (add-to-list 'load-path "/Users/nebj/git_builds/emacs-reader")
+;; (autoload 'reader--saveplace-to-alist "reader-saveplace")
+;; (require 'reader)
+;; (dolist (rx '("\\.pdf\\'" "\\.epub\\'" "\\.mobi\\'" "\\.fb2\\'"
+;;               "\\.xps\\'" "\\.cbz\\'"
+;;               "\\.odt\\'" "\\.ods\\'" "\\.odp\\'" "\\.odg\\'"
+;;               "\\.docx\\'" "\\.pptx\\'" "\\.xlsx\\'"))
+;;   (add-to-list 'auto-mode-alist (cons rx 'reader-mode)))
 
 ;; Make gc pauses faster by decreasubg tge threshold.
 ;;(setq gc-cons-threshold (* 2 1000 000))
