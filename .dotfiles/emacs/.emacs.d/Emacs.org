@@ -205,6 +205,7 @@ We use the no-littering package to keep folders where we edit files and the Emac
 		eshell-mode-hook
 		vterm-mode-hook
 		treemacs-mode-hook
+		reader-mode-hook
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
