@@ -57,5 +57,6 @@ with pkgs;
 
   # tree-sitter-grammars.tree-sitter-php
   go
+  codex
   #mupdf
 ]
