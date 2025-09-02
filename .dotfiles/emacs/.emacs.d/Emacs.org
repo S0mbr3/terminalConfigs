@@ -923,11 +923,11 @@ folder, otherwise delete a word"
 	    (derived-mode-p 'makefile-mode))
 	(progn
 	  (setq completion-at-point-functions
-      (list (cape-capf-super #'codeium-completion-at-point #'yasnippet-capf #'cape-dabbrev)))
+      (list (cape-capf-super #'yasnippet-capf #'cape-dabbrev)))
 	  (add-to-list 'completion-at-point-functions #'cape-file))
       (progn
 	(add-to-list 'completion-at-point-functions
-                     (cape-capf-super #'codeium-completion-at-point  #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
+                     (cape-capf-super #'yasnippet-capf #'lsp-completion-at-point #'cape-dabbrev))
         (add-to-list 'completion-at-point-functions #'cape-file))))
 ;;   ;; Disable lsp-completion-mode from being automatically enabled
 ;; (with-eval-after-load 'lsp-mode
@@ -3032,6 +3032,7 @@ We are using consult-dash as an ui-front end to parse dash-docs
 We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* keep showing codeium completions while accepting completions.
 #+begin_src emacs-lisp
 (use-package codeium
+  :disabled
   :straight '(codeium :host github :repo "Exafunction/codeium.el")
   :config
 (dolist (element '(completion-at-point corfu-expand corfu-insert))
