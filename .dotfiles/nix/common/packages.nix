@@ -50,10 +50,12 @@ with pkgs;
   bat
   typescript
   nodemon
-  nixd #nix lsp server
-  nixfmt-rfc-style #nix formatter
+  nixd # nix lsp server
+  nixfmt-rfc-style # nix formatter
   #direnv
   # emacsPackages.treesit-grammars.with-all-grammars
 
   # tree-sitter-grammars.tree-sitter-php
+  go
+  #mupdf
 ]
