@@ -40,10 +40,10 @@ rec {
       emacsGitLejiGeneric.overrideAttrs (old: {
         patches = (old.patches or [ ]) ++ [
           # Fix OS window role so that yabai can pick up Emacs
-          (prev.fetchpatch {
-            url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
-            sha256 = "+z/KfsBm1lvZTZNiMbxzXQGRTjkCFO4QPlEK35upjsE=";
-          })
+          # (prev.fetchpatch {
+          #   url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
+          #   sha256 = "+z/KfsBm1lvZTZNiMbxzXQGRTjkCFO4QPlEK35upjsE=";
+          # })
           # Add setting to enable rounded window with no decoration (still
           # have to alter default-frame-alist)
           (prev.fetchpatch {
@@ -61,7 +61,8 @@ rec {
           (prev.fetchpatch {
             url = "https://raw.githubusercontent.com/bbenchen/homebrew-emacs-plus/master/patches/emacs-31/alpha-background.patch";
             # sha256 = "10d62i3kr4ld5idiklzh3fv0rfc31pf8p0f9dbkavj30vzpzqz9v";
-            sha256 = "aozFcD8Vo3/4/VfZdqPPCWdsBvBQicPPYzoozGxKVOk=";
+            #sha256 = "aozFcD8Vo3/4/VfZdqPPCWdsBvBQicPPYzoozGxKVOk=";
+            sha256 = "qfZhWue2RgwEbiz64nKL0Nq5/loMGhg5oDK+gCNyHOg=";
           })
 
           # Modified patch to enable alpha-background on Emacs 31
