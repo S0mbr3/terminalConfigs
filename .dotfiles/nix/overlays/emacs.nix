@@ -32,7 +32,7 @@ rec {
         src = emacs-src; # ← pin the tree
         version = "${oldAttrs.version}-${shortRev}";
         env = (oldAttrs.env or { }) // {
-          NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -O3 -march=native";
+          NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -O2 -march=native";
         };
       });
   emacsLeji =
