@@ -2638,7 +2638,7 @@ so use-package can load it. By using straight it does not work. Waiting for this
   :hook ((prog-mode . combobulate-mode))
   ;; Amend this to the directory where you keep Combobulate's source
   ;; code.
-  :load-path ("~/builds/combobulate/"))
+  :load-path ("~/git_builds/combobulate/"))
 #+end_src
 * Indent
 #+begin_src emacs-lisp
