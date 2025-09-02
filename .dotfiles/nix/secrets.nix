@@ -1,33 +1,36 @@
-{ config ? {}, lib, pkg-config ? {}, ... }:
-let
-    secrets = builtins.importAge [ ./secret-key ] ./secret.nix.age {};
-in
+{
+  lib,
+  ...
+}:
 {
   # Declare the option first
-  options = {
-    rage-username = lib.mkOption {
+  options.rage = {
+    username = lib.mkOption {
       type = lib.types.str;
       description = "Username encrypted with age";
       default = "tmp";
     };
-  };
-  options = {
-    rage-hostName = lib.mkOption {
+    hostName = lib.mkOption {
       type = lib.types.str;
       description = "hostName encrypted with age";
       default = "tmpHostName";
     };
-  };
-  options = {
-    rage-syncthingUser = lib.mkOption {
+    syncthingUser = lib.mkOption {
       type = lib.types.str;
       description = "Syncthing user encrypted with age";
       default = "tmpSyncthingUser";
     };
   };
-  config = {
-    rage-username = secrets.rage-username;
-    rage-hostName = secrets.rage-hostName;
-    rage-syncthingUser = secrets.rage-syncthingUser;
+  config =
+    let
+      keyFile = ./secret-key;
+      secrets = builtins.importAge [ keyFile ] ./secret.nix.age { cache = false; };
+    in
+    {
+      rage = {
+        username = secrets.rage-username;
+        hostName = secrets.rage-hostName;
+        syncthingUser = secrets.rage-syncthingUser;
+      };
     };
 }
