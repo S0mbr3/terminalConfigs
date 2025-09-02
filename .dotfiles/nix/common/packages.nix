@@ -58,5 +58,6 @@ with pkgs;
   # tree-sitter-grammars.tree-sitter-php
   go
   codex
+  poppler-utils #getting pdftotext
   #mupdf
 ]
