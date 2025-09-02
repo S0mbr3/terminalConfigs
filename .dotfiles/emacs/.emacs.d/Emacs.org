@@ -206,6 +206,7 @@ We use the no-littering package to keep folders where we edit files and the Emac
 		vterm-mode-hook
 		treemacs-mode-hook
 		reader-mode-hook
+		doc-view-mode-hook
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -3137,6 +3138,7 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
 
  #+begin_src emacs-lisp
   (use-package reader
+    :disabled t
     :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
   	      :files ("*.el" "render-core.dylib")
   	      :pre-build ("make" "all")))
