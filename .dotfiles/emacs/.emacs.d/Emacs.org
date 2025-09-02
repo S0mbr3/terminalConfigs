@@ -3127,6 +3127,26 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
   :init
   (global-sops-mode 1))
 #+end_src
+* emacs-reader
+ An all-in-one document reader for GNU Emacs, supporting all [[https://codeberg.org/divyaranjan/emacs-reader/src/branch/master/%2A%20Supported%20Formats][major document formats]]. This package intends to take from =doc-view=, =nov.el=, and =pdf-tools= and make them better. And as such, it is effectively a *drop-in replacement* for them
+
+ #+begin_src emacs-lisp
+  (use-package reader
+    :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
+  	      :files ("*.el" "render-core.dylib")
+  	      :pre-build ("make" "all")))
+
+;;       Manual install of emacs-reader
+;; (add-to-list 'load-path "/Users/nebj/git_builds/emacs-reader")
+;; (autoload 'reader--saveplace-to-alist "reader-saveplace")
+;; (require 'reader)
+;; (dolist (rx '("\\.pdf\\'" "\\.epub\\'" "\\.mobi\\'" "\\.fb2\\'"
+;;               "\\.xps\\'" "\\.cbz\\'"
+;;               "\\.odt\\'" "\\.ods\\'" "\\.odp\\'" "\\.odg\\'"
+;;               "\\.docx\\'" "\\.pptx\\'" "\\.xlsx\\'"))
+;;   (add-to-list 'auto-mode-alist (cons rx 'reader-mode)))
+ #+end_src
+
 * Runtime Performance
 #+begin_src emacs-lisp
 ;; Make gc pauses faster by decreasubg tge threshold.
