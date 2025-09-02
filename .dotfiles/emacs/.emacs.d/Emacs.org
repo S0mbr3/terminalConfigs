@@ -2049,6 +2049,8 @@ because compile mode is too slow"
 (setq org-format-latex-header
       (concat org-format-latex-header "\n\\usepackage{tikz}")) ;; adding tikz package to latex header
 
+ ;; Open PDF files links in org-mode inside emacs instead of an external tool
+(push '("\\.pdf\\'" . emacs) org-file-apps)
   (setq org-return-follows-link t) ;; Allow to follow links using RET key
   (setq org-link-frame-setup
         '((vm . vm-visit-folder-other-frame)
