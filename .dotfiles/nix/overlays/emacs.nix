@@ -26,7 +26,7 @@ rec {
       withImageMagick = true;
       withTreeSitter = true;
       withMailutils = true;
-      withNativeCompilation = false;
+      withNativeCompilation = true;
     }).overrideAttrs
       (oldAttrs: {
         src = emacs-src; # ← pin the tree
