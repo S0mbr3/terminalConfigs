@@ -222,6 +222,8 @@ alias tt='tmux-attacher'
 alias lg='lazygit'
 export PATH="$HOME/scripts:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOPATH/bin"
 
 # Set GPG_TTY to the correct tty
 if [ -n "$TMUX" ]; then
