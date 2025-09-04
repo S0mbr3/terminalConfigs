@@ -1487,6 +1487,7 @@ Adding [[(define-key evil-motion-state-map (kbd "\\"][\]] as a secondary leader 
 (define-key my-evil-leader-map (kbd "1") 'evil-avy-goto-char)  ;; Easymotions
 (define-key my-evil-leader-map (kbd "2") 'evil-avy-goto-char-2)  ;; Easymotions
 (define-key my-evil-leader-map (kbd "3") 'evil-avy-goto-word-1)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "x") (lambda () (interactive) (save-buffer) (kill-buffer))) ;; Save and kill buffer
 
 (defun my/evil-next-visual-line (count)
   "Move COUNT screen lines down."
