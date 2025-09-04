@@ -2757,6 +2757,14 @@ We are using consult-dash as an ui-front end to parse dash-docs
     :straight t
     :hook (dired-mode . all-the-icons-dired-mode))
 
+(use-package dirvish
+  :after dired
+  :straight t
+  :init
+  (dirvish-override-dired-mode)
+  :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+      "q" 'dirvish-quit))
 
   (use-package ranger
     ;;:straight t
@@ -2776,8 +2784,13 @@ We are using consult-dash as an ui-front end to parse dash-docs
 
     (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
 
+(defun my/dired-check-features ()
+  "Check if ranger and dirvish are loaded"
+  (or (featurep 'ranger)
+      (featurep' dirvish)))
+
     (use-package dired-hide-dotfiles
-      :unless (featurep 'ranger)
+      :unless (my/dired-check-features)
       :straight t
       :hook (dired-mode . dired-hide-dotfiles-mode)
       :config
@@ -2785,7 +2798,7 @@ We are using consult-dash as an ui-front end to parse dash-docs
 	"H" 'dired-hide-dotfiles-mode))
 
     (use-package dired-preview
-      :unless (featurep 'ranger)
+      :unless (my/dired-check-features)
       :straight t
       :hook (dired-mode . dired-preview-mode)
       :config
