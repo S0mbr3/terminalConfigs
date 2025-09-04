@@ -58,6 +58,7 @@ with pkgs;
   # tree-sitter-grammars.tree-sitter-php
   go
   codex
-  poppler-utils #getting pdftotext
+  poppler-utils # getting pdftotext
+  vips # Used to get images previews in Dirvish
   #mupdf
 ]
