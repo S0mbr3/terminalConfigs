@@ -166,6 +166,7 @@
 		vterm-mode-hook
 		treemacs-mode-hook
 		reader-mode-hook
+		doc-view-mode-hook
 		compilation-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
@@ -1245,6 +1246,7 @@ folder, otherwise delete a word"
 (define-key my-evil-leader-map (kbd "1") 'evil-avy-goto-char)  ;; Easymotions
 (define-key my-evil-leader-map (kbd "2") 'evil-avy-goto-char-2)  ;; Easymotions
 (define-key my-evil-leader-map (kbd "3") 'evil-avy-goto-word-1)  ;; Easymotions
+(define-key my-evil-leader-map (kbd "x") (lambda () (interactive) (save-buffer) (kill-buffer))) ;; Save and kill buffer
 
 (defun my/evil-next-visual-line (count)
   "Move COUNT screen lines down."
@@ -2407,6 +2409,14 @@ map)
     :straight t
     :hook (dired-mode . all-the-icons-dired-mode))
 
+(use-package dirvish
+  :after dired
+  :straight t
+  :init
+  (dirvish-override-dired-mode)
+  :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+      "q" 'dirvish-quit))
 
   (use-package ranger
     ;;:straight t
@@ -2426,8 +2436,13 @@ map)
 
     (advice-add 'ranger-close :after #'my/ranger-clear-header-line))
 
+(defun my/dired-check-features ()
+  "Check if ranger and dirvish are loaded"
+  (or (featurep 'ranger)
+      (featurep' dirvish)))
+
     (use-package dired-hide-dotfiles
-      :unless (featurep 'ranger)
+      :unless (my/dired-check-features)
       :straight t
       :hook (dired-mode . dired-hide-dotfiles-mode)
       :config
@@ -2435,7 +2450,7 @@ map)
 	"H" 'dired-hide-dotfiles-mode))
 
     (use-package dired-preview
-      :unless (featurep 'ranger)
+      :unless (my/dired-check-features)
       :straight t
       :hook (dired-mode . dired-preview-mode)
       :config
@@ -2748,6 +2763,7 @@ map)
   (global-sops-mode 1))
 
   (use-package reader
+    :disabled t
     :straight '(reader :type git :host codeberg :repo "divyaranjan/emacs-reader"
   	      :files ("*.el" "render-core.dylib")
   	      :pre-build ("make" "all")))
