@@ -2797,7 +2797,7 @@ We are using consult-dash as an ui-front end to parse dash-docs
       (featurep' dirvish)))
 
     (use-package dired-hide-dotfiles
-      :unless (my/dired-check-features)
+      :unless (featurep 'ranger)
       :straight t
       :hook (dired-mode . dired-hide-dotfiles-mode)
       :config
@@ -3076,8 +3076,58 @@ We do add completion-at-point, corfu-expand and corfu insert to ensure *corfu* k
          ("C-=" . codestral-next-completion)
          ("C-;" . codestral-previous-completion)))
 #+end_src
+* supermaven
+Supermaven.el is an Emacs plugin for supermaven AI code completion
+
+Warning: This plugin is unofficial and based on code and binaries provided by https://github.com/supermaven-inc/supermaven-nvim and https://github.com/copilot-emacs/copilot.el.
+#+begin_src emacs-lisp
+(use-package supermaven
+  :disabled t ;; not working actually
+  :straight '(:type git :host github :repo "crazywolf132/supermaven.el"))
+
+;; (add-to-list 'load-path "~/git_builds/supermaven.el")
+;; (require 'supermaven)
+;; (add-hook 'prog-mode-hook 'supermaven-mode)
+#+end_src
+* GitHub Copilot
+#+begin_src emacs-lisp
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :config
+  ;; Used to define if we are using copilot, nil if its not the case
+  (setq my/completion-engine "copilot")
+    :bind (:map copilot-mode-map
+	      ("s-<return>" . copilot-accept-completion)
+	      ("s-]" . copilot-next-completion)
+	      ("s-[" . copilot-previous-completion)
+	      ("s-c" . copilot-accept-completion-by-word)))
+#+end_src
 * gptel
 #+begin_src emacs-lisp
+(defun my/toggle-completions ()
+  "Toggle AI completions modes"
+  (interactive)
+  (cond 
+   ((equal my/completion-engine "copilot")
+    (if (eq copilot-mode t)
+	(progn (copilot-mode -1)
+	       (message "Copilot disabled"))
+      (progn (copilot-mode 1)
+	     (message "Copilot enabled")))
+    )
+   ((equal my/completion-engine "comingle")
+   (if (eq comingle-mode t)
+	   (progn (comingle-mode -1)
+	      (message "Comingle disabled"))
+	 (progn (comingle-mode 1)
+	    (message "Comingle enabled"))))
+   ((equal my/completion-engine "supermaven")
+    (if (eq supermaven-mode t))
+   	(progn (supermaven-mode -1)
+	       (message "Supermaven disabled"))
+	  (progn (supermaven-mode 1)
+	     (message "Supermaven enabled")))))
+
 (use-package gptel
   :straight t
   :after general
