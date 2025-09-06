@@ -635,6 +635,12 @@ It can also add projects on the fly with the Add project option
   (delete-other-windows))
 
 
+(defun my/go-to-scratch ()
+  "Go to the persp none and focus on the *scratch* buffer"
+  (interactive)
+  (persp-frame-switch "none")
+  (scratch-buffer))
+
 ;; Better keybinding management 
 (use-package general
   :straight t
@@ -674,6 +680,7 @@ It can also add projects on the fly with the Add project option
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
     "fc" '(consult-dir :which-key "consult-dir")
+    "fz" '(my/go-to-scratch :which-key "Go to scratch buffer in the none perspective")
 
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
