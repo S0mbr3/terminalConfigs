@@ -568,6 +568,12 @@
   (delete-other-windows))
 
 
+(defun my/go-to-scratch ()
+  "Go to the persp none and focus on the *scratch* buffer"
+  (interactive)
+  (persp-frame-switch "none")
+  (scratch-buffer))
+
 ;; Better keybinding management 
 (use-package general
   :straight t
@@ -607,6 +613,7 @@
     "fs" '(ox/sudo-find-file :which-key "Open files as sudo")
     "ft" '(treemacs-select-window :which-key "Open treemacs")
     "fc" '(consult-dir :which-key "consult-dir")
+    "fz" '(my/go-to-scratch :which-key "Go to scratch buffer in the none perspective")
 
     "p" '(:ignore t :which-key "projects")
     "pp" '(my-switch-to-project :which-key "Open/switch project in persp")
@@ -2442,7 +2449,7 @@ map)
       (featurep' dirvish)))
 
     (use-package dired-hide-dotfiles
-      :unless (my/dired-check-features)
+      :unless (featurep 'ranger)
       :straight t
       :hook (dired-mode . dired-hide-dotfiles-mode)
       :config
@@ -2676,6 +2683,101 @@ map)
 (dolist (element '(completion-at-point corfu-expand corfu-insert))
   (add-to-list 'corfu-auto-commands element)))
 
+(defvar my/comingle-is-enabled t)
+(use-package comingle
+  ;;:straight t
+  :disabled t
+  :after (pinentry) ;; for api-key in auth-source
+  ;;:ensure t
+  :straight '(:type git :host github :repo "jeff-phil/comingle.el")
+  ;;:vc (:fetcher github :repo "jeff-phil/comingle.el" :rev "main")
+  :diminish "🧠"
+  ;;:load-path "~/git_builds/comingle.el/"
+  :commands (my/comingle-toggle comingle-mode)
+  :bind
+  (("s-<return>" . comingle-accept-completion)
+   ("S-<return>" . comingle-accept-completion-line)
+   ("M-<return>" . comingle-accept-completion-word)
+   ("C-<return>" . comingle-accept-completion-character)
+   ("H-j" . comingle-next-completion)
+   ("H-k" . comingle-prev-completion)
+   ("H-C" . 'my/comingle-toggle)
+   ("C-c p c" . comingle-chat-open)) ;;  launch chat
+  :hook (prog-mode . my/try-run-comingle-mode)
+  :init
+  ;; optionally set a timer, which might speed up things as the
+  ;; comingle local language server takes ~0.2s to start up
+  (when (bound-and-true-p my/comingle-is-enabled)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (run-with-timer
+                 0.1
+                 nil
+                 (lambda ()
+                   (when (comingle-state-proc comingle-state)
+                     ;; temporarily disable comingle, so that we can init
+                     (let ((my/comingle-is-enabled nil))
+                       (my/comingle-toggle))))))))
+  :config
+  (defun my/try-run-comingle-mode ()
+    "Use in hook, like prog-mode-hook, so that can test first if comingle is enabled."
+    (when (bound-and-true-p my/comingle-is-enabled)
+      (comingle-mode)))
+
+  (defun my/comingle-toggle (&optional state)
+    "Toggle comingle's enabled state."
+    (interactive)
+    (let ((current-state (or state comingle-state)))
+      (cond
+       ;; First condition: Is comingle currently enabled?
+       (my/comingle-is-enabled
+         (when (and current-state (comingle-state-proc current-state))
+           ;; -> Then, disable it. No `progn` needed.
+           (comingle-reset))
+        (setq my/comingle-is-enabled nil)
+        (message "Comingle disabled"))
+       ;; if you don't want to use customize to save the api-key
+       (t (setopt comingle/metadata/api_key
+                  `,(auth-source-pass-get 'secret "ai/api_key@codeium.com"))
+          ;; Reset only if it was already in a valid (but not running) state
+          (when current-state
+            (comingle-reset))
+          (comingle-init)
+          (setq my/comingle-is-enabled t)
+          (message "Comingle enabled")))))
+
+  (setq use-dialog-box nil) ;; do not use popup boxes
+
+  ;; get comingle status in the modeline
+  (setq comingle-mode-line-enable
+        (lambda (api)
+          (when (bound-and-true-p my/comingle-is-enabled)
+            (not (memq api '(CancelRequest Heartbeat AcceptCompletion))))))
+  (add-to-list 'mode-line-format '(:eval (car-safe comingle-mode-line)) t)
+  ;; alternatively for a more extensive mode-line
+  ;; (add-to-list 'mode-line-format '(-50 "" comingle-mode-line) t)
+
+  ;; You can overwrite all the comingle configs!
+  ;; for example, we recommend limiting the string sent to comingle for better perf
+  (defun my/comingle/document/text ()
+    (buffer-substring-no-properties
+     (max (- (point) 3000) (point-min))
+     (min (+ (point) 1000) (point-max))))
+  ;; if you change the text, you should also change the cursor_offset
+  ;; warning: this is measured by UTF-8 encoded bytes
+  (defun my/comingle/document/cursor_offset ()
+    (comingle-utf8-byte-length
+     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+  (setq comingle/document/text 'my/comingle/document/text)
+  (setq comingle/document/cursor_offset 'my/comingle/document/cursor_offset)
+
+  (define-key global-map (kbd "s-<return>")
+	      #'comingle-accept-completion)
+  (define-key global-map (kbd "C--")
+	      #'comingle-next-completion)
+  (define-key global-map (kbd "C-=")
+	      #'comingle-prev-completion))
+
 (use-package codestral
   :straight (t :type git :host github :repo "BrachystochroneSD/codestral.el")
   ;;:init (global-codestral-mode)
@@ -2688,6 +2790,49 @@ map)
          ("C-=" . codestral-next-completion)
          ("C-;" . codestral-previous-completion)))
 
+(use-package supermaven
+  :disabled t ;; not working actually
+  :straight '(:type git :host github :repo "crazywolf132/supermaven.el"))
+
+;; (add-to-list 'load-path "~/git_builds/supermaven.el")
+;; (require 'supermaven)
+;; (add-hook 'prog-mode-hook 'supermaven-mode)
+
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :config
+  ;; Used to define if we are using copilot, nil if its not the case
+  (setq my/completion-engine "copilot")
+    :bind (:map copilot-mode-map
+	      ("s-<return>" . copilot-accept-completion)
+	      ("s-]" . copilot-next-completion)
+	      ("s-[" . copilot-previous-completion)
+	      ("s-c" . copilot-accept-completion-by-word)))
+
+(defun my/toggle-completions ()
+  "Toggle AI completions modes"
+  (interactive)
+  (cond 
+   ((equal my/completion-engine "copilot")
+    (if (eq copilot-mode t)
+	(progn (copilot-mode -1)
+	       (message "Copilot disabled"))
+      (progn (copilot-mode 1)
+	     (message "Copilot enabled")))
+    )
+   ((equal my/completion-engine "comingle")
+   (if (eq comingle-mode t)
+	   (progn (comingle-mode -1)
+	      (message "Comingle disabled"))
+	 (progn (comingle-mode 1)
+	    (message "Comingle enabled"))))
+   ((equal my/completion-engine "supermaven")
+    (if (eq supermaven-mode t))
+   	(progn (supermaven-mode -1)
+	       (message "Supermaven disabled"))
+	  (progn (supermaven-mode 1)
+	     (message "Supermaven enabled")))))
+
 (use-package gptel
   :straight t
   :after general
@@ -2696,6 +2841,7 @@ map)
     "g" '(:ignore t :which-key "gptel")
     "gm" '(gptel-menu :which-key "Open gptel-menu")
     "gc" '(gptel :which-key "Open gptel chats buffers")
+    "gx" '(my/toggle-completions :which-key "Toggle AI completions")
     "gs" '(gptel-send :whick-key "gptel-send"))
   (defun my-groq-api-key ()
     (let ((auth-info (auth-source-search
